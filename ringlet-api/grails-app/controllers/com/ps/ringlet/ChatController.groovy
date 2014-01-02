@@ -1,0 +1,65 @@
+package com.ps.ringlet
+
+import grails.converters.JSON
+
+class ChatController {
+
+    static allowedMethods = [getByUser: "GET", create: "POST", update: "PUT", delete: "PUT"]
+
+    def getByUser(){
+        User user = User.findByToken(UserToken.findByToken(params.token as String))
+        User recipient = User.findById(params.recipientId as Long)
+        def chats = []
+        Chat.findAllByOwnerAndRecipientAndOwnerStatus(user, recipient, MessageStatus.DELETED).each {
+            chats.add(it.showInformation())
+        }
+        Chat.findAllByOwnerAndRecipientAndRecipientStatus(recipient, user, MessageStatus.DELETED).each {
+            chats.add(it.showInformation())
+        }
+        render chats as JSON
+    }
+
+    def create() {
+        def message = [response:""]
+        User owner = User.findByToken(UserToken.findByToken(params.token as String))
+        User recipient = User.findById(params.chat.recipient as Long)
+        if(recipient){
+            new Chat(message: params.chat.message, dateCreated: new Date(), owner: owner, recipient: recipient).save(flush: true)
+            message.response = "chat_created"
+        }
+        else{
+            message.response = "chat_not_created"
+        }
+        render message as JSON
+    }
+
+    def update() {
+        def message = [response:""]
+        User user = User.findByToken(UserToken.findByToken(params.token as String))
+        Chat chat = Chat.findById(params.chat.id as Long)
+        if(chat.owner == user){
+            chat.setMessage(params.chat.message as String)
+        }
+        else if(chat.recipient == user){
+            chat.setRecipientStatus(MessageStatus.SEEN)
+        }
+        chat.save(flush: true)
+        message.response = "chat_updated"
+        render message as JSON
+    }
+
+    def delete() {
+        def message = [response:""]
+        User user = User.findByToken(UserToken.findByToken(params.token as String))
+        Chat chat = Chat.findById(params.id as Long)
+        if(chat.owner == user){
+            chat.setOwnerStatus(MessageStatus.DELETED)
+        }
+        else if(chat.recipient == user){
+            chat.setRecipientStatus(MessageStatus.DELETED)
+        }
+        chat.save(flush: true)
+        message.response = "chat_deleted"
+        render message as JSON
+    }
+}
