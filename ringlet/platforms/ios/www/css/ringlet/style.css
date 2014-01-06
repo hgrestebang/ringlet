@@ -46,12 +46,12 @@ form ul li input{
 }
 
 /**----------------------------- Landing View ------------------------------------**/
-.ui-body-landing{
+.ui-body-a{
     background-image:url("../../img/map01.png");
     position:absolute;
 }
 
-.ui-body-landing form{
+.ui-body-a form{
     text-align: center;
     padding-top: 25%;
 }
