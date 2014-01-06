@@ -155,18 +155,26 @@
     </div>
     <div data-role="content" id="listing-content" data-theme="none">
         <div id="listing-information" data-ng-show="loadedListings">
-            <ul id="listing-lImages" data-role="listview" data-icon="">
-                <li data-ng-repeat="house in listings| filter:refreshListingImages">
-                    <a href="#listing-item" data-ng-click="getHouse(house)" data-transition="slidefade">
-                        <img id="imgList-{{house.id}}" src="{{house.photos[0].photo_protocol}}{{house.photos[0].photo_host}}/{{house.photos[0].photo_path}}" onload="changeSizeImgList(this)" onerror="imgError(this)" />
-                        <h2 data-ng-bind="'$'+house.price_monthly+'/mo'" data-ng-show="house.price_monthly!=0"></h2>
-                        <h2 data-ng-bind="'$'+house.price_sale" data-ng-hide="house.price_monthly!=0"></h2>
-                        <p class="gray-text" data-ng-bind="house.bedrooms+' bed,'+house.bathrooms+' bath'"></p>
-                        <p class="gray-text" data-ng-bind="house.street_address"></p>
-                        <i class="icon-angle-right right"></i>
-                    </a>
-                </li>
+            <ul id="listing-lImages" data-role="listview">
+              <li data-ng-repeat="ringlet in ringlets | filter:refreshListingImages">
+                  <a href="#listing-item" data-ng-click="getRinglets(ringlet)" data-transition="slidefade">
+
+                  </a>
+              </li>
             </ul>
+
+            <!--<ul id="listing-lImages" data-role="listview" data-icon="">-->
+                <!--<li data-ng-repeat="house in listings| filter:refreshListingImages">-->
+                    <!--<a href="#listing-item" data-ng-click="getHouse(house)" data-transition="slidefade">-->
+                        <!--<img id="imgList-{{house.id}}" src="{{house.photos[0].photo_protocol}}{{house.photos[0].photo_host}}/{{house.photos[0].photo_path}}" onload="changeSizeImgList(this)" onerror="imgError(this)" />-->
+                        <!--<h2 data-ng-bind="'$'+house.price_monthly+'/mo'" data-ng-show="house.price_monthly!=0"></h2>-->
+                        <!--<h2 data-ng-bind="'$'+house.price_sale" data-ng-hide="house.price_monthly!=0"></h2>-->
+                        <!--<p class="gray-text" data-ng-bind="house.bedrooms+' bed,'+house.bathrooms+' bath'"></p>-->
+                        <!--<p class="gray-text" data-ng-bind="house.street_address"></p>-->
+                        <!--<i class="icon-angle-right right"></i>-->
+                    <!--</a>-->
+                <!--</li>-->
+            <!--</ul>-->
             <a href="#pro" data-role="button" data-transition="slideup" data-corners="false" data-theme="red" id="get-listing-button" data-corners="true">Get more Listing!</a>
         </div>
     </div>
