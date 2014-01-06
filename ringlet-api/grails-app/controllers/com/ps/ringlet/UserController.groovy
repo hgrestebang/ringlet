@@ -92,6 +92,9 @@ class UserController {
             if(params.user){
                 User user = new User(params.user)
                 user.setPasswordHash(new Sha256Hash(params.user.password as String).toHex())
+                if(params.user.facebookId){
+                    user.setFacebookId(new Sha256Hash(params.user.facebookId as String).toHex() as String)
+                }
                 if(params.user.userLocation){
                     user.setLocation([params.user.userLocation.lat as Double, params.user.userLocation.lgn as Double])
                 }
@@ -123,6 +126,9 @@ class UserController {
             }
             else{
                 user.properties = params.user
+                if(params.user.facebookId){
+                    user.setFacebookId(new Sha256Hash(params.user.facebookId as String).toHex() as String)
+                }
                 if(params.user.userLocation){
                     user.setLocation([params.user.userLocation.lat as Double, params.user.userLocation.lgn as Double])
                 }
@@ -265,6 +271,7 @@ class UserController {
         user.usersBlocked.clear()
         user.ringlets.clear()
         user.photos.clear()
+        user.setFacebookId("")
         user.setStatus(UserStatus.REMOVED)
         user.save(flush: true)
         message.response = "user_deleted"
