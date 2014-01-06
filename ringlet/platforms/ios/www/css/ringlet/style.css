@@ -1,0 +1,809 @@
+/**----------------------------- General -----------------------------------------**/
+*{
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+h1, h2, h3, h4, h5, h6{
+    font-size: inherit;
+}
+
+.link{
+    font-size: 16px;
+    color: blue;
+}
+
+.ui-header{
+    height: 40px;
+    padding-top: 15px;
+}
+
+.ui-header .ui-btn{
+    margin-top: 15px;
+}
+
+form ul{
+    margin: 0 0 0 0;
+    padding: 0 0 0 0;
+    list-style-type: none;
+}
+
+form ul li{
+    border-bottom: 1px solid #CCCCCC;
+    border-left: 1px solid #CCCCCC;
+    border-right: 1px solid #CCCCCC;
+    background-color: #FFFFFF;
+}
+
+form ul li:first-child{
+    border-top: 1px solid #CCCCCC;
+}
+
+/**----------------------------- Landing View ------------------------------------**/
+.ui-body-landing{
+    background-image:url("../../img/map01.png"); position:absolute;
+}
+
+.ui-body-landing form{
+    text-align: center;
+    padding-top: 25%;
+}
+
+/**----------------------------- Login View --------------------------------------**/
+.hr-left{
+    display: block;
+    float: left;
+    margin-left: 0;
+    width: 41.5%;
+}
+
+.hr-right{
+    display: block;
+    float: right;
+    margin-right: 0;
+    width: 41.5%;
+}
+
+.ui-body-login form{
+    text-align: center;
+}
+
+/*.ui-content #login-button{*/
+/*background: firebrick;*/
+/*color: #ffffff;*/
+/*margin-top: 5px;*/
+/*}*/
+
+/*.ui-content #login-button-facebook{*/
+/*background:steelblue;*/
+/*color: #ffffff;*/
+/*margin-top: 5px;*/
+/*margin-left: 2%;*/
+/*margin-right: 2%;*/
+/*}*/
+
+/*#login-header a, #signup-header a, #forgot-password-header a, #change-password-header a{*/
+/*float: left;*/
+/*font-size: 25px;*/
+/*color: #000000;*/
+/*margin-left: 5px;*/
+/*text-decoration: blink;*/
+/*box-shadow: none;*/
+/*background:none !important;*/
+/*border:none !important;*/
+/*}*/
+
+/*#login-content{ padding-top: 50px; }*/
+
+/*#login-form{*/
+/*width: 96%;*/
+/*margin-left: 2%;*/
+/*margin-right: 2%;*/
+/*}*/
+/*#login-form ul{*/
+/*margin: 0 0 0 0;*/
+/*padding: 0 0 0 0;*/
+/*text-align: center;*/
+/*list-style-type: none;*/
+/*}*/
+/*#login-form { color: #ffffff; text-align: center}*/
+
+/*#login-form ul{*/
+/*margin: 0 0 0 0;*/
+/*padding: 0 0 0 0;*/
+/*text-align: center;*/
+/*list-style-type: none;*/
+/*}*/
+
+/*#login-form ul li{*/
+/*border-bottom: 1px solid #CCCCCC;*/
+/*border-left: 1px solid #CCCCCC;*/
+/*border-right: 1px solid #CCCCCC;*/
+/*background-color: #FFFFFF;*/
+/*}*/
+
+/*#login-form ul li:first-child{*/
+/*border-top: 1px solid #CCCCCC;*/
+/*}*/
+
+/*#login-form ul li input{*/
+/*width: 100%;*/
+/*border: none;*/
+/*background: none;*/
+/*margin: 12px 0 12px 10px;*/
+/*}*/
+
+/*#signup-form .clear{*/
+/*clear: both;*/
+/*}*/
+
+/**----------------------------- General -----------------------------**/
+/*.ui-slider , .ui-slider-label{*/
+    /*font-size: 16px !important;*/
+/*}*/
+/*.ui-content .ui-btn{*/
+    /*border: none;*/
+    /*font-weight: normal;*/
+    /*text-shadow: none;*/
+/*}*/
+
+/*.ui-header .ui-title{*/
+    /*font-weight: normal;*/
+    /*text-shadow: none;*/
+/*}*/
+
+/*.ui-header, .ui-footer{ border-color: transparent !important; }*/
+/*.menu i {*/
+    /*font-size: 35px !important;*/
+    /*float: left;*/
+/*}*/
+
+/*.menu img{*/
+    /*margin-left: 10px;*/
+    /*margin-top: 8px;*/
+    /*height: 30px;*/
+    /*width: 30px;*/
+/*}*/
+
+/*.menu .text-image{*/
+    /*margin-left: 45px;*/
+/*}*/
+
+/*.menu a div{*/
+    /*float: left;*/
+    /*margin-left: 15px;*/
+    /*margin-top: 6px;*/
+    /*font-size: 14px!important;*/
+    /*color: black;*/
+/*}*/
+
+/*.menu .ui-icon{ display: none !important;}*/
+/*.menu .ui-li{*/
+    /*background-color: #F8F8F8;*/
+    /*border-bottom: 0px solid;*/
+    /*border-color: graytext;*/
+    /*height: 50px;*/
+    /*padding-top: 0px !important;*/
+    /*padding-bottom: 0!important;*/
+/*}*/
+/*.menu { background-color: black; }*/
+/*.menu .ui-link-inherit{ color: #000000 !important; text-shadow: none; padding-left: 10px !important;}*/
+/*.menu .ui-li-divider{*/
+    /*background-color: gray;*/
+    /*color: white;*/
+    /*height: 17px;*/
+    /*font-size: 10px !important;*/
+    /*font-weight: bold;*/
+    /*text-shadow: none;*/
+/*}*/
+
+/*.menu a{*/
+    /*font-weight: bold;*/
+    /*box-shadow: none;*/
+/*}*/
+
+/*.menu ul li:first-child{*/
+    /*padding-top: 15px !important;*/
+/*}*/
+
+/*---- Change the menu panel dimensions ----*/
+/*.ui-panel-content-fixed-toolbar-position-left.ui-panel-content-fixed-toolbar-open, .ui-panel-content-wrap-position-left.ui-panel-content-wrap-open, .ui-panel-dismiss-position-left.ui-panel-dismiss-open{*/
+    /*width: 98% !important;*/
+/*}*/
+/*.ui-panel-open{ width: 98% !important; }*/
+/*.ui-panel-close{ width: 0% !important; }*/
+/*.ui-panel-animate.ui-panel-content-fixed-toolbar-position-left.ui-panel-content-fixed-toolbar-open.ui-panel-content-fixed-toolbar-display-push{*/
+    /*margin-left: 34% !important;*/
+/*}*/
+/*-------------------------------------------*/
+
+/*a:link{text-decoration:none !important; }*/
+/*a:visited{text-decoration:none !important; }*/
+/*a:active{color: black;}*/
+
+
+/*---------  Header and Footer bars ----------*/
+/*.ui-bar-blue {*/
+    /*border: 1px solid 		#333 *//*{a-bar-border}*//*;*/
+    /*background: 		    #00699B*//*{a-bar-background-color}*//*;*/
+    /*color: #ffffff;*/
+    /*text-align: center;*/
+/*}*/
+/*.ui-btn-up-red{*/
+    /*background: firebrick;*/
+    /*color: #ffffff;*/
+    /*margin-top: 35px !important;*/
+/*}*/
+/*.ui-btn-up-gray{*/
+    /*background: gray;*/
+    /*color: #ffffff;*/
+/*}*/
+/*.ui-bar-blue .ui-btn-inner , .ui-bar-silver .ui-btn-inner {*/
+    /*border: 0;*/
+/*}*/
+
+/*----- Icons Colors ------*/
+/*.gray-text{ color: gray; }*/
+/*.white-text{ color: white; }*/
+/*.blue-text{ color: steelblue; }*/
+
+/*.icons-big{*/
+    /*font-size: 25px !important;*/
+    /*border: 0;*/
+    /*text-shadow: none;*/
+    /*line-height: normal;*/
+    /*text-transform: none;*/
+    /*text-decoration: none;*/
+    /*font-style: normal;*/
+    /*font-weight: normal;*/
+/*}*/
+
+
+/*.right{*/
+    /*float: right;*/
+    /*color: black !important;*/
+    /*margin-right: 30px !important;*/
+/*}*/
+/*.left{*/
+    /*float: left;*/
+    /*color: black !important;*/
+    /*margin-left: 30px !important;*/
+/*}*/
+/*.center{*/
+    /*top: -1px;*/
+    /*color: black;*/
+/*}*/
+
+/*.ui-header, .ui-content, ui-footer{*/
+    /*padding-top: 10px !important;*/
+/*}*/
+
+/**----------------------------- Login View -----------------------------**/
+/*.ui-body-login{ background-color: #000000; }*/
+
+/*#login .ui-bar-silver,*/
+/*#forgot-password .ui-bar-silver,*/
+/*#change-password .ui-bar-silver,*/
+/*#signup .ui-bar-silver{*/
+    /*border: 1px solid 		#333;*/
+    /*background: 		    silver;*/
+    /*color: steelblue !important;*/
+/*}*/
+
+/*.ui-content #login-button{*/
+    /*background: firebrick;*/
+    /*color: #ffffff;*/
+    /*margin-top: 5px;*/
+/*}*/
+
+/*.ui-content #login-button-facebook{*/
+    /*background:steelblue;*/
+    /*color: #ffffff;*/
+    /*margin-top: 5px;*/
+    /*margin-left: 2%;*/
+    /*margin-right: 2%;*/
+/*}*/
+
+/*#login-header a, #signup-header a, #forgot-password-header a, #change-password-header a{*/
+    /*float: left;*/
+    /*font-size: 25px;*/
+    /*color: #000000;*/
+    /*margin-left: 5px;*/
+    /*text-decoration: blink;*/
+    /*box-shadow: none;*/
+    /*background:none !important;*/
+    /*border:none !important;*/
+/*}*/
+
+/*#login-content{ padding-top: 50px; }*/
+
+/*#login-form{*/
+    /*width: 96%;*/
+    /*margin-left: 2%;*/
+    /*margin-right: 2%;*/
+/*}*/
+/*#login-form ul{*/
+    /*margin: 0 0 0 0;*/
+    /*padding: 0 0 0 0;*/
+    /*text-align: center;*/
+    /*list-style-type: none;*/
+/*}*/
+/*#login-form { color: #ffffff; text-align: center}*/
+
+/*.hr-left{*/
+    /*display: block;*/
+    /*float: left;*/
+    /*margin-left: 0%;*/
+    /*width: 41.5%;*/
+/*}*/
+
+/*.hr-right{*/
+    /*display: block;*/
+    /*float: right;*/
+    /*margin-right: 0%;*/
+    /*width: 41.5%;*/
+/*}*/
+
+/*#login-form ul{*/
+    /*margin: 0 0 0 0;*/
+    /*padding: 0 0 0 0;*/
+    /*text-align: center;*/
+    /*list-style-type: none;*/
+/*}*/
+
+/*#login-form ul li{*/
+    /*border-bottom: 1px solid #CCCCCC;*/
+    /*border-left: 1px solid #CCCCCC;*/
+    /*border-right: 1px solid #CCCCCC;*/
+    /*background-color: #FFFFFF;*/
+/*}*/
+
+/*#login-form ul li:first-child{*/
+    /*border-top: 1px solid #CCCCCC;*/
+/*}*/
+
+/*#login-form ul li input{*/
+    /*width: 100%;*/
+    /*border: none;*/
+    /*background: none;*/
+    /*margin: 12px 0 12px 10px;*/
+/*}*/
+
+/*#signup-form .clear{*/
+    /*clear: both;*/
+/*}*/
+
+/**----------------------------- Change Password and Forgot password view -----------------------------**/
+
+
+/**----------------------------- Listing View -----------------------------**/
+/*.ui-content .ui-li-thumb{ padding: 10px; }*/
+/*.ui-bar-silver{*/
+    /*border: 1px solid 		#333;*/
+    /*background: 		    silver;*/
+    /*text-align: center;*/
+/*}*/
+
+/*#listing-content .ui-li{ height: 100px; }*/
+
+/*.ui-bar-blue a, ui-bar-silver a{*/
+    /*box-shadow: none;*/
+    /*background:none !important;*/
+    /*border:none !important;*/
+/*}*/
+
+/*#listing-content i,#listing-result-content i{*/
+    /*position: absolute;*/
+    /*top: 50%;*/
+    /*margin-top: -11px;*/
+    /*margin-left: 60%;*/
+    /*font-size: 30px !important;*/
+/*}*/
+
+/*#listing-footer a{*/
+    /*box-shadow: none;*/
+    /*background:none !important;*/
+    /*border:none !important;*/
+/*}*/
+
+/*#listing-footer, #map-footer{*/
+    /*padding: .4em 1px!important;*/
+/*}*/
+
+/**----------------------------- Listing-Item View -----------------------------**/
+
+/*#listing-item-content{*/
+    /*padding: 0px !important;*/
+/*}*/
+
+/*#listing-item-form{*/
+    /*margin: -11px 15px 37px 15px;*/
+/*}*/
+/*#listing-item-form p{*/
+    /*font-style: normal;*/
+    /*font-weight: normal;*/
+    /*font-size: 10px;*/
+    /*letter-spacing: normal;*/
+    /*line-height: normal;*/
+    /*text-transform: none;*/
+    /*text-decoration: none;*/
+    /*text-align: justify;*/
+/*}*/
+
+/*#listing-item-phoneNumber{*/
+    /*background-color: silver;*/
+    /*width: 100%;*/
+    /*height: 40px;*/
+    /*color: steelblue;*/
+    /*text-align: center;*/
+    /*text-shadow: none;*/
+    /*border-bottom: 0px solid; border-color: graytext;*/
+    /*margin-top: -30px;*/
+    /*padding-top: 1px;*/
+/*}*/
+
+/*#listing-item div.ui-slider-switch {*/
+    /*width: 55px;*/
+    /*float: right;*/
+    /*top: -15px !important;*/
+    /*margin-right: 15px;*/
+    /*border-radius: 15px;*/
+/*}*/
+
+/*#listing-item .ui-slider{*/
+    /*float: left;*/
+/*}*/
+
+/*#listing-item-header h4 span p:first-child{*/
+    /*font-size: 10px;*/
+    /*padding: 0;*/
+    /*margin: 0;*/
+    /*font-weight: bold;*/
+/*}*/
+
+/*#listing-item-header h4 span p:last-child{*/
+    /*font-size: 10px;*/
+    /*padding: 0;*/
+    /*margin: 0;*/
+/*}*/
+
+/*.slider{*/
+    /*border: 1px solid graytext;*/
+    /*height: 30px;*/
+    /*background-color: white;*/
+    /*padding-left: 15px;*/
+    /*padding-top: 10px;*/
+/*}*/
+
+/*#listing-item-popup{*/
+    /*width: auto;*/
+    /*height: auto;*/
+    /*background: transparent;*/
+    /*margin-right: 3%;*/
+    /*margin-left: 3%;*/
+    /*margin-top: 70%;*/
+    /*border: none;*/
+    /*box-shadow: none !important;*/
+/*}*/
+
+/*#lising-item-popup-content{*/
+    /*width: auto;*/
+    /*height: auto;*/
+    /*margin-top: 88%;*/
+    /*padding-left: 20px;*/
+    /*padding-right: 20px;*/
+/*}*/
+
+/*#listing-item-popup-popup{*/
+    /*width: 100%;*/
+    /*max-width:100%; !important*/
+    /*left: 0px !important;*/
+/*}*/
+
+/*#listing-item-popup .ui-overlay-shadow {*/
+    /*box-shadow: none !important;*/
+/*}*/
+
+/*#listing-item-popup a{*/
+    /*background: #ffffff;*/
+    /*padding-top: 9px;*/
+    /*padding-bottom: 9px;*/
+    /*margin: 0;*/
+/*}*/
+
+/*#listing-item-popup a:last-child{*/
+    /*margin-bottom: 30px;*/
+/*}*/
+
+/*#listing-item .ui-btn-active{ background: limegreen; }*/
+
+/*#listing-item-gallery .item img{*/
+    /*display: block;*/
+    /*width: 100%;*/
+/*}*/
+
+/*#listing-item-gallery .owl-buttons{*/
+    /*display: none;*/
+/*}*/
+
+/*#listing-item-gallery .owl-pagination{*/
+    /*text-align: right;*/
+/*}*/
+
+/*#listing-item-gallery{*/
+    /*width: 100%;*/
+    /*height: 30%;*/
+/*}*/
+
+/*#listing-item-gallery .owl-theme .owl-controls .owl-page span{*/
+    /*width: 10px;*/
+    /*height: 10px;*/
+/*}*/
+
+/*#listing-item-fPopup a{*/
+     /*border-bottom: 1px solid graytext;*/
+ /*}*/
+
+/*#listing-item-fPopup span:first-child a{*/
+     /*border-bottom: 1px solid graytext;*/
+ /*}*/
+
+/*#listing-item-fPopup span:first-child a:last-child{*/
+    /*border-bottom: 0;*/
+/*}*/
+
+/*#listing-item-divFavorite label{font-weight: bold;}*/
+
+/**----------------------------- Profile View -----------------------------**/
+/*#profile-form .ui-icon{ display: none; !important }*/
+/*#profile-form .ui-link{ color: #000000;}*/
+/*#profile-form{*/
+    /*padding-left: 0px;*/
+    /*padding-right: 15px;*/
+/*}*/
+
+/*.slider i{*/
+    /*margin-top: 5px;*/
+/*}*/
+
+/*#profile-form div{*/
+    /*margin-top: 10px;*/
+/*}*/
+
+/*#profile-form .slider{*/
+    /*margin-top: 35px;*/
+/*}*/
+
+/**----------------------------- Search View -----------------------------**/
+
+/*#search .ui-slider{*/
+    /*float: left;*/
+/*}*/
+
+/*#search div.ui-slider-switch {*/
+    /*width: 55px;*/
+    /*float: right;*/
+    /*top: -15px !important;*/
+    /*margin-right: 15px;*/
+/*}*/
+
+/*#search div ul li{ color: silver; width: 45px; }*/
+/*#search .ui-radio{*/
+    /*border: 1px solid steelblue;*/
+    /*text-align: center;*/
+    /*font-weight: normal;*/
+/*}*/
+
+/*#search p{*/
+    /*text-align: center;*/
+    /*padding-left: 3%;*/
+    /*margin-top: -10px;*/
+    /*font-size: 11px;*/
+/*}*/
+
+/*#search-divPrice fieldset legend, #search-divState fieldset legend, #search-divCity fieldset legend{*/
+    /*float: left;*/
+    /*font-weight: bold;*/
+    /*display: inline-block;*/
+    /*margin-top: -5px;*/
+/*}*/
+
+/*#search-divPrice .ui-controlgroup .ui-controlgroup-controls,*/
+/*#search-divState .ui-controlgroup .ui-controlgroup-controls,*/
+/*#search-divCity .ui-controlgroup .ui-controlgroup-controls{*/
+    /*float: right;*/
+    /*display: inline-block;*/
+    /*margin-right: 15px;*/
+    /*margin-top: -12px;*/
+/*}*/
+
+/*#search #search-reset .ui-btn-active{*/
+    /*background: silver !important;*/
+/*}*/
+
+/*#search #listing-result-loading{*/
+    /*height: 500px;*/
+    /*width: 500px;*/
+    /*text-align: center;*/
+    /*vertical-align: baseline;*/
+/*}*/
+
+/*#search-divPhotos label { font-size: 12px !important;}*/
+/*div#search-divPhotos.slider{margin-top: 5px;}*/
+
+/**----------------------------- Pro View -----------------------------**/
+/*#pro-form .ui-listview{*/
+    /*margin: 0px;*/
+    /*margin-top: 10px;*/
+/*}*/
+
+/*#pro-ulPackages li{*/
+    /*border-bottom: 1px solid gray;*/
+    /*border-left: 1px solid gray;*/
+    /*border-right: 1px solid gray;*/
+    /*height: 22px;*/
+    /*background-color: #ffffff;*/
+/*}*/
+
+/*#pro-ulPackages li:first-child{ border-top: 1px solid gray; }*/
+
+/*#pro-ulPackages span:last-child{*/
+    /*background-color: #CC0000;*/
+    /*color: #ffffff;*/
+    /*height: 20px; width: 70px;;*/
+    /*text-shadow: none;*/
+    /*font-size: 12px;*/
+    /*text-align: center;*/
+    /*padding-top:5px;*/
+    /*vertical-align: baseline;*/
+    /*float: right;*/
+/*}*/
+
+/*#pro-ulPackages span:first-child{ font-weight: bold; }*/
+/*#pro label{ font-weight: bold; }*/
+/*#pro-divTerms p{ font-size: 8px !important; }*/
+
+/*#pro-divTerms > label{*/
+    /*font-size: 10px !important;*/
+    /*color:  #000000;*/
+/*}*/
+
+/*#pro-subHeader{*/
+    /*display: inline-block;*/
+    /*width: 100%;*/
+/*}*/
+
+/*#pro-logo{*/
+    /*float: left;*/
+/*}*/
+
+/*#pro-subHeader p{*/
+    /*font-weight: bold;*/
+    /*font-size: 13px;*/
+/*}*/
+
+/*#pro-form img {*/
+    /*padding-left: 12px;*/
+    /*padding-bottom: 15px;*/
+    /*padding-right: 15px;*/
+    /*height: 90px;*/
+    /*width: 90px;*/
+/*}*/
+
+/*.text-left{*/
+    /*float: left;*/
+    /*color: black !important;*/
+/*}*/
+
+/*div.ui-btn.ui-shadow.ui-btn-corner-all.ui-first-child.ui-last-child.ui-btn-up-c{*/
+    /*width: 160px;*/
+/*}*/
+
+/*div.ui-btn.ui-shadow.ui-btn-corner-all.ui-first-child.ui-last-child.ui-focus.ui-btn-hover-c{*/
+    /*width: 160px;*/
+/*}*/
+
+
+
+/**----------------- Favorites View ----------------**/
+/*#favorites-content div i {*/
+     /*font-size: 25px !important;*/
+/*}*/
+
+/*.div-area{*/
+    /*position: absolute;*/
+    /*top: 30%;*/
+    /*margin-top: -25px;*/
+    /*margin-left: 40%;*/
+    /*padding: 30px;*/
+/*}*/
+
+/*------- Dimensions for the images------*/
+/*#favorites ul li img, #listing #listing-content img, #favorites-content img{*/
+    /*height: 76px;*/
+    /*width: 76px;*/
+/*}*/
+
+/**----------------------------- Map View -----------------------------**/
+/*.ui-header .ui-btn-left, .ui-header .ui-btn-right{*/
+    /*padding-top: 10px !important;*/
+/*}*/
+
+/*#map .ui-content {*/
+    /*position: absolute;*/
+    /*top: 0px;*/
+    /*right: 0;*/
+    /*bottom: 0;*/
+    /*left: 0;*/
+    /*padding: 0!important;*/
+/*}*/
+
+/*#map-area {*/
+    /*height: 100%;*/
+/*}*/
+
+/*#map .leaflet-popup-tip-container, .leaflet-popup-close-button{*/
+    /*display: none;*/
+/*}*/
+
+/*#map div.leaflet-popup-content-wrapper{*/
+    /*border-radius: 3px;*/
+    /*border: 1px solid gray;*/
+    /*box-shadow: none;*/
+/*}*/
+
+/*.red{*/
+    /*color: firebrick;*/
+    /*vertical-align: baseline;*/
+    /*text-align: center;*/
+    /*font-size: 30px;*/
+    /*position: absolute;*/
+    /*top: 23px;*/
+    /*right: 20px;*/
+/*}*/
+
+/*.img-popup{*/
+    /*float: left;*/
+    /*padding-right: 10px;*/
+/*}*/
+
+
+/*.leaflet-container a.leaflet-popup-close-button{*/
+    /*right: 15px;*/
+/*}*/
+
+
+/*.leaflet-popup{*/
+    /*background: #ffffff;*/
+    /*border-radius: 3px;*/
+/*}*/
+
+/*#map div.leaflet-popup.leaflet-zoom-animated{*/
+    /*left: -130px;*/
+    /*bottom: 50px!important;*/
+/*}*/
+
+
+/*.leaflet-popup-content {*/
+    /*margin: 3px 3px 15px 3px !important;*/
+    /*padding: 0;*/
+    /*width: 100% !important;*/
+    /*border-radius: 3px;*/
+/*}*/
+
+/*#map #map-footer a{*/
+    /*box-shadow: none;*/
+    /*background:none !important;*/
+    /*border:none !important;*/
+    /*text-decoration: none !important;*/
+/*}*/
+
+/*#map a.center.ui-btn.ui-btn-inline.ui-btn-up-none.ui-btn-active*/
+/*{color: black;}*/
+
+
+
+
+
+
+

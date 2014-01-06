@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html xmlns:og="http://ogp.me/ns" xmlns:fb="http://www.facebook.com/2008/fbml" lang="en" data-ng-app="ringlet">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <!------------------------CSS files------------------------------------------------------>
+    <link rel="stylesheet" type="text/css" href="css/ringlet/jquery.mobile.structure-1.3.2.css" />
+    <link rel="stylesheet" type="text/css" href="css/ringlet/jquery.mobile.theme-1.3.2.css" />
+    <link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.2/jquery.mobile-1.3.2.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/leaflet/leaflet.css" />
+    <link rel="stylesheet" type="text/css" href="css/leaflet/MarkerCluster.Default.css">
+    <link rel="stylesheet" type="text/css" href="css/leaflet/MarkerCluster.css">
+    <link rel="stylesheet" type="text/css" href="css/leaflet/leaflet.awesome-markers.css">
+    <link rel="stylesheet" type="text/css" href="css/ringlet/style.css" />
+    <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Open+Sans'>
+    <!------------------------JS files------------------------------------------------------->
+    <script type="text/javascript" src="cordova.js"></script>
+    <script type="text/javascript" src="phonegap.js"></script>
+    <script type="text/javascript" src="js/ringlet/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="js/ringlet/jquery.mobile-1.3.2.js"></script>
+    <script type="text/javascript" src="js/facebook/cdv-plugin-fb-connect.js"></script>
+    <script type="text/javascript" src="js/facebook/facebook-js-sdk.js"></script>
+    <script type="text/javascript" src="js/InAppPurchase/InAppPurchase.js"></script>
+    <script type="text/javascript" src="js/leaflet/leaflet.js"></script>
+    <script type="text/javascript" src="js/leaflet/leaflet.markercluster.js"></script>
+    <script type="text/javascript" src="js/leaflet/leaflet.markercluster-src.js"></script>
+    <script type="text/javascript" src="js/leaflet/leaflet.awesome-markers.js"></script>
+    <script type="text/javascript" src="js/angular/angular.js"></script>
+    <script type="text/javascript" src="js/angular/angular-resource.js"></script>
+    <script type="text/javascript" src="js/angular/services.js"></script>
+    <script type="text/javascript" src="js/angular/controllers.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script type="text/javascript" src="js/ringlet/index.js"></script>
+    <script type="text/javascript">
+        app.initialize();
+    </script>
+</head>
+<body data-ng-controller="UserCtrl">
+<!------------------------Necessary to initialize FB plugin------------------------------>
+<div id="fb-root"></div>
+<!------------------------Landing Screen View-------------------------------------------->
+<div data-role="page" id="landing" data-theme="landing">
+    <div data-role="content">
+        <form>
+            <img id="landing-icon" src="img/logo01.png" onload="resizeLgo()"/>
+            <a href="#login" data-role="button" data-transition="slide" data-corners="false">Login</a>
+            <a href="#signup" data-role="button" data-transition="slide" data-corners="false">Signup</a>
+            <p class="link" onclick="window.location.href='#forgot'">Forgot my password</p>
+        </form>
+    </div>
+</div>
+<!------------------------Log In View---------------------------------------------------->
+<div data-role="page" id="login" data-theme="login">
+    <div data-role="header" id="login-header" data-theme="none">
+        <a href="#landing" data-role="button" data-icon="arrow-l" data-iconpos="notext">Landing</a>
+        <h3>Log In</h3>
+    </div>
+    <div data-role="content">
+        <a id="login-button-facebook" data-role="button" data-corners="false" data-ng-click="facebookLogin()">Facebook</a>
+        <form name="formLogin">
+            <p><hr class="hr-left"/><label>OR</label><hr class="hr-right"/></p>
+            <ul>
+                <li>
+                    <input data-role="none" name="email" type="email" placeholder="Email Address" data-ng-model="user.email" data-ng-change="showFunctionError=false; showServerError=false" required>
+                </li>
+                <li>
+                    <input data-role="none" name="password" type="password" placeholder="Password" data-ng-model="user.password" data-ng-change="showFunctionError=false; showServerError=false" data-ng-minlength=5 required>
+                </li>
+            </ul>
+            <div data-ng-show="showErrors">
+                <p data-ng-show="formLogin.email.$error.required">"Email required"</p>
+                <p data-ng-show="formLogin.email.$invalid && formLogin.email.$error.email">"Wrong email format"</p>
+                <p data-ng-show="formLogin.password.$error.required">"Password required"</p>
+                <p data-ng-show="formLogin.password.$error.minlength">"Password too short"</p>
+                <p data-ng-show="showFunctionError">"The email or password is incorrect"</p>
+                <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
+            </div>
+            <a id="login-button" data-role="button" data-corners="false" data-ng-click="validateLogin(formLogin.$invalid)">Log in</a>
+            <p class="link" onclick="window.location.href='#forgot'">Forgot my password</p>
+        </form>
+    </div>
+</div>
+<!------------------------Forgot your password View-------------------------------------->
+<div data-role="page" id="forgot-password">
+    <div data-role="header" id="forgot-password-header" data-theme="silver">
+        <a href="#landing-screen"  data-theme="none" data-shadow="false" data-corners="false" data-transition="slidedown" data-ng-click="errorValidation()">
+            <i class="icon-remove icons-big"></i>
+        </a>
+        <h3>Forgot password</h3>
+    </div>
+    <div data-role="content" id="forgot-password-content">
+        <form id="forgot-password-form" name="formForgotPassword">
+            <div>
+                <label for="emailForgot">Username/Email:</label>
+                <input name="emailForgot" id="emailForgot" type="email" placeholder="Email Address" data-ng-model="emailForgot" data-ng-change="showFunctionError=false; showServerError=false; showPasswordError=false; showMessage=false" required>
+            </div>
+            <div data-ng-show="showErrors">
+                <p data-ng-show="formForgotPassword.emailForgot.$error.required">"Email required"</p>
+                <p data-ng-show="formForgotPassword.emailForgot.$invalid && formForgotPassword.emailForgot.$error.email">"Wrong email format"</p>
+                <p data-ng-show="showMessage">"New password send to your email"</p>
+                <p data-ng-show="showFunctionError">"Cannot find user with this email"</p>
+                <p data-ng-show="showPasswordError">"Problem to send the mail, try later"</p>
+                <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
+            </div>
+            <a href="" data-role="button" data-corners="false" data-theme="red" id="forgotPassword-btn" data-ng-click="validateForgotPassword(formForgotPassword.$invalid)">Send me new password</a>
+        </form>
+    </div>
+</div>
+<!------------------------SignUp View---------------------------------------------------->
+<div data-role="page" id="signup">
+    <div data-role="header" id="signup-header" data-theme="silver">
+        <a data-ng-hide="user.id" href="#landing-screen"  data-theme="none" data-shadow="false" data-corners="false" data-transition="slidedown" data-ng-click="errorValidation()">
+            <i class="icon-remove icons-big"></i>
+        </a>
+        <h3>Sign Up</h3>
+    </div>
+    <div data-role="content" id="signup-content">
+        <form id="signup-form" name="formSignup">
+            <div>
+                <label for="signup-name">Name:</label>
+                <input type="text" placeholder="required" name="signupName" id="signup-name" data-ng-model="user.name" data-mini="true" data-ng-change="showFunctionError=false; showServerError=false; showPasswordError=false" required/>
+            </div><br/>
+            <div>
+                <label for="signup-email">Email:</label>
+                <input type="email" placeholder="required" name="signupEmail" id="signup-email" data-ng-model="user.email" data-mini="true" data-ng-change="showFunctionError=false; showServerError=false; showPasswordError=false" required/>
+            </div><br/>
+            <div>
+                <label for="signup-password">Create a password:</label>
+                <input type="password" id="signup-password" name="signupPassword" data-ng-model="user.password" data-mini="true" data-ng-change="showFunctionError=false; showServerError=false; showPasswordError=false" data-ng-minlength=5 required/>
+            </div><br/>
+            <div>
+                <label for="signup-repassword">Confirm your password:</label>
+                <input type="password" id="signup-repassword" data-ng-model="passwordConfirm" data-mini="true" data-ng-change="showFunctionError=false; showServerError=false; showPasswordError=false"/>
+            </div>
+            <div data-ng-show="showErrors">
+                <p data-ng-show="formSignup.signupName.$error.required">"Name required"</p>
+                <p data-ng-show="formSignup.signupEmail.$error.required">"Email required"</p>
+                <p data-ng-show="formSignup.signupEmail.$invalid && formSignup.signupEmail.$error.email">"Wrong email format"</p>
+                <p data-ng-show="formSignup.signupPassword.$error.required">"Password required"</p>
+                <p data-ng-show="formSignup.signupPassword.$error.minlength">"Password too short"</p>
+                <p data-ng-show="showPasswordError">"Passwords do not match"</p>
+                <p data-ng-show="showFunctionError">"The email is already used"</p>
+                <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
+            </div>
+            <a href="" data-role="button" data-corners="false" data-theme="red" id="signup-bSave" data-ng-click="validateSignup(formSignup.$invalid)">Save</a>
+        </form>
+    </div>
+</div>
+<!------------------------Listing View---------------------------------------------------->
+<div data-role="page" id="listing">
+    <div data-role="header" id="listing-header" data-theme="blue" data-position="fixed">
+        <a href="#listing-menu" data-theme="none" data-shadow="false" data-corners="false">
+            <div><i class="icon-reorder icons-big white-text"></i></div>
+        </a>
+        <h4>Listing</h4>
+    </div>
+    <div data-role="content" id="listing-content" data-theme="none">
+        <div id="listing-information" data-ng-show="loadedListings">
+            <ul id="listing-lImages" data-role="listview" data-icon="">
+                <li data-ng-repeat="house in listings| filter:refreshListingImages">
+                    <a href="#listing-item" data-ng-click="getHouse(house)" data-transition="slidefade">
+                        <img id="imgList-{{house.id}}" src="{{house.photos[0].photo_protocol}}{{house.photos[0].photo_host}}/{{house.photos[0].photo_path}}" onload="changeSizeImgList(this)" onerror="imgError(this)" />
+                        <h2 data-ng-bind="'$'+house.price_monthly+'/mo'" data-ng-show="house.price_monthly!=0"></h2>
+                        <h2 data-ng-bind="'$'+house.price_sale" data-ng-hide="house.price_monthly!=0"></h2>
+                        <p class="gray-text" data-ng-bind="house.bedrooms+' bed,'+house.bathrooms+' bath'"></p>
+                        <p class="gray-text" data-ng-bind="house.street_address"></p>
+                        <i class="icon-angle-right right"></i>
+                    </a>
+                </li>
+            </ul>
+            <a href="#pro" data-role="button" data-transition="slideup" data-corners="false" data-theme="red" id="get-listing-button" data-corners="true">Get more Listing!</a>
+        </div>
+    </div>
+    <div  data-id="footer" id="listing-footer" data-role="footer" class="ui-bar" data-theme="silver" data-position="fixed">
+        <a href="#search" data-ng-click="getStates()" class="left" data-inline="true" data-theme="none" data-shadow="false" data-corners="false" data-transition="slideup"><i class="icon-search icons-big"></i></a>
+        <a href="#map" data-ng-click="initMap()" class="center" data-inline="true" data-theme="none" data-shadow="false" data-corners="false" data-transition="flip"><img src="img/map-5-icon.svg" height="25px" width="25px"/></a>
+        <a class="right" data-inline="true" data-theme="none" data-shadow="false" data-corners="false"><img src="img/icoRow.png" height="25px" width="25px"/></a>
+    </div>
+
+    <div data-role="panel" id="listing-menu" data-theme="black" class="menu" data-swipe-close="false" data-dismissible="false" data-position="left" data-display="push" data-mini="true">
+        <ul data-role="listview" data-theme="none" data-mini="true" data-divider-theme="menu" data-icon="">
+            <li data-role="list-divider">Menu</li>
+            <li><a href="#listing" data-transition="slide" data-rel="close"><img src="img/map-5-icon.svg"/><div class="text-image">Listing</div></a></li>
+            <li><a href="#profile" data-transition="slide"><i class="icon-cog"></i><div>My Profile</div></a></li>
+            <li><a href="#search" data-ng-click="getStates()" data-transition="slide"><i class="icon-search"></i><div>Search</div></a></li>
+            <li><a href="#favorites" data-ng-click="getFavorites()" data-transition="slide"><i class="icon-star icons-big"></i><div>Favorites</div></a></li>
+            <li><a data-ng-click="logout()"><i class="icon-signout"></i><div>Log Out</div></a></li>
+        </ul>
+    </div>
+</div>
+<!----------------------------------Profile View---------------------------------------------------->
+<div data-role="page" id="profile" data-theme="profile">
+    <div data-role="header" id="profile-header" data-theme="blue" data-position="fixed">
+        <a href="#profile-menu" data-theme="none" data-shadow="false" data-corners="false" data-ng-click="errorValidation()"><i class="icon-reorder icons-big white-text"></i></a>
+        <h4>My Profile</h4>
+    </div>
+    <div data-role="content" id="profile-content">
+        <form id="profile-form" name="formProfile">
+            <div>
+                <label for="profile-name">Name:</label>
+                <input type="text" placeholder="required" name="profileName" id="profile-name" data-ng-model="user.name" data-mini="true" data-ng-change="showServerError=false; showFunctionError=false; showMessage=false" required/>
+            </div>
+            <div>
+                <label for="profile-email">Email:</label>
+                <input type="email" placeholder="required" name="profileEmail" id="profile-email" data-mini="true" data-ng-model="user.username" data-ng-change="showServerError=false; showFunctionError=false; showMessage=false" required/>
+            </div>
+            <div data-ng-show="showErrors">
+                <p data-ng-show="formProfile.profileName.$error.required">"Name required"</p>
+                <p data-ng-show="formProfile.profileEmail.$error.required">"Email required"</p>
+                <p data-ng-show="formProfile.profileEmail.$invalid && formProfile.profileEmail.$error.email">"Wrong email format"</p>
+                <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
+                <p data-ng-show="showFunctionError">"The email is already used"</p>
+                <p data-ng-show="showMessage">"Information updated"</p>
+            </div>
+            <div class="slider" onclick="window.location.href='#change-password'">
+                <a style="color: gray;">Change Password<i class="icon-chevron-right right"></i></a>
+            </div>
+            <a href="" data-role="button" data-corners="false" data-theme="red" id="save-profile-button" data-ng-click="validateProfile(formProfile.$invalid)">Save</a>
+        </form>
+    </div>
+    <div data-role="panel" id="profile-menu" class="menu" data-theme="black" data-swipe-close="false" data-dismissible="false" data-position="left" data-display="push" data-mini="true">
+        <ul data-role="listview" data-theme="none" data-mini="true" data-divider-theme="menu" data-iconshadow="false">
+            <li data-role="list-divider">Menu</li>
+            <li><a href="#listing" data-transition="slide"><img src="img/map-5-icon.svg"/><div class="text-image">Listing</div></a></li>
+            <li><a href="#profile" data-transition="slide" data-rel="close" data-direction="reverse"><i class="icon-cog"></i><div>My Profile</div></a></li>
+            <li><a href="#search" data-ng-click="getStates()" data-transition="slide"><i class="icon-search"></i><div>Search</div></a></li>
+            <li><a href="#favorites" data-transition="slide"><i class="icon-star"></i><div>Favorites</div></a></li>
+            <li><a data-ng-click="logout()"><i class="icon-signout"></i><div>Log Out</div></a></li>
+        </ul>
+    </div>
+</div>
+<!----------------------------------Change password View--------------------------------------------------->
+<div data-role="page" id="change-password">
+    <div data-role="header" id="change-password-header" data-theme="silver">
+        <a href="#profile"  data-theme="none" data-shadow="false" data-corners="false" data-transition="slidedown" data-ng-click="errorValidation()">
+            <i class="icon-remove icons-big"></i>
+        </a>
+        <h3>Change password</h3>
+    </div>
+    <div data-role="content" id="change-password-content">
+        <form id="change-password-form" name="formChangePassword">
+            <div>
+                <label for="currentPassword">Current password:</label>
+                <input type="password" id="currentPassword" name="currentPassword" data-ng-model="currentPassword" data-mini="true" data-ng-change="showFunctionError=false; showServerError=false; showPasswordError=false" data-ng-minlength=5 required/>
+            </div>
+            <div>
+                <label for="newPassword">Enter new password:</label>
+                <input type="password" id="newPassword" name="newPassword" data-ng-model="newPassword" data-mini="true" data-ng-change="showFunctionError=false; showServerError=false; showPasswordError=false" data-ng-minlength=5 required/>
+            </div>
+            <div>
+                <label for="passwordConfirm">Confirm new password:</label>
+                <input type="password" id="passwordConfirm" data-ng-model="passwordConfirm" data-mini="true" data-ng-change="showFunctionError=false; showServerError=false; showPasswordError=false"/>
+            </div>
+            <div data-ng-show="showErrors">
+                <p data-ng-show="formChangePassword.currentPassword.$error.required">"Current password required"</p>
+                <p data-ng-show="formChangePassword.currentPassword.$error.minlength">"Current password too short"</p>
+                <p data-ng-show="formChangePassword.newPassword.$error.required">"New password required"</p>
+                <p data-ng-show="formChangePassword.newPassword.$error.minlength">"New password too short"</p>
+                <p data-ng-show="showPasswordError">"Passwords do not match"</p>
+                <p data-ng-show="showFunctionError">"The current password is incorrect"</p>
+                <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
+            </div>
+            <a href="" data-role="button" data-corners="false" data-theme="red" id="changePassword-btn" data-ng-click="validateChangePassword(formChangePassword.$invalid)">Change password</a>
+        </form>
+    </div>
+</div>
+<!---------------------------------------Direction View---------------------------------------------------->
+<div data-role="page" id="listing-item">
+    <div data-role="header" id="listing-item-header" data-theme="blue" data-position="fixed">
+        <a href="#listing" data-theme="none" data-shadow="false" data-corners="false" data-transition="slidefade"><i class="icon-arrow-left icons-big white-text"></i></i></a>
+        <h4><span>
+            <p data-ng-bind="listing.street_address"></p>
+            <p data-ng-bind="listing.city+', '+listing.state+' '+listing.zip_code"></p>
+        </span></h4>
+        <a href="#listing-item-popup" data-rel="popup" data-position-to="window" data-theme="none" data-shadow="false" data-corners="false"><img src="img/openPopUp.png" height="30px" width="27px"/></a>
+    </div>
+    <div data-role="content" id="listing-item-content">
+        <div id="listing-item-gallery"></div>
+
+        <form id="listing-item-form">
+            <h4 data-ng-bind="'$'+listing.price_monthly+'/mo'"></h4>
+            <p class="gray-text" data-ng-bind="listing.bedrooms+' bed, '+listing.bathrooms+' bath'"></p>
+            <p data-ng-hide="listing.description">No description</p>
+            <p data-ng-show="listing.description" data-ng-bind="listing.description"></p>
+            <div id="listing-item-divFavorite" class="slider">
+                <label for="listing-item-SFavorite" data-inline="true">Favorite</label>
+                <select data-inline="true" name="favorite" id="listing-item-sFavorite" data-role="slider" data-ng-model="isFavorite" data-ng-change="addFavorites()">
+                    <option value="remove"></option>
+                    <option value="add"></option>
+                </select>
+            </div>
+            <h4>Contact</h4>
+        </form>
+        <div id="listing-item-phoneNumber">
+            <p data-ng-hide="listing.contact_phone_number">No contact number</p>
+            <p data-ng-show="listing.contact_phone_number" data-ng-bind="listing.contact_phone_number"></p>
+        </div>
+    </div>
+    <div data-role="popup" id="listing-item-popup" data-corners="false" data-tolerance="0,0" data-overlay-theme="a">
+        <form id=listing-item-fPopup>
+            <span>
+            <a href="{{emailUrls}}" data-role="button" data-theme="none" data-mini="true" data-corners="false" id="listing-item-bEmail" class="blue-text" >Email</a>
+            <!--<a href="" data-role="button" data-theme="none" data-mini="true" data-corners="false" id="listing-item-bMessage" class="blue-text" >Message</a>-->
+            <a href="#map" data-ng-click="initMapDirection()" data-role="button" data-theme="none" data-mini="true" data-corners="false" id="listing-item-bDirections" class="blue-text" >Get Directions</a>
+            </span>
+            <br/>
+            <span><a href="" data-role="button" data-theme="none" data-mini="true" data-corners="false" id="listing-item-bCancel" class="blue-text" onclick="closePopup()"><strong>Cancel</strong></a></span>
+        </form>
+    </div>
+</div>
+
+<!---------------------------------Search View---------------------------------------------------->
+<div data-role="page" id="search">
+    <div data-role="header" id="search-header" data-theme="blue" data-position="fixed">
+        <a href="#listing"  data-theme="none" data-shadow="false" data-corners="false" data-transition="slidedown"><i class="icon-remove icons-big white-text"></i></i></a>
+        <h3>Search</h3>
+    </div>
+    <div data-role="content" id="search-content">
+        <form id="search-form" name="search-form"><br/>
+            <p>Search for  listings using the search criteria bellow.</p>
+             <label for="search-tLocation" style="font-weight: bold;">Location:</label><br/>
+
+            <div id="search-divState" class="slider" data-inline="true">
+                <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" data-iconshadow="false">
+                    <legend>State:</legend>
+                    <select id="search-states" name="search-states" data-icon="" data-ng-change="getCities(selectState)" data-ng-model="selectState">
+                        <option value="Select your State">Select your State</option>
+                        <option data-ng-repeat="state in states" value="{{state.state}}" data-ng-bind="state.description"></option>
+                    </select>
+                </fieldset>
+            </div><br/>
+
+            <div id="search-divCity" class="slider" data-inline="true" data-ng-disabled="cityLoad">
+                <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" data-iconshadow="false">
+                    <legend>City:</legend>
+                    <select id="search-city" name="search-city" data-icon="" data-ng-model="selectCity">
+                        <option>Select your City</option>
+                        <option data-ng-repeat="city in cities" value="{{city.city}}" data-ng-bind="city.city"></option>
+                    </select>
+                </fieldset>
+            </div><br/>
+            <input type="text"placeholder="Zip,Code,Country" id="search-tLocation" value="" data-mini="true" />
+            <br/>
+            <div id="search-divPrice" class="slider" data-inline="true">
+                <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" data-iconshadow="false">
+                    <legend>Price:</legend>
+                    <label for="search-sMin">Min</label>
+                    <select name="search-sMin" id="search-sMin" data-icon="">
+                        <option>Min</option>
+                        <option value="">Any</option>
+                        <option value="100">$100</option>
+                        <option value="200">$200</option>
+                        <option value="300">$300</option>
+                        <option value="400">$400</option>
+                        <option value="300">$500</option>
+                        <option value="400">$600</option>
+                    </select>
+                    <select data-icon="" disabled>
+                        <option>-</option>
+                    </select>
+
+                    <label for="search-sMax">Max</label>
+                    <select name="search-sMin" id="search-sMax" data-icon="">
+                        <option>Max</option>
+                        <option value="">Any</option>
+                        <option value="100">$100</option>
+                        <option value="200">$200</option>
+                        <option value="300">$300</option>
+                        <option value="400">$400</option>
+                        <option value="300">$500</option>
+                        <option value="400">$600</option>
+                    </select>
+                </fieldset>
+            </div><br/>
+
+            <strong>Beds</strong>
+            <fieldset id="search-rBeds" data-role="controlgroup" data-type="horizontal" data-mini="true" data-corners="false">
+                <input type="radio" name="search-rBeds" id="search-rBedsAny" value="0" checked="checked" />
+                <label for="search-rBedsAny">Any</label>
+
+                <input type="radio" name="search-rBeds" id="search-rBeds1+" value="1"  />
+                <label class="gray-text" for="search-rBeds1+">1+</label>
+
+                <input type="radio" name="search-rBeds" id="search-rBeds2+" value="2"  />
+                <label class="gray-text" for="search-rBeds2+">2+</label>
+
+                <input type="radio" name="search-rBeds" id="search-rBeds3+" value="3"  />
+                <label class="gray-text" for="search-rBeds3+">3+</label>
+
+                <input type="radio" name="search-rBeds" id="search-rBeds4+" value="4"  />
+                <label class="gray-text" for="search-rBeds4+">4+</label>
+
+                <input type="radio" name="search-rBeds" id="search-rBeds5+" value="5"  />
+                <label class="gray-text" for="search-rBeds5+">5+</label>
+            </fieldset><br/>
+
+            <strong>Baths</strong>
+            <fieldset id="search-rBaths" data-role="controlgroup" data-type="horizontal" data-mini="true" data-corners="false">
+                <input type="radio" name="search-rBaths" id="search-rBathsAny" value="0" checked="checked" />
+                <label for="search-rBathsAny">Any</label>
+
+                <input type="radio" name="search-rBaths" id="search-rBaths1+" value="1"  />
+                <label class="gray-text" for="search-rBaths1+">1+</label>
+
+                <input type="radio" name="search-rBaths" id="search-rBaths2+" value="2"  />
+                <label class="gray-text" for="search-rBaths2+">2+</label>
+
+                <input type="radio" name="search-rBaths" id="search-rBaths3+" value="3"  />
+                <label class="gray-text" for="search-rBaths3+">3+</label>
+
+                <input type="radio" name="search-rBaths" id="search-rBaths4+" value="4"  />
+                <label class="gray-text" for="search-rBaths4+">4+</label>
+
+                <input type="radio" name="search-rBaths" id="search-rBaths5+" value="5"  />
+                <label class="gray-text" for="search-rBaths5+">5+</label>
+            </fieldset><br/>
+            <strong>Options</strong>
+            <div id="search-divPhotos" class="slider">
+                <label for="search-sPhotos" data-inline="true" style="font-weight: bold;">Photos Only</label>
+                <select data-inline="true" name="favorite" id="search-sPhotos" data-role="slider">
+                    <option value="0"></option>
+                    <option value="1"></option>
+                </select>
+            </div>
+            <a href="" data-role="button" data-corners="false" data-theme="red" id="search-bSearch" data-ng-click="Search()">Search</a>
+            <span id="search-reset"><input id="search-bReset" type="reset" value="Reset" data-corners="false" data-theme="gray"/></span>
+        </form>
+    </div>
+</div>
+</div>
+
+<!---------------------------------Pro View---------------------------------------------------->
+<div data-role="page" id="pro">
+    <div data-role="header" id="pro-header" data-theme="blue" data-position="fixed">
+        <a href="#listing"  data-theme="none" data-shadow="false" data-corners="false" data-transition="slidedown"><i class="icon-remove icons-big white-text"></i></i></a>
+        <h3>PRO</h3>
+    </div>
+    <div data-role="content" id="pro-content">
+        <form id="pro-form">
+            <div id="pro-subHeader">
+                <div id="pro-logo"><img src="img/pro-logo.png"/></div>
+                <div id="pro-label">
+                    <p>Upgrade to a PRO</p>
+                    <p>Membership and enjoy:</p>
+                </div>
+            </div>
+            <ul>
+                <li>View more property listing</li>
+                <li>Benefit 2</li>
+                <li>Benefit 3</li>
+                <li>Benefit 4</li>
+                <li>etc.</li>
+            </ul><br/>
+            <label>Subscription Packages</label>
+            <div id="pro-divPackages" style="display: block">
+                <ul data-role="listview" data-theme="none" id="pro-ulPackages">
+                </ul><br/>
+            </div><br/>
+            <div id="pro-divTerms" style="display: block">
+                <label>Terms of Purchase:</label>
+                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.</p>
+
+                <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate</p>
+            </div>
+        </form>
+    </div>
+</div>
+<!---------------------------------Favorites View---------------------------------------------------->
+<div data-role="page" id="favorites">
+    <div data-role="header" id="favorites-header" data-theme="blue" data-position="fixed">
+        <a href="#listing"  data-theme="none" data-shadow="false" data-corners="false" data-transition="slidedown"><i class="icon-remove icons-big white-text"></i></i></a>
+        <h4>Favorites</h4>
+    </div>
+    <div data-role="content" id="favorites-content">
+        <div id="favorites-information">
+            <ul id="favorites-lImages" data-role="listview" data-icon="">
+                <li data-ng-repeat="favoriteHouse in favorites| filter:refreshFavoritesImages">
+                    <img id="imgFavorite-{{favoriteHouse.id}}" src="{{favoriteHouse.photos[0].photo_protocol}}{{favoriteHouse.photos[0].photo_host}}/{{favoriteHouse.photos[0].photo_path}}" onload="changeSizeImgList(this)" onerror="imgError(this)" />
+                    <h2 data-ng-bind="'$'+favoriteHouse.price_monthly+'/mo'"></h2>
+                    <p class="gray-text" data-ng-bind="favoriteHouse.bedrooms+' bed, '+favoriteHouse.bathrooms+' bath'"></p>
+                    <p class="gray-text" data-ng-bind="favoriteHouse.street_address"></p>
+                    <div class="div-area" data-ng-hide="favoriteHouse.favorite" data-ng-click="removeFavorites(favoriteHouse)"><i class="icon-star right" style="color: black!important;"></i></div>
+                    <div class="div-area" data-ng-show="favoriteHouse.favorite" data-ng-click="removeFavorites(favoriteHouse)"><i class="icon-star right" style="color: #f4a460!important;"></i></div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!---------------------------------Map View---------------------------------------------------->
+<div data-role="page" id="map">
+    <div data-role="header" id="map-header" data-theme="blue" data-position="fixed">
+        <a href="#map-menu" data-theme="none" data-shadow="false" data-corners="false"><i class="icon-reorder icons-big white-text"></i></a>
+        <h4>Map</h4>
+    </div>
+    <div data-role="content" id="map-content">
+        <div id="map-area"></div>
+    </div>
+    <div  data-id="footer" id="map-footer" data-role="footer" class="ui-bar" data-theme="silver" data-position="fixed">
+        <a href="#search" data-ng-click="getStates()" class="left" data-inline="true" data-theme="none" data-shadow="false" data-corners="false" data-transition="slideup"><i class="icon-search icons-big"></i></a>
+        <a href="#listing" class="center" data-inline="true" data-theme="none" data-shadow="false" data-corners="false" data-transition="flip"><i class="icon-th-list icons-big"></i></a>
+        <a class="right" data-inline="true" data-theme="none" data-shadow="false" data-corners="false"><img src="img/icoRow.png" height="25px" width="25px"/></a>
+    </div>
+    <div data-role="panel" id="map-menu" class="menu" data-theme="black" data-swipe-close="false" data-dismissible="false" data-position="left" data-display="push" data-mini="true">
+        <ul data-role="listview" data-theme="none" data-mini="true" data-divider-theme="menu" data-iconshadow="false">
+            <li data-role="list-divider">Menu</li>
+            <li><a href="#listing" data-transition="slide"><img src="img/map-5-icon.svg"/><div class="text-image">Listing</div></a></li>
+            <li><a href="#profile" data-transition="slide"><i class="icon-cog"></i><div>My Profile</div></a></li>
+            <li><a href="#search" data-ng-click="getStates()" data-transition="slide"><i class="icon-search"></i><div>Search</div></a></li>
+            <li><a href="#favorites" data-transition="slide"><i class="icon-star"></i><div>Favorites</div></a></li>
+            <li><a data-ng-click="logout()"><i class="icon-signout"></i><div>Log Out</div></a></li>
+        </ul>
+    </div>
+</div>
+<!---------------------------------Search result View---------------------------------------------------->
+<div data-role="page" id="listing-result">
+    <div data-role="header" id="listing-result-header" data-theme="blue" data-position="fixed">
+        <a href="#search"  data-theme="none" data-shadow="false" data-corners="false" data-transition="slidedown"><i class="icon-remove icons-big white-text"></i></i></a>
+        <h4>Listing Result</h4>
+    </div>
+    <div data-role="content" id="listing-result-content" data-theme="none">
+       <div id="listing-result-information" data-ng-show="loadedSearch">
+            <ul id="result-lImages" data-role="listview" data-icon="">
+                <li data-ng-repeat="result in resultSearch| filter:refreshResultImages">
+                    <a href="#listing-item" data-ng-click="getHouse(result)" data-transition="slidefade">
+                        <img id="imgResult-{{result.id}}" src="{{result.photos[0].photo_protocol}}{{result.photos[0].photo_host}}/{{result.photos[0].photo_path}}" onload="changeSizeImgList(this)" onerror="imgError(this)" />
+                        <h2 data-ng-bind="'$'+result.price_monthly+'/mo'" data-ng-show="result.price_monthly!=0"></h2>
+                        <h2 data-ng-bind="'$'+result.price_sale" data-ng-hide="result.price_monthly!=0"></h2>
+                        <p class="gray-text" data-ng-bind="result.bedrooms+' bed,'+result.bathrooms+' bath'"></p>
+                        <p class="gray-text" data-ng-bind="result.street_address"></p>
+                        <i class="icon-angle-right right"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!-- END OF THE PAGES--->
+</body>
+</html>
