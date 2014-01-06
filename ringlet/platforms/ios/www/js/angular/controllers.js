@@ -87,17 +87,11 @@ function UserCtrl($scope, DAO){
                 }
             }
         );
-        console.log("aki");
     }
+
     $scope.getRinglets = function(ringlet){
         $scope.ringlet = ringlet;
-
-
     };
-//    $scope.refreshListingImages = function(){
-//        $('#listing-lImages').listview('refresh');
-//        return true;
-//    }
 
 //------------------Facebook Authentication-------------------------------------------------------
     $scope.facebookLogin = function(){

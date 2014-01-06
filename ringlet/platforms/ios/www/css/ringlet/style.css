@@ -5,7 +5,7 @@
 }
 
 h1, h2, h3, h4, h5, h6{
-    font-size: inherit;
+    font-size: inherit !important;
 }
 
 .link{
@@ -73,6 +73,11 @@ form ul li input{
 
 .ui-body-login form{
     text-align: center;
+}
+
+/**----------------------------- Listing View --------------------------------------**/
+#listing-content{
+    width: 115%;
 }
 
 /*.ui-content #login-button{*/

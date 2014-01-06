@@ -147,51 +147,35 @@
 <!------------------------Listing View---------------------------------------------------->
 <div data-role="page" id="home" data-theme="a">
     <div data-role="header" id="listing-header" data-position="fixed">
-        <a href="#listing-menu" data-shadow="false" data-corners="false">
-            <div><i class="icon-reorder icons-big white-text"></i></div>
+        <a href="#listing-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-shadow="false" data-corners="false">
         </a>
         <h4>Listing</h4>
     </div>
     <div data-role="content" id="listing-content">
         <div id="listing-information">
             <ul id="listing-lImages" data-role="listview">
-              <li data-ng-repeat="ringlet in ringlets | filter:refreshListingImages">
+              <li data-ng-repeat="ringlet in ringlets">
                   <a href="#listing-item" data-ng-click="getRinglets(ringlet)" data-transition="slidefade">
                       <img id="imgList-{{ringlet.id}}" src="{{ringlet.photos[0].photo_protocol}}{{ringlet.photos[0].photo_host}}/{{ringlet.photos[0].photo_path}}" onload="changeSizeImgList(this)" onerror="imgError(this)" />
-                      <h2 data-ng-bind="{{ringlet.name}}"></h2>
+                      <h2 data-ng-bind="ringlet.name"></h2>
+                      <span data-ng-bind="ringlet.distanceFromPoint+' miles away'"></span>
                   </a>
               </li>
             </ul>
-
-            <!--<ul id="listing-lImages" data-role="listview" data-icon="">-->
-                <!--<li data-ng-repeat="house in listings| filter:refreshListingImages">-->
-                    <!--<a href="#listing-item" data-ng-click="getHouse(house)" data-transition="slidefade">-->
-                        <!--<img id="imgList-{{house.id}}" src="{{house.photos[0].photo_protocol}}{{house.photos[0].photo_host}}/{{house.photos[0].photo_path}}" onload="changeSizeImgList(this)" onerror="imgError(this)" />-->
-                        <!--<h2 data-ng-bind="'$'+house.price_monthly+'/mo'" data-ng-show="house.price_monthly!=0"></h2>-->
-                        <!--<h2 data-ng-bind="'$'+house.price_sale" data-ng-hide="house.price_monthly!=0"></h2>-->
-                        <!--<p class="gray-text" data-ng-bind="house.bedrooms+' bed,'+house.bathrooms+' bath'"></p>-->
-                        <!--<p class="gray-text" data-ng-bind="house.street_address"></p>-->
-                        <!--<i class="icon-angle-right right"></i>-->
-                    <!--</a>-->
-                <!--</li>-->
-            <!--</ul>-->
-            <a href="#pro" data-role="button" data-transition="slideup" data-corners="false"  id="get-listing-button" data-corners="true">Get more Listing!</a>
         </div>
     </div>
     <div  data-id="footer" id="listing-footer" data-role="footer" class="ui-bar" data-position="fixed">
-        <a href="#search" data-ng-click="getStates()" class="left" data-inline="true" data-shadow="false" data-corners="false" data-transition="slideup"><i class="icon-search icons-big"></i></a>
-        <a href="#map" data-ng-click="initMap()" class="center" data-inline="true"  data-shadow="false" data-corners="false" data-transition="flip"><img src="img/map-5-icon.svg" height="25px" width="25px"/></a>
-        <a class="right" data-inline="true" data-shadow="false" data-corners="false"><img src="img/icoRow.png" height="25px" width="25px"/></a>
+        <!--footer-->
     </div>
 
     <div data-role="panel" id="listing-menu" class="menu" data-swipe-close="false" data-dismissible="false" data-position="left" data-display="push" data-mini="true">
         <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
             <li data-role="list-divider">Menu</li>
-            <li><a href="#listing" data-transition="slide" data-rel="close"><img src="img/map-5-icon.svg"/><div class="text-image">Listing</div></a></li>
-            <li><a href="#profile" data-transition="slide"><i class="icon-cog"></i><div>My Profile</div></a></li>
-            <li><a href="#search" data-ng-click="getStates()" data-transition="slide"><i class="icon-search"></i><div>Search</div></a></li>
-            <li><a href="#favorites" data-ng-click="getFavorites()" data-transition="slide"><i class="icon-star icons-big"></i><div>Favorites</div></a></li>
-            <li><a data-ng-click="logout()"><i class="icon-signout"></i><div>Log Out</div></a></li>
+            <li><a href="#listing" data-transition="slide" data-rel="close">Listing</a></li>
+            <li><a href="#profile" data-transition="slide">My Profile</a></li>
+            <li><a href="#search" data-ng-click="getStates()" data-transition="slide">Search</a></li>
+            <li><a href="#favorites" data-ng-click="getFavorites()" data-transition="slide">Favorites</a></li>
+            <li><a data-ng-click="logout()">Log Out</a></li>
         </ul>
     </div>
 </div>

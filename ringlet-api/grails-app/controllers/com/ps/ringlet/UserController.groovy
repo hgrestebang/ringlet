@@ -17,7 +17,7 @@ class UserController {
         if(userService.validatePro(user)){
             User.findAllByIdNotEqualAndShowOnMapAndStatusNotEqual(user.id, true, UserStatus.REMOVED).each {
                 if(!it.usersBlocked?.contains(user.id)){
-                    users.add(it.showInformation())
+                    users.add(it.showInformation(user.location[0],user.location[1]))
                 }
             }
         }
@@ -26,13 +26,12 @@ class UserController {
             User.findAllByIdNotEqualAndShowOnMapAndStatusNotEqual(user.id, true, UserStatus.REMOVED).each {
                 if(count < 10){
                     if(!it.usersBlocked?.contains(user.id)){
-                        users.add(it.showInformation())
+                        users.add(it.showInformation(user.location[0],user.location[1]))
                         count++
                     }
                 }
             }
         }
-
         if(users.size() > 0){
             render users as JSON
         }
@@ -40,9 +39,6 @@ class UserController {
             def message = [response:"bad_request"]
             render message as JSON
         }
-
-
-
     }
 
     def nearBy(){
@@ -51,7 +47,7 @@ class UserController {
         if(userService.validatePro(user)){
             User.findAllByLocationWithinCircle([user.location, 30 / 69]).each {
                 if(user.id != it.id && it.showOnMap && !it.usersBlocked?.contains(user.id) && it.status != UserStatus.REMOVED){
-                    users.add(it.showInformation())
+                    users.add(it.showInformation(user.location[0],user.location[1]))
                 }
             }
         }
@@ -60,7 +56,7 @@ class UserController {
             User.findAllByLocationWithinCircle([user.location, 30 / 69]).each {
                 if(count < 10){
                     if(user.id != it.id && it.showOnMap && !it.usersBlocked?.contains(user.id) && it.status != UserStatus.REMOVED){
-                        users.add(it.showInformation())
+                        users.add(it.showInformation(user.location[0],user.location[1]))
                     }
                 }
             }
