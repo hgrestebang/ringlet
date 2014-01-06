@@ -153,11 +153,12 @@
         <h4>Listing</h4>
     </div>
     <div data-role="content" id="listing-content" data-theme="none">
-        <div id="listing-information" data-ng-show="loadedListings">
+        <div id="listing-information">
             <ul id="listing-lImages" data-role="listview">
               <li data-ng-repeat="ringlet in ringlets | filter:refreshListingImages">
                   <a href="#listing-item" data-ng-click="getRinglets(ringlet)" data-transition="slidefade">
-
+                      <img id="imgList-{{ringlet.id}}" src="{{ringlet.photos[0].photo_protocol}}{{ringlet.photos[0].photo_host}}/{{ringlet.photos[0].photo_path}}" onload="changeSizeImgList(this)" onerror="imgError(this)" />
+                      <h2 data-ng-bind="{{ringlet.name}}"></h2>
                   </a>
               </li>
             </ul>

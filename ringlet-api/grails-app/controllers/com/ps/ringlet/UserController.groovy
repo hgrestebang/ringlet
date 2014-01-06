@@ -16,7 +16,7 @@ class UserController {
         User user = User.findByToken(UserToken.findByToken(params.token as String))
         if(userService.validatePro(user)){
             User.findAllByIdNotEqualAndShowOnMapAndStatusNotEqual(user.id, true, UserStatus.REMOVED).each {
-                if(!it.usersBlocked.contains(user.id)){
+                if(!it.usersBlocked?.contains(user.id)){
                     users.add(it.showInformation())
                 }
             }
@@ -25,14 +25,24 @@ class UserController {
             def count = 0
             User.findAllByIdNotEqualAndShowOnMapAndStatusNotEqual(user.id, true, UserStatus.REMOVED).each {
                 if(count < 10){
-                    if(!it.usersBlocked.contains(user.id)){
+                    if(!it.usersBlocked?.contains(user.id)){
                         users.add(it.showInformation())
                         count++
                     }
                 }
             }
         }
-        render users as JSON
+
+        if(users.size() > 0){
+            render users as JSON
+        }
+        else{
+            def message = [response:"bad_request"]
+            render message as JSON
+        }
+
+
+
     }
 
     def nearBy(){
@@ -40,7 +50,7 @@ class UserController {
         User user = User.findByToken(UserToken.findByToken(params.token as String))
         if(userService.validatePro(user)){
             User.findAllByLocationWithinCircle([user.location, 30 / 69]).each {
-                if(user.id != it.id && it.showOnMap && !it.usersBlocked.contains(user.id) && it.status != UserStatus.REMOVED){
+                if(user.id != it.id && it.showOnMap && !it.usersBlocked?.contains(user.id) && it.status != UserStatus.REMOVED){
                     users.add(it.showInformation())
                 }
             }
@@ -49,7 +59,7 @@ class UserController {
             def count = 0
             User.findAllByLocationWithinCircle([user.location, 30 / 69]).each {
                 if(count < 10){
-                    if(user.id != it.id && it.showOnMap && !it.usersBlocked.contains(user.id) && it.status != UserStatus.REMOVED){
+                    if(user.id != it.id && it.showOnMap && !it.usersBlocked?.contains(user.id) && it.status != UserStatus.REMOVED){
                         users.add(it.showInformation())
                     }
                 }
@@ -215,7 +225,7 @@ class UserController {
             if(user.friends.contains(params.id as Long)){
                 user.friends.remove(params.id as Long)
             }
-            if(!user.usersBlocked.contains(params.id as Long)){
+            if(!user.usersBlocked?.contains(params.id as Long)){
                 user.addToUsersBlocked(params.id as Long)
                 user.save(flush: true)
                 message.response = "user_blocked"
@@ -228,7 +238,7 @@ class UserController {
         def message = [response:""]
         User user = User.findByToken(UserToken.findByToken(params.token as String))
         if(user){
-            if(user.usersBlocked.contains(params.id as Long)){
+            if(user.usersBlocked?.contains(params.id as Long)){
                 user.usersBlocked.remove(params.id as Long)
                 user.save(flush: true)
                 message.response = "user_unblocked"
@@ -253,7 +263,7 @@ class UserController {
             friend.save(flush: true)
         }
         User.list().each {
-            if(it.usersBlocked.contains(user.id)){
+            if(it.usersBlocked?.contains(user.id)){
                 it.usersBlocked.remove(user.id)
                 it.save(flush: true)
             }

@@ -11,11 +11,13 @@ function UserCtrl($scope, DAO){
     $scope.showMessage = false;
     $scope.passwordConfirm = '';
     $scope.emailForgot = '';
-    var appConfig = {serverHost:'192.168.0.101', appName:'ringlet', token:''};
+    $scope.ringlet=[];
+    $scope.ringlets=[];
+    var appConfig = {serverHost:'192.168.0.103', appName:'ringlet', token:''};
 
     function initializeVariables(){
         $scope.user = {email:'', password:''};
-        appConfig = {serverHost:'192.168.0.101', appName:'ringlet', token:''};
+        appConfig = {serverHost:'192.168.0.103', appName:'ringlet', token:''};
     }
 
     $scope.errorValidation = function(){
@@ -51,8 +53,7 @@ function UserCtrl($scope, DAO){
                 else{
                     $scope.user = result;
                     appConfig.token = result.token.token;
-                    $.mobile.loading( 'hide', {textVisible: false});
-                    window.location.href="#home";
+                    $scope.getNearByRinglets();
                 }
             },
             function(error){
@@ -72,13 +73,29 @@ function UserCtrl($scope, DAO){
             });
     };
     //-----------------------------Listings functions-------------------------------------------------
-    $scope.getRinglets = function(ringlets){
-        $scope.ringlets = ringlets;
+    $scope.getNearByRinglets = function(){
+        DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'user', action:'nearBy',token: appConfig.token},
+            function(result){
+                if(result.response == "bad_request"){
+                    console.log("Error loading information");
+                }
+                else{
+                    $scope.ringlets=result;
+                    console.log($scope.ringlets);
+                    $.mobile.loading( 'hide', {textVisible: false});
+                    window.location.href="#home";
+                }
+            }
+        );
+        console.log("aki");
+    }
+    $scope.getRinglets = function(ringlet){
+        $scope.ringlet = ringlet;
 
 
     };
-    $scope.refreshListingImages = function(){
-        $('#listing-lImages').listview('refresh');
-        return true;
-    }
+//    $scope.refreshListingImages = function(){
+//        $('#listing-lImages').listview('refresh');
+//        return true;
+//    }
 }

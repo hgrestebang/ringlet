@@ -26,3 +26,13 @@ function resizeLgo(){
         $('#landing-icon').css({'height': (window.innerWidth/2)+'px'});
     }
 }
+function changeSizeImgList(img){
+    document.getElementById(img.id).height = 76;
+    document.getElementById(img.id).width = 76;
+}
+
+function imgError(image){
+    document.getElementById(image.id).src = "img/house.png";
+    document.getElementById(image.id).height = 76;
+    document.getElementById(image.id).width = 76;
+}
