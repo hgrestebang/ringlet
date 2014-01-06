@@ -26,7 +26,6 @@
 		30A0434814DC770100060A13 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 30A0434314DC770100060A13 /* Localizable.strings */; };
 		30FC414916E50CA1004E6F35 /* icon-72@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 30FC414816E50CA1004E6F35 /* icon-72@2x.png */; };
 		42B3F56A187B262A00A5065E /* FacebookConnectPlugin.m in Sources */ = {isa = PBXBuildFile; fileRef = 42B3F568187B262A00A5065E /* FacebookConnectPlugin.m */; };
-		42B3F56C187B265000A5065E /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B3F56B187B265000A5065E /* FacebookSDK.framework */; };
 		42B3F56E187B266100A5065E /* Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B3F56D187B266100A5065E /* Social.framework */; };
 		42B3F570187B266900A5065E /* AdSupport.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B3F56F187B266900A5065E /* AdSupport.framework */; };
 		42B3F572187B267100A5065E /* Accounts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 42B3F571187B267100A5065E /* Accounts.framework */; };
@@ -44,6 +43,7 @@
 		7E7966E51810823500FA85AD /* icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E7966DB1810823500FA85AD /* icon-76@2x.png */; };
 		7E7966E61810823500FA85AD /* icon-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E7966DC1810823500FA85AD /* icon-small.png */; };
 		7E7966E71810823500FA85AD /* icon-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E7966DD1810823500FA85AD /* icon-small@2x.png */; };
+		84380753187B426B00549F1B /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84380752187B426B00549F1B /* FacebookSDK.framework */; };
 		89E148445ACE45E3897BE875 /* CDVCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = A539D2735945406AB36FF023 /* CDVCamera.m */; };
 		9219841F0A8442389B60BB12 /* CDVDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = B6E209F29D234DE69DE6AF56 /* CDVDevice.m */; };
 		AD3B32A159074B898F94DF34 /* CDVJpegHeaderWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDEBE39132A4C938A33C15A /* CDVJpegHeaderWriter.m */; };
@@ -101,7 +101,6 @@
 		32CA4F630368D1EE00C91783 /* ringlet-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ringlet-Prefix.pch"; sourceTree = "<group>"; };
 		42B3F568187B262A00A5065E /* FacebookConnectPlugin.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FacebookConnectPlugin.m; sourceTree = "<group>"; };
 		42B3F569187B262A00A5065E /* FacebookConnectPlugin.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FacebookConnectPlugin.h; sourceTree = "<group>"; };
-		42B3F56B187B265000A5065E /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../../../Documents/FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 		42B3F56D187B266100A5065E /* Social.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Social.framework; path = System/Library/Frameworks/Social.framework; sourceTree = SDKROOT; };
 		42B3F56F187B266900A5065E /* AdSupport.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AdSupport.framework; path = System/Library/Frameworks/AdSupport.framework; sourceTree = SDKROOT; };
 		42B3F571187B267100A5065E /* Accounts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accounts.framework; path = System/Library/Frameworks/Accounts.framework; sourceTree = SDKROOT; };
@@ -118,6 +117,7 @@
 		7E7966DB1810823500FA85AD /* icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-76@2x.png"; sourceTree = "<group>"; };
 		7E7966DC1810823500FA85AD /* icon-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-small.png"; sourceTree = "<group>"; };
 		7E7966DD1810823500FA85AD /* icon-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-small@2x.png"; sourceTree = "<group>"; };
+		84380752187B426B00549F1B /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../../../../Documents/FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* ringlet-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "ringlet-Info.plist"; path = "../ringlet-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		A539D2735945406AB36FF023 /* CDVCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVCamera.m; path = org.apache.cordova.camera/CDVCamera.m; sourceTree = "<group>"; };
 		B6E209F29D234DE69DE6AF56 /* CDVDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVDevice.m; path = org.apache.cordova.device/CDVDevice.m; sourceTree = "<group>"; };
@@ -134,6 +134,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				42B3F572187B267100A5065E /* Accounts.framework in Frameworks */,
+				84380753187B426B00549F1B /* FacebookSDK.framework in Frameworks */,
 				42B3F570187B266900A5065E /* AdSupport.framework in Frameworks */,
 				42B3F56E187B266100A5065E /* Social.framework in Frameworks */,
 				5B1594DD16A7569C00FEF299 /* AssetsLibrary.framework in Frameworks */,
@@ -142,7 +143,6 @@
 				305D5FD1115AB8F900A74A75 /* MobileCoreServices.framework in Frameworks */,
 				5AEE5B35173C68D80009041E /* CoreLocation.framework in Frameworks */,
 				634F4B3B000D49CD99A5F8C9 /* ImageIO.framework in Frameworks */,
-				42B3F56C187B265000A5065E /* FacebookSDK.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,10 +230,10 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				84380752187B426B00549F1B /* FacebookSDK.framework */,
 				42B3F571187B267100A5065E /* Accounts.framework */,
 				42B3F56F187B266900A5065E /* AdSupport.framework */,
 				42B3F56D187B266100A5065E /* Social.framework */,
-				42B3F56B187B265000A5065E /* FacebookSDK.framework */,
 				5AEE5B34173C68D80009041E /* CoreLocation.framework */,
 				5B1594DC16A7569C00FEF299 /* AssetsLibrary.framework */,
 				288765FC0DF74451002DB57D /* CoreGraphics.framework */,
@@ -521,6 +521,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/marlonrojas/Documents/FacebookSDK,
+					/Users/admin/Documents/FacebookSDK,
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -558,6 +559,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/marlonrojas/Documents/FacebookSDK,
+					/Users/admin/Documents/FacebookSDK,
 				);
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "ringlet/ringlet-Prefix.pch";
