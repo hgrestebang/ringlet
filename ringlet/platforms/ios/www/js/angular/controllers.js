@@ -11,13 +11,11 @@ function UserCtrl($scope, DAO){
     $scope.showMessage = false;
     $scope.passwordConfirm = '';
     $scope.emailForgot = '';
-    $scope.ringlet=[];
-    $scope.ringlets=[];
-    var appConfig = {serverHost:'192.168.0.103', appName:'ringlet', token:''};
+    var appConfig = {serverHost:'192.168.0.101', appName:'ringlet', token:''};
 
     function initializeVariables(){
         $scope.user = {email:'', password:''};
-        appConfig = {serverHost:'192.168.0.103', appName:'ringlet', token:''};
+        appConfig = {serverHost:'192.168.0.101', appName:'ringlet', token:''};
     }
 
     $scope.errorValidation = function(){
@@ -53,7 +51,8 @@ function UserCtrl($scope, DAO){
                 else{
                     $scope.user = result;
                     appConfig.token = result.token.token;
-                    $scope.getNearByRinglets();
+                    $.mobile.loading( 'hide', {textVisible: false});
+                    window.location.href="#home";
                 }
             },
             function(error){
@@ -72,30 +71,36 @@ function UserCtrl($scope, DAO){
                 }
             });
     };
-    //-----------------------------Listings functions-------------------------------------------------
-    $scope.getNearByRinglets = function(){
-        DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'user', action:'nearBy',token: appConfig.token},
+
+//------------------Facebook Authentication-------------------------------------------------------
+    $scope.facebookLogin = function(){
+        FB.login(
+            function(response) {
+                if (response.status == "connected"){
+                    facebookGetUser();
+                }
+            },{scope: "email"}
+        );
+    }
+
+    function facebookGetUser(){
+        FB.api('/me', {fields: 'id, name, gender, email'}, function(response){
+            if (!response.error){
+                $scope.user = response;
+                authenticateUser();
+            }
+        });
+    }
+
+    function authenticateUser(){
+        DAO.get({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'auth', action:'authenticateUser', facebookId:$scope.user.id},
             function(result){
-                if(result.response == "bad_request"){
-                    console.log("Error loading information");
+                if(result.response == "user_not_found"){
+                    window.location.href="#signup";
                 }
                 else{
-                    $scope.ringlets=result;
-                    console.log($scope.ringlets);
-                    $.mobile.loading( 'hide', {textVisible: false});
-                    window.location.href="#home";
+                    $scope.login();
                 }
-            }
-        );
-        console.log("aki");
+            });
     }
-    $scope.getRinglets = function(ringlet){
-        $scope.ringlet = ringlet;
-
-
-    };
-//    $scope.refreshListingImages = function(){
-//        $('#listing-lImages').listview('refresh');
-//        return true;
-//    }
 }

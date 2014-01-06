@@ -9,7 +9,6 @@ h1, h2, h3, h4, h5, h6{
 }
 
 .link{
-    font-size: 16px;
     color: blue;
 }
 
@@ -48,7 +47,8 @@ form ul li input{
 
 /**----------------------------- Landing View ------------------------------------**/
 .ui-body-landing{
-    background-image:url("../../img/map01.png"); position:absolute;
+    background-image:url("../../img/map01.png");
+    position:absolute;
 }
 
 .ui-body-landing form{

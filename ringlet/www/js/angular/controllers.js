@@ -98,4 +98,36 @@ function UserCtrl($scope, DAO){
 //        $('#listing-lImages').listview('refresh');
 //        return true;
 //    }
+
+//------------------Facebook Authentication-------------------------------------------------------
+    $scope.facebookLogin = function(){
+        FB.login(
+            function(response) {
+                if (response.status == "connected"){
+                    facebookGetUser();
+                }
+            },{scope: "email"}
+        );
+    }
+
+    function facebookGetUser(){
+        FB.api('/me', {fields: 'id, name, gender, email'}, function(response){
+            if (!response.error){
+                $scope.user = response;
+                authenticateUser();
+            }
+        });
+    }
+
+    function authenticateUser(){
+        DAO.get({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'auth', action:'authenticateUser', facebookId:$scope.user.id},
+            function(result){
+                if(result.response == "user_not_found"){
+                    window.location.href="#signup";
+                }
+                else{
+                    $scope.login();
+                }
+            });
+    }
 }
