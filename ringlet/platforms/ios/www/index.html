@@ -44,7 +44,6 @@
             <img id="landing-icon" src="img/logo01.png" onload="resizeLgo()"/>
             <a href="#login" data-role="button" data-transition="slide" data-corners="false">Login</a>
             <a href="#signup" data-role="button" data-transition="slide" data-corners="false">Signup</a>
-            <p class="link" onclick="window.location.href='#forgot'">Forgot my password</p>
         </form>
     </div>
 </div>
@@ -80,9 +79,9 @@
     </div>
 </div>
 <!------------------------Forgot your password View-------------------------------------->
-<div data-role="page" id="forgot-password">
+<div data-role="page" id="forgot">
     <div data-role="header" id="forgot-password-header" data-theme="silver">
-        <a href="#landing-screen"  data-theme="none" data-shadow="false" data-corners="false" data-transition="slidedown" data-ng-click="errorValidation()">
+        <a href="#landing"  data-theme="none" data-shadow="false" data-corners="false" data-transition="slidedown" data-ng-click="errorValidation()">
             <i class="icon-remove icons-big"></i>
         </a>
         <h3>Forgot password</h3>
@@ -108,7 +107,7 @@
 <!------------------------SignUp View---------------------------------------------------->
 <div data-role="page" id="signup">
     <div data-role="header" id="signup-header" data-theme="silver">
-        <a data-ng-hide="user.id" href="#landing-screen"  data-theme="none" data-shadow="false" data-corners="false" data-transition="slidedown" data-ng-click="errorValidation()">
+        <a data-ng-hide="user.id" href="#landing"  data-theme="none" data-shadow="false" data-corners="false" data-transition="slidedown" data-ng-click="errorValidation()">
             <i class="icon-remove icons-big"></i>
         </a>
         <h3>Sign Up</h3>
@@ -146,7 +145,7 @@
     </div>
 </div>
 <!------------------------Listing View---------------------------------------------------->
-<div data-role="page" id="listing">
+<div data-role="page" id="home">
     <div data-role="header" id="listing-header" data-theme="blue" data-position="fixed">
         <a href="#listing-menu" data-theme="none" data-shadow="false" data-corners="false">
             <div><i class="icon-reorder icons-big white-text"></i></div>

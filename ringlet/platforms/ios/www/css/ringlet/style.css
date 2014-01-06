@@ -39,6 +39,13 @@ form ul li:first-child{
     border-top: 1px solid #CCCCCC;
 }
 
+form ul li input{
+    width: 100%;
+    border: none;
+    background: none;
+    margin: 12px 0 12px 10px;
+}
+
 /**----------------------------- Landing View ------------------------------------**/
 .ui-body-landing{
     background-image:url("../../img/map01.png"); position:absolute;

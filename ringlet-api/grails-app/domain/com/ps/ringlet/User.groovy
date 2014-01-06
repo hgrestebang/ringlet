@@ -4,6 +4,7 @@ class User {
 
     String username
     String passwordHash
+    String facebookId
     String name
     String phone
     String bio
@@ -29,6 +30,7 @@ class User {
     static constraints = {
         username nullable: false, blank: false, unique: true
         passwordHash nullable: false, blank: false
+        facebookId nullable: true
         name nullable: false, blank: false
         phone nullable: true
         bio nullable: true
@@ -63,6 +65,7 @@ class User {
         }
         return [id: this.id,
                 username: this.username,
+                facebookId: this.facebookId,
                 name: this.name,
                 phone: this.phone,
                 bio: this.bio,

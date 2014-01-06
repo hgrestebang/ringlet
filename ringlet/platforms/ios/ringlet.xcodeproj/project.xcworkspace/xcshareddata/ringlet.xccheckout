@@ -5,19 +5,19 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>8B2C5B1B-4E91-41DC-9A9C-784CB38C8EEB</string>
+	<string>D263C185-89BA-4EDC-99F3-BDFDE5F5DCFA</string>
 	<key>IDESourceControlProjectName</key>
 	<string>ringlet</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>A266F509-2719-4ADF-8A83-20D669BFED62</key>
+		<key>7694BFF0-1DEF-407F-8E7E-F59F98D84969</key>
 		<string>https://github.com/PureSrc/ringlet.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>ringlet/platforms/ios/ringlet.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>A266F509-2719-4ADF-8A83-20D669BFED62</key>
+		<key>7694BFF0-1DEF-407F-8E7E-F59F98D84969</key>
 		<string>../../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
@@ -25,14 +25,14 @@
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>A266F509-2719-4ADF-8A83-20D669BFED62</string>
+	<string>7694BFF0-1DEF-407F-8E7E-F59F98D84969</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>A266F509-2719-4ADF-8A83-20D669BFED62</string>
+			<string>7694BFF0-1DEF-407F-8E7E-F59F98D84969</string>
 			<key>IDESourceControlWCCName</key>
 			<string>ringlet</string>
 		</dict>
