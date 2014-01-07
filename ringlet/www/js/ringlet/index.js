@@ -22,7 +22,7 @@ var app = {
     }
 };
 
-function resizeLgo(){
+function resizeLogo(){
     if(window.innerHeight < window.innerWidth){
         $('#landing-icon').css({'height': (window.innerHeight/2)+'px'});
     }
@@ -30,6 +30,14 @@ function resizeLgo(){
         $('#landing-icon').css({'height': (window.innerWidth/2)+'px'});
     }
 }
+
+function resizePhoto(elementId){
+    var width = $('#carousel-image').width();
+    var height = $('#carousel-image').height();
+    $('#'+elementId).css({'width': width+'px'});
+    $('#'+elementId).css({'height': height+'px'});
+}
+
 function changeSizeImgList(img){
     document.getElementById(img.id).height = 76;
     document.getElementById(img.id).width = 76;
