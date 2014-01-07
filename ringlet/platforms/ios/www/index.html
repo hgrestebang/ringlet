@@ -102,7 +102,7 @@
 </div>
 <!------------------------SignUp View---------------------------------------------------->
 <div data-role="page" id="signup" data-theme="a">
-    <div data-role="header"    id="signup-header">
+    <div data-role="header" id="signup-header">
         <a data-ng-hide="user.id" href="#landing" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-ng-click="errorValidation()">Landing</a>
         <h3>Sign Up</h3>
         <a data-role="button" data-mini="true" data-inline="true" data-corners="false" data-ng-click="validateSignup(formSignup.$invalid)">Save</a>
@@ -131,7 +131,7 @@
                 <li><input data-role="none" name="name" type="text" placeholder="Your Name" data-ng-model="user.name" data-ng-change="showFunctionError=false; showServerError=false" required></li>
                 <li><input data-role="none" name="email" type="email" placeholder="Email Address" data-ng-model="user.email" data-ng-change="showFunctionError=false; showServerError=false" required></li>
                 <li><input data-role="none" name="password" type="password" placeholder="Password" data-ng-model="user.password" data-ng-change="showFunctionError=false; showServerError=false" data-ng-minlength=5 required></li>
-                <li><input data-role="none" name="phone" type="number" placeholder="Phone Number" data-ng-model="user.phone" data-ng-change="showFunctionError=false; showServerError=false" required></li>
+                <li><input data-role="none" name="phone" type="number" placeholder="Phone Number" data-ng-model="user.phone" data-ng-change="showFunctionError=false; showServerError=false"></li>
                 <li><select data-role="none" name="gender" id="gender" data-ng-model="user.gender" data-ng-change="showFunctionError=false; showServerError=false"><option value="MALE">Male</option><option value="FEMALE">Female</option></select></li>
                 <li><textarea data-role="none" name="bio" rows="5" id="bio" data-ng-model="user.bio" data-ng-change="showFunctionError=false; showServerError=false"></textarea></li>
             </ul>
@@ -141,7 +141,7 @@
 <!------------------------Listing View---------------------------------------------------->
 <div data-role="page" id="home" data-theme="a">
     <div data-role="header" id="listing-header"  >
-        <a href="#panel-menu" data-role="button" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-shadow="false" data-corners="false">
+        <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-shadow="false" data-corners="false">
         </a>
         <h4>Listing</h4>
     </div>
@@ -161,8 +161,6 @@
     <div  data-id="footer" id="listing-footer" data-role="footer" class="ui-bar"  >
         <!--footer-->
     </div>
-
-
 </div>
 <!----------------------------------Profile View---------------------------------------------------->
 <div data-role="page" id="profile" data-theme="a">
@@ -474,9 +472,9 @@
 </div>
 
 <!--Panel-->
-<div data-role="panel" id="panel-menu" data-position="left" data-display="overlay" data-dismissible="true" data-theme="a">
+<div data-role="panel" id="panel-menu" data-theme="a" data-position="left">
     </br>
-    <ul data-role="listview" data-mini="true" data-divider-theme="menu" data-icon="">
+    <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
         <li data-role="list-divider" class="center">Menu</li>
         <li><a href="#home" data-transition="slide" data-rel="close">Listing</a></li>
         <li><a href="#profile" data-transition="slide">My Profile</a></li>

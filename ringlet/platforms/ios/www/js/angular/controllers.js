@@ -14,7 +14,7 @@ function UserCtrl($scope, DAO){
     $scope.emailForgot = '';
     $scope.ringlet=[];
     $scope.ringlets=[];
-    var appConfig = {serverHost:'192.168.0.101', appName:'ringlet', token:''};
+    var appConfig = {serverHost:'192.168.0.102', appName:'ringlet', token:''};
     var owl = $("#listing-item-gallery");
     var carousel = $("#signup-carousel");
     var photoCount = 0;
@@ -30,7 +30,7 @@ function UserCtrl($scope, DAO){
         $scope.passwordConfirm = '';
         $scope.emailForgot = '';
         $scope.images = [];
-        appConfig = {serverHost:'192.168.0.101', appName:'ringlet', token:''};
+        appConfig = {serverHost:'192.168.0.102', appName:'ringlet', token:''};
     }
 
     $scope.errorValidation = function(){
@@ -176,6 +176,43 @@ function UserCtrl($scope, DAO){
                 else if(result.response == "email_not_send"){
                     $scope.showErrors = true;
                     $scope.showPasswordError = true;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                }
+            },
+            function(error){
+                $scope.showErrors = true;
+                $scope.showServerError = true;
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+    }
+
+    $scope.validateSignup = function(notValid){
+        if(notValid){
+            $scope.showErrors = true;
+        }
+        else{
+            $scope.showErrors = false;
+            $scope.showFunctionError = false;
+            $scope.showServerError = false;
+            $scope.signup();
+        }
+    }
+
+    $scope.signup = function(){
+        $.mobile.loading( 'show', {textVisible: false});
+        if($scope.user.id){
+            $scope.user.facebookId = $scope.user.id;
+            $scope.user.id = null;
+        }
+        DAO.save({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'user', action:'create', user:$scope.user, images:$scope.images},
+            function(result){
+                if(result.response == "user_created"){
+                    $.mobile.loading( 'hide', {textVisible: false});
+                    $scope.login();
+                }
+                else if(result.response == "email_used"){
+                    $scope.showErrors = true;
+                    $scope.showFunctionError = true;
                     $.mobile.loading( 'hide', {textVisible: false});
                 }
             },
