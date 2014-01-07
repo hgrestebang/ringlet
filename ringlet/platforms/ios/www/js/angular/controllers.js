@@ -30,7 +30,7 @@ function UserCtrl($scope, DAO){
         $scope.passwordConfirm = '';
         $scope.emailForgot = '';
         $scope.images = [];
-        appConfig = {serverHost:'192.168.0.102', appName:'ringlet', token:''};
+        appConfig = {serverHost:'192.168.0.101', appName:'ringlet', token:''};
     }
 
     $scope.errorValidation = function(){
@@ -188,7 +188,7 @@ function UserCtrl($scope, DAO){
 
 //---------------------------- Carousel Functions ------------------------------------------------
     carousel.owlCarousel({ autoPlay: false, itemsMobile : [479,3], itemsTablet: [768,3]});
-    owl.owlCarousel({navigation:true, slideSpeed:300, paginationSpeed:400, lazyLoad:true, singleItem:true});
+    owl.owlCarousel({autoplay:true,navigation:true, slideSpeed:300, paginationSpeed:400, lazyLoad:true, singleItem:true});
     
     function addPhoto(data, id){
         var content = "<div class='item'><img class='user-image' id='"+id+"' onload='resizePhoto(this.id)' src='data:image/jpeg;base64,"+data+"'></div>";
