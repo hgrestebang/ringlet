@@ -3,9 +3,8 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <!------------------------CSS files------------------------------------------------------>
-    <link rel="stylesheet" type="text/css" href="css/ringlet/ringlet.css" />
-    <link rel="stylesheet" type="text/css" href="css/ringlet/jquery.mobile.icons.min.css" />
     <link rel="stylesheet" type="text/css" href="css/ringlet/jquery.mobile-1.4.0.min.css" />
+    <link rel="stylesheet" type="text/css" href="css/ringlet/ringlet.min.css" />
     <link rel="stylesheet" type="text/css" href="css/leaflet/leaflet.css" />
     <link rel="stylesheet" type="text/css" href="css/leaflet/MarkerCluster.Default.css">
     <link rel="stylesheet" type="text/css" href="css/leaflet/MarkerCluster.css">
@@ -52,14 +51,14 @@
 </div>
 <!------------------------Log In View---------------------------------------------------->
 <div data-role="page" id="login" data-theme="a">
-    <div data-role="header" id="login-header" data-position="fixed" >
+    <div data-role="header" id="login-header"   >
         <a href="#landing" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">Landing</a>
         <h3>Log In</h3>
     </div>
     <div data-role="content">
         <a data-role="button" data-corners="false" data-ng-click="facebookLogin()">Facebook</a>
         <form name="formLogin" class="center">
-            <p><hr class="hr-left"/><label>OR</label><hr class="hr-right"/></p>
+            <p><label>OR</label></p>
             <ul>
                 <li><input data-role="none" name="email" type="email" placeholder="Email Address" data-ng-model="user.email" data-ng-change="showFunctionError=false; showServerError=false" required></li>
                 <li><input data-role="none" name="password" type="password" placeholder="Password" data-ng-model="user.password" data-ng-change="showFunctionError=false; showServerError=false" data-ng-minlength=5 required></li>
@@ -79,7 +78,7 @@
 </div>
 <!------------------------Forgot your password View-------------------------------------->
 <div data-role="page" id="forgot" data-theme="a">
-    <div data-role="header" id="forgot-password-header">
+    <div data-role="header"    id="forgot-password-header">
         <a href="#login" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-ng-click="errorValidation()">Login</a>
         <h3>Forgot password</h3>
     </div>
@@ -141,7 +140,7 @@
 </div>
 <!------------------------Listing View---------------------------------------------------->
 <div data-role="page" id="home" data-theme="a">
-    <div data-role="header" id="listing-header" data-position="fixed">
+    <div data-role="header" id="listing-header"  >
         <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-shadow="false" data-corners="false">
         </a>
         <h4>Listing</h4>
@@ -159,15 +158,13 @@
             </ul>
         </div>
     </div>
-    <div  data-id="footer" id="listing-footer" data-role="footer" class="ui-bar" data-position="fixed">
+    <div  data-id="footer" id="listing-footer" data-role="footer" class="ui-bar"  >
         <!--footer-->
     </div>
-
-
 </div>
 <!----------------------------------Profile View---------------------------------------------------->
 <div data-role="page" id="profile" data-theme="a">
-    <div data-role="header" id="profile-header" data-theme="d" data-position="fixed">
+    <div data-role="header" id="profile-header" data-theme="d"  >
         <a href="#panel-menu"   data-shadow="false" data-corners="false" data-ng-click="errorValidation()"><i class="icon-reorder icons-big white-text"></i></a>
         <h4>My Profile</h4>
     </div>
@@ -199,7 +196,7 @@
 </div>
 <!----------------------------------Change password View--------------------------------------------------->
 <div data-role="page" id="change-password" data-theme="a">
-    <div data-role="header" id="change-password-header">
+    <div data-role="header"    id="change-password-header">
         <a href="#profile"    data-shadow="false" data-corners="false" data-transition="slidedown" data-ng-click="errorValidation()">
             <i class="icon-remove icons-big"></i>
         </a>
@@ -234,7 +231,7 @@
 </div>
 <!---------------------------------------ringster Info View---------------------------------------------------->
 <div data-role="page" id="listing-item" data-theme="a">
-    <div data-role="header" id="listing-item-header" data-position="fixed">
+    <div data-role="header" id="listing-item-header"  >
         <a href="#home" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-shadow="false" data-corners="false">
         </a>
         <h2 data-ng-bind="ringlet.name"></h2>
@@ -242,9 +239,9 @@
     <div data-role="content" id="listing-item-content">
         <div id="listing-item-gallery">    </div>
         <form id="listing-item-form">
-            <p data-ng-show="ringlet.bio" class="ui-btn ui-icon-user ui-btn-icon-left" data-ng-bind="ringlet.bio"></p>
+            <p data-ng-show="ringlet.bio" class="ui-btn ui-icon-comment ui-btn-icon-left" data-ng-bind="ringlet.bio"></p>
+            <p data-ng-show="ringlet.gender"   class="ui-btn ui-icon-user ui-btn-icon-left" data-ng-bind="ringlet.gender"></p>
             <h4>Contact</h4>
-
             <div id="listing-item-phoneNumber">
                 <p data-ng-hide="ringlet.phone">No contact number</p>
                 <p data-ng-show="ringlet.phone" class="ui-btn ui-icon-phone ui-btn-icon-left" >
@@ -259,7 +256,7 @@
 
 <!---------------------------------Search View---------------------------------------------------->
 <div data-role="page" id="search" data-theme="a">
-    <div data-role="header" id="search-header" data-theme="d" data-position="fixed">
+    <div data-role="header" id="search-header"  >
         <a href="#listing"    data-shadow="false" data-corners="false" data-transition="slidedown"><i class="icon-remove icons-big white-text"></i></i></a>
         <h3>Search</h3>
     </div>
@@ -379,7 +376,7 @@
 
 <!---------------------------------Pro View---------------------------------------------------->
 <div data-role="page" id="pro">
-    <div data-role="header" id="pro-header" data-theme="d" data-position="fixed">
+    <div data-role="header" id="pro-header" data-theme="d"  >
         <a href="#listing"  data-shadow="false" data-corners="false" data-transition="slidedown"><i class="icon-remove icons-big white-text"></i></i></a>
         <h3>PRO</h3>
     </div>
@@ -415,7 +412,7 @@
 </div>
 <!---------------------------------Favorites View---------------------------------------------------->
 <div data-role="page" id="favorites">
-    <div data-role="header" id="favorites-header" data-theme="d" data-position="fixed">
+    <div data-role="header" id="favorites-header" data-theme="d"  >
         <a href="#listing"    data-shadow="false" data-corners="false" data-transition="slidedown"><i class="icon-remove icons-big white-text"></i></i></a>
         <h4>Favorites</h4>
     </div>
@@ -437,14 +434,14 @@
 
 <!---------------------------------Map View---------------------------------------------------->
 <div data-role="page" id="map" data-theme="a">
-    <div data-role="header" id="map-header" data-theme="d" data-position="fixed">
+    <div data-role="header" id="map-header" data-theme="d"  >
         <a href="#map-menu"   data-shadow="false" data-corners="false"><i class="icon-reorder icons-big white-text"></i></a>
         <h4>Map</h4>
     </div>
     <div data-role="content" id="map-content">
         <div id="map-area"></div>
     </div>
-    <div  data-id="footer" id="map-footer" data-role="footer" class="ui-bar" data-position="fixed">
+    <div  data-id="footer" id="map-footer" data-role="footer" class="ui-bar"  >
         <a href="#search" data-ng-click="getStates()" class="left" data-inline="true"   data-shadow="false" data-corners="false" data-transition="slideup"><i class="icon-search icons-big"></i></a>
         <a href="#listing" class="center" data-inline="true"   data-shadow="false" data-corners="false" data-transition="flip"><i class="icon-th-list icons-big"></i></a>
         <a class="right" data-inline="true"   data-shadow="false" data-corners="false"><img src="img/icoRow.png" height="25px" width="25px"/></a>
@@ -452,7 +449,7 @@
 </div>
 <!---------------------------------Search result View---------------------------------------------------->
 <div data-role="page" id="listing-result" data-theme="a">
-    <div data-role="header" id="listing-result-header" data-position="fixed">
+    <div data-role="header" id="listing-result-header"  >
         <a href="#search"    data-shadow="false" data-corners="false" data-transition="slidedown"><i class="icon-remove icons-big white-text"></i></i></a>
         <h4>Listing Result</h4>
     </div>
@@ -476,8 +473,9 @@
 
 <!--Panel-->
 <div data-role="panel" id="panel-menu" data-theme="a" data-position="left">
+    </br>
     <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
-        <li data-role="list-divider">Menu</li>
+        <li data-role="list-divider" class="center">Menu</li>
         <li><a href="#home" data-transition="slide" data-rel="close">Listing</a></li>
         <li><a href="#profile" data-transition="slide">My Profile</a></li>
         <li><a href="#search" data-ng-click="getStates()" data-transition="slide">Search</a></li>
