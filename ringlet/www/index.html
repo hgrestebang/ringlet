@@ -158,7 +158,7 @@
         <div id="listing-information">
             <ul id="listing-lImages" data-role="listview">
               <li data-ng-repeat="ringlet in ringlets">
-                  <a href="#listing-item" data-ng-click="getRinglets(ringlet)" data-rel="dialog" data-transition="flip">
+                  <a href="#listing-item" data-ng-click="getRinglets(ringlet)" data-transition="flip">
                       <img id="imgList-{{ringlet.id}}" src="{{ringlet.photos[0].photo_protocol}}{{ringlet.photos[0].photo_host}}/{{ringlet.photos[0].photo_path}}" onload="changeSizeImgList(this)" onerror="imgError(this)" />
                       <h2 data-ng-bind="ringlet.name"></h2>
                       <span class="textFont8" data-ng-bind="ringlet.distanceFromPoint+' miles away'"></span>
