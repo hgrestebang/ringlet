@@ -18,11 +18,18 @@ var app = {
     }
 };
 
-function resizeLgo(){
+function resizeLogo(){
     if(window.innerHeight < window.innerWidth){
         $('#landing-icon').css({'height': (window.innerHeight/2)+'px'});
     }
     else{
         $('#landing-icon').css({'height': (window.innerWidth/2)+'px'});
     }
+}
+
+function resizePhoto(elementId){
+    var width = $('#carousel-image').width();
+    var height = $('#carousel-image').height();
+    $('#'+elementId).css({'width': width+'px'});
+    $('#'+elementId).css({'height': height+'px'});
 }

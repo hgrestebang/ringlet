@@ -1,4 +1,4 @@
-/**----------------------------- General -----------------------------------------**/
+/**----------------------------- Font Style --------------------------------------**/
 *{
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 12px;
@@ -8,10 +8,11 @@ h1, h2, h3, h4, h5, h6{
     font-size: inherit;
 }
 
-.link{
-    color: blue;
+.center{
+    text-align: center;
 }
 
+/**----------------------------- Headers Style -----------------------------------**/
 .ui-header{
     height: 40px;
     padding-top: 15px;
@@ -27,6 +28,7 @@ form ul{
     list-style-type: none;
 }
 
+/**----------------------------- Lists Style -------------------------------------**/
 form ul li{
     border-bottom: 1px solid #CCCCCC;
     border-left: 1px solid #CCCCCC;
@@ -45,6 +47,24 @@ form ul li input{
     margin: 12px 0 12px 10px;
 }
 
+/**----------------------------- Colors Style ------------------------------------**/
+.red{
+    color: #FF0000;
+}
+
+.blue{
+    color: #0000FF;
+}
+
+.green{
+    color: #00FF00;
+}
+
+/**----------------------------- Carousel Style ----------------------------------**/
+.user-image{
+    width: 98% !important;
+}
+
 /**----------------------------- Landing View ------------------------------------**/
 .ui-body-landing{
     background-image:url("../../img/map01.png");
@@ -52,7 +72,6 @@ form ul li input{
 }
 
 .ui-body-landing form{
-    text-align: center;
     padding-top: 25%;
 }
 
@@ -71,9 +90,8 @@ form ul li input{
     width: 41.5%;
 }
 
-.ui-body-login form{
-    text-align: center;
-}
+/**----------------------------- Signup View -------------------------------------**/
+
 
 /*.ui-content #login-button{*/
 /*background: firebrick;*/

@@ -10,6 +10,8 @@
     <link rel="stylesheet" type="text/css" href="css/leaflet/MarkerCluster.Default.css">
     <link rel="stylesheet" type="text/css" href="css/leaflet/MarkerCluster.css">
     <link rel="stylesheet" type="text/css" href="css/leaflet/leaflet.awesome-markers.css">
+    <link rel="stylesheet" type="text/css" href="css/owl-carousel/owl.carousel.css" />
+    <link rel="stylesheet" type="text/css" href="css/owl-carousel/owl.theme.css" />
     <link rel="stylesheet" type="text/css" href="css/ringlet/style.css" />
     <link rel='stylesheet' type='text/css' href='http://fonts.googleapis.com/css?family=Open+Sans'>
     <!------------------------JS files------------------------------------------------------->
@@ -24,6 +26,7 @@
     <script type="text/javascript" src="js/leaflet/leaflet.markercluster.js"></script>
     <script type="text/javascript" src="js/leaflet/leaflet.markercluster-src.js"></script>
     <script type="text/javascript" src="js/leaflet/leaflet.awesome-markers.js"></script>
+    <script type="text/javascript" src="js/owl-carousel/owl.carousel.js"></script>
     <script type="text/javascript" src="js/angular/angular.js"></script>
     <script type="text/javascript" src="js/angular/angular-resource.js"></script>
     <script type="text/javascript" src="js/angular/services.js"></script>
@@ -37,35 +40,31 @@
 <body data-ng-controller="UserCtrl">
 <!------------------------Necessary to initialize FB plugin------------------------------>
 <div id="fb-root"></div>
-<!------------------------Landing Screen View-------------------------------------------->
+<!------------------------Landing View-------------------------------------------->
 <div data-role="page" id="landing" data-theme="landing">
     <div data-role="content">
-        <form>
-            <img id="landing-icon" src="img/logo01.png" onload="resizeLgo()"/>
-            <a href="#login" data-role="button" data-transition="slide" data-corners="false">Login</a>
-            <a href="#signup" data-role="button" data-transition="slide" data-corners="false">Signup</a>
+        <form class="center">
+            <img id="landing-icon" src="img/logo01.png" onload="resizeLogo()"/>
+            <a href="#login" data-role="button" data-transition="slide" data-corners="false" data-ng-click="errorValidation()">Login</a>
+            <a href="#signup" data-role="button" data-transition="slide" data-corners="false" data-ng-click="errorValidation()">Signup</a>
         </form>
     </div>
 </div>
 <!------------------------Log In View---------------------------------------------------->
 <div data-role="page" id="login" data-theme="login">
-    <div data-role="header" id="login-header" data-theme="none">
-        <a href="#landing" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">Landing</a>
+    <div data-role="header" data-theme="none">
+        <a href="#landing" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-ng-click="errorValidation()">Landing</a>
         <h3>Log In</h3>
     </div>
     <div data-role="content">
-        <a id="login-button-facebook" data-role="button" data-corners="false" data-ng-click="facebookLogin()">Facebook</a>
-        <form name="formLogin">
+        <a data-role="button" data-corners="false" data-ng-click="facebookLogin()">Facebook</a>
+        <form name="formLogin" class="center">
             <p><hr class="hr-left"/><label>OR</label><hr class="hr-right"/></p>
             <ul>
-                <li>
-                    <input data-role="none" name="email" type="email" placeholder="Email Address" data-ng-model="user.email" data-ng-change="showFunctionError=false; showServerError=false" required>
-                </li>
-                <li>
-                    <input data-role="none" name="password" type="password" placeholder="Password" data-ng-model="user.password" data-ng-change="showFunctionError=false; showServerError=false" data-ng-minlength=5 required>
-                </li>
+                <li><input data-role="none" name="email" type="email" placeholder="Email Address" data-ng-model="user.email" data-ng-change="showFunctionError=false; showServerError=false" required></li>
+                <li><input data-role="none" name="password" type="password" placeholder="Password" data-ng-model="user.password" data-ng-change="showFunctionError=false; showServerError=false" data-ng-minlength=5 required></li>
             </ul>
-            <div data-ng-show="showErrors">
+            <div data-ng-show="showErrors" class="red">
                 <p data-ng-show="formLogin.email.$error.required">"Email required"</p>
                 <p data-ng-show="formLogin.email.$invalid && formLogin.email.$error.email">"Wrong email format"</p>
                 <p data-ng-show="formLogin.password.$error.required">"Password required"</p>
@@ -73,74 +72,70 @@
                 <p data-ng-show="showFunctionError">"The email or password is incorrect"</p>
                 <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
             </div>
-            <a id="login-button" data-role="button" data-corners="false" data-ng-click="validateLogin(formLogin.$invalid)">Log in</a>
-            <p class="link" onclick="window.location.href='#forgot'">Forgot my password</p>
+            <a data-role="button" data-corners="false" data-ng-click="validateLogin(formLogin.$invalid)">Log in</a>
+            <p class="blue" onclick="window.location.href='#forgot'" data-ng-click="errorValidation()">Forgot my password</p>
         </form>
     </div>
 </div>
-<!------------------------Forgot your password View-------------------------------------->
+<!------------------------Forgot Password View-------------------------------------->
 <div data-role="page" id="forgot" data-theme="forgot">
-    <div data-role="header" id="forgot-password-header" data-theme="silver">
-        <a href="#landing"  data-theme="none" data-shadow="false" data-corners="false" data-transition="slidedown" data-ng-click="errorValidation()">
-            <i class="icon-remove icons-big"></i>
-        </a>
+    <div data-role="header" data-theme="none">
+        <a href="#login" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-ng-click="errorValidation()">Login</a>
         <h3>Forgot password</h3>
     </div>
-    <div data-role="content" id="forgot-password-content">
-        <form id="forgot-password-form" name="formForgotPassword">
+    <div data-role="content">
+        <form name="formForgot">
             <div>
                 <label for="emailForgot">Username/Email:</label>
                 <input name="emailForgot" id="emailForgot" type="email" placeholder="Email Address" data-ng-model="emailForgot" data-ng-change="showFunctionError=false; showServerError=false; showPasswordError=false; showMessage=false" required>
             </div>
-            <div data-ng-show="showErrors">
-                <p data-ng-show="formForgotPassword.emailForgot.$error.required">"Email required"</p>
-                <p data-ng-show="formForgotPassword.emailForgot.$invalid && formForgotPassword.emailForgot.$error.email">"Wrong email format"</p>
-                <p data-ng-show="showMessage">"New password send to your email"</p>
+            <div data-ng-show="showErrors" class="center red">
+                <p data-ng-show="formForgot.emailForgot.$error.required">"Email required"</p>
+                <p data-ng-show="formForgot.emailForgot.$invalid && formForgot.emailForgot.$error.email">"Wrong email format"</p>
+                <p data-ng-show="showMessage" class="green">"New password send to your email"</p>
                 <p data-ng-show="showFunctionError">"Cannot find user with this email"</p>
                 <p data-ng-show="showPasswordError">"Problem to send the mail, try later"</p>
                 <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
             </div>
-            <a href="" data-role="button" data-corners="false" data-theme="red" id="forgotPassword-btn" data-ng-click="validateForgotPassword(formForgotPassword.$invalid)">Send me new password</a>
+            <a data-role="button" data-corners="false" data-ng-click="validateForgot(formForgot.$invalid)">Send me new password</a>
         </form>
     </div>
 </div>
 <!------------------------SignUp View---------------------------------------------------->
-<div data-role="page" id="signup">
-    <div data-role="header" id="signup-header" data-theme="silver">
-        <a data-ng-hide="user.id" href="#landing"  data-theme="none" data-shadow="false" data-corners="false" data-transition="slidedown" data-ng-click="errorValidation()">
-            <i class="icon-remove icons-big"></i>
-        </a>
+<div data-role="page" id="signup" data-theme="a">
+    <div data-role="header" data-theme="none">
+        <a data-ng-hide="user.id" href="#landing" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-ng-click="errorValidation()">Landing</a>
         <h3>Sign Up</h3>
+        <a data-role="button" data-mini="true" data-inline="true" data-corners="false" data-ng-click="validateSignup(formSignup.$invalid)">Save</a>
     </div>
-    <div data-role="content" id="signup-content">
-        <form id="signup-form" name="formSignup">
-            <div>
-                <label for="signup-name">Name:</label>
-                <input type="text" placeholder="required" name="signupName" id="signup-name" data-ng-model="user.name" data-mini="true" data-ng-change="showFunctionError=false; showServerError=false; showPasswordError=false" required/>
-            </div><br/>
-            <div>
-                <label for="signup-email">Email:</label>
-                <input type="email" placeholder="required" name="signupEmail" id="signup-email" data-ng-model="user.email" data-mini="true" data-ng-change="showFunctionError=false; showServerError=false; showPasswordError=false" required/>
-            </div><br/>
-            <div>
-                <label for="signup-password">Create a password:</label>
-                <input type="password" id="signup-password" name="signupPassword" data-ng-model="user.password" data-mini="true" data-ng-change="showFunctionError=false; showServerError=false; showPasswordError=false" data-ng-minlength=5 required/>
-            </div><br/>
-            <div>
-                <label for="signup-repassword">Confirm your password:</label>
-                <input type="password" id="signup-repassword" data-ng-model="passwordConfirm" data-mini="true" data-ng-change="showFunctionError=false; showServerError=false; showPasswordError=false"/>
+    <div data-role="content">
+        <form name="formSignup">
+            <a href="#camera" data-rel="popup" data-position-to="window">
+                <div id="signup-carousel" ><div class='item'><img id="carousel-image" class="user-image" src='img/edit-image.png' ></div></div>
+            </a>
+            <div data-role="popup" data-overlay-theme="a" id="camera">
+                <a data-corners="false" data-role="button" data-ng-click="capturePhoto()">Take a Picture</a>
+                <a data-corners="false" data-role="button" data-ng-click="getPhoto()">Phone Library</a>
+                <a data-corners="false" data-role="button" data-ng-hide="images.length==0" data-ng-click="deletePhoto()">Delete Last Photo</a>
+                <a href="#" data-rel="back" data-role="button" data-corners="false">Cancel</a>
             </div>
+            <ul>
+                <li><input data-role="none" name="name" type="text" placeholder="Your Name" data-ng-model="user.name" data-ng-change="showFunctionError=false; showServerError=false" required></li>
+                <li><input data-role="none" name="email" type="email" placeholder="Email Address" data-ng-model="user.email" data-ng-change="showFunctionError=false; showServerError=false" required></li>
+                <li><input data-role="none" name="password" type="password" placeholder="Password" data-ng-model="user.password" data-ng-change="showFunctionError=false; showServerError=false" data-ng-minlength=5 required></li>
+                <li><input data-role="none" name="phone" type="number" placeholder="Phone Number" data-ng-model="user.phone" data-ng-change="showFunctionError=false; showServerError=false" required></li>
+                <li><select data-role="none" name="gender" id="gender" data-ng-model="user.gender" data-ng-change="showFunctionError=false; showServerError=false"><option value="MALE">Male</option><option value="FEMALE">Female</option></select></li>
+                <li><textarea data-role="none" name="bio" rows="5" id="bio" data-ng-model="user.bio" data-ng-change="showFunctionError=false; showServerError=false"></textarea></li>
+            </ul>
             <div data-ng-show="showErrors">
-                <p data-ng-show="formSignup.signupName.$error.required">"Name required"</p>
-                <p data-ng-show="formSignup.signupEmail.$error.required">"Email required"</p>
-                <p data-ng-show="formSignup.signupEmail.$invalid && formSignup.signupEmail.$error.email">"Wrong email format"</p>
-                <p data-ng-show="formSignup.signupPassword.$error.required">"Password required"</p>
-                <p data-ng-show="formSignup.signupPassword.$error.minlength">"Password too short"</p>
-                <p data-ng-show="showPasswordError">"Passwords do not match"</p>
+                <p data-ng-show="formSignup.name.$error.required">"Name required"</p>
+                <p data-ng-show="formSignup.email.$error.required">"Email required"</p>
+                <p data-ng-show="formSignup.email.$invalid && formSignup.email.$error.email">"Wrong email format"</p>
+                <p data-ng-show="formSignup.password.$error.required">"Password required"</p>
+                <p data-ng-show="formSignup.password.$error.minlength">"Password too short"</p>
                 <p data-ng-show="showFunctionError">"The email is already used"</p>
                 <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
             </div>
-            <a href="" data-role="button" data-corners="false" data-theme="red" id="signup-bSave" data-ng-click="validateSignup(formSignup.$invalid)">Save</a>
         </form>
     </div>
 </div>

@@ -91,6 +91,7 @@ class UserController {
         else{
             if(params.user){
                 User user = new User(params.user)
+                user.setUsername(params.user.email as String)
                 user.setPasswordHash(new Sha256Hash(params.user.password as String).toHex())
                 if(params.user.facebookId){
                     user.setFacebookId(new Sha256Hash(params.user.facebookId as String).toHex() as String)
