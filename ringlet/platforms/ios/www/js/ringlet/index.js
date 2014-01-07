@@ -15,6 +15,10 @@ var app = {
         } catch (error) {
             console.log(error);
         }
+
+        $( document ).on( "click", ".icon-arrow-left", function() {
+            $.mobile.loading('hide');
+        });
     }
 };
 
@@ -32,4 +36,22 @@ function resizePhoto(elementId){
     var height = $('#carousel-image').height();
     $('#'+elementId).css({'width': width+'px'});
     $('#'+elementId).css({'height': height+'px'});
+}
+
+function changeSizeImgList(img){
+    document.getElementById(img.id).height = 76;
+    document.getElementById(img.id).width = 76;
+}
+
+function imgError(image){
+    document.getElementById(image.id).src = "img/house.png";
+    document.getElementById(image.id).height = 76;
+    document.getElementById(image.id).width = 76;
+}
+function changeSize(img){
+    document.getElementById(img.id).height = (screen.height*0.4);
+}
+
+function carouselImageError(img){
+    document.getElementById(img.id).height = (screen.height*0.4);
 }

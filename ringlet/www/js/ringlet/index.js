@@ -30,14 +30,14 @@ function resizeLogo(){
         $('#landing-icon').css({'height': (window.innerWidth/2)+'px'});
     }
 }
-<<<<<<< HEAD
 
 function resizePhoto(elementId){
     var width = $('#carousel-image').width();
     var height = $('#carousel-image').height();
     $('#'+elementId).css({'width': width+'px'});
     $('#'+elementId).css({'height': height+'px'});
-=======
+}
+
 function changeSizeImgList(img){
     document.getElementById(img.id).height = 76;
     document.getElementById(img.id).width = 76;
@@ -54,5 +54,4 @@ function changeSize(img){
 
 function carouselImageError(img){
     document.getElementById(img.id).height = (screen.height*0.4);
->>>>>>> 6c10124ddc1a378f7838e51c6520bb1f716d3ae7
 }
