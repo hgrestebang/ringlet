@@ -119,15 +119,7 @@
                 <a data-corners="false" data-role="button" data-ng-hide="images.length==0" data-ng-click="deletePhoto()">Delete Last Photo</a>
                 <a href="#" data-rel="back" data-role="button" data-corners="false">Cancel</a>
             </div>
-            <ul>
-                <li><input data-role="none" name="name" type="text" placeholder="Your Name" data-ng-model="user.name" data-ng-change="showFunctionError=false; showServerError=false" required></li>
-                <li><input data-role="none" name="email" type="email" placeholder="Email Address" data-ng-model="user.email" data-ng-change="showFunctionError=false; showServerError=false" required></li>
-                <li><input data-role="none" name="password" type="password" placeholder="Password" data-ng-model="user.password" data-ng-change="showFunctionError=false; showServerError=false" data-ng-minlength=5 required></li>
-                <li><input data-role="none" name="phone" type="number" placeholder="Phone Number" data-ng-model="user.phone" data-ng-change="showFunctionError=false; showServerError=false" required></li>
-                <li><select data-role="none" name="gender" id="gender" data-ng-model="user.gender" data-ng-change="showFunctionError=false; showServerError=false"><option value="MALE">Male</option><option value="FEMALE">Female</option></select></li>
-                <li><textarea data-role="none" name="bio" rows="5" id="bio" data-ng-model="user.bio" data-ng-change="showFunctionError=false; showServerError=false"></textarea></li>
-            </ul>
-            <div data-ng-show="showErrors">
+            <div data-ng-show="showErrors" class="center red">
                 <p data-ng-show="formSignup.name.$error.required">"Name required"</p>
                 <p data-ng-show="formSignup.email.$error.required">"Email required"</p>
                 <p data-ng-show="formSignup.email.$invalid && formSignup.email.$error.email">"Wrong email format"</p>
@@ -136,6 +128,14 @@
                 <p data-ng-show="showFunctionError">"The email is already used"</p>
                 <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
             </div>
+            <ul>
+                <li><input data-role="none" name="name" type="text" placeholder="Your Name" data-ng-model="user.name" data-ng-change="showFunctionError=false; showServerError=false" required></li>
+                <li><input data-role="none" name="email" type="email" placeholder="Email Address" data-ng-model="user.email" data-ng-change="showFunctionError=false; showServerError=false" required></li>
+                <li><input data-role="none" name="password" type="password" placeholder="Password" data-ng-model="user.password" data-ng-change="showFunctionError=false; showServerError=false" data-ng-minlength=5 required></li>
+                <li><input data-role="none" name="phone" type="number" placeholder="Phone Number" data-ng-model="user.phone" data-ng-change="showFunctionError=false; showServerError=false" required></li>
+                <li><select data-role="none" name="gender" id="gender" data-ng-model="user.gender" data-ng-change="showFunctionError=false; showServerError=false"><option value="MALE">Male</option><option value="FEMALE">Female</option></select></li>
+                <li><textarea data-role="none" name="bio" rows="5" id="bio" data-ng-model="user.bio" data-ng-change="showFunctionError=false; showServerError=false"></textarea></li>
+            </ul>
         </form>
     </div>
 </div>

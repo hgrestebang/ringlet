@@ -4,7 +4,7 @@ var ringlet = angular.module('ringlet',['services']);
 function UserCtrl($scope, DAO){
 
 //---------------------------- Variables Initialization ------------------------------------------
-    $scope.user = {email:'', password:''};
+    $scope.user = {email:'', password:'', gender:'MALE'};
     $scope.showErrors = false;
     $scope.showFunctionError = false;
     $scope.showServerError = false;
@@ -21,7 +21,7 @@ function UserCtrl($scope, DAO){
     $scope.images = [];
 
     function initializeVariables(){
-        $scope.user = {email:'', password:''};
+        $scope.user = {email:'', password:'', gender:'MALE'};
         $scope.showErrors = false;
         $scope.showFunctionError = false;
         $scope.showServerError = false;

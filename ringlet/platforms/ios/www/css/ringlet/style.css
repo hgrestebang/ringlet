@@ -12,6 +12,10 @@ h1, h2, h3, h4, h5, h6{
     text-align: center;
 }
 
+.textFont8{
+    font-size: 8px !important;
+}
+
 /**----------------------------- Headers Style -----------------------------------**/
 .ui-header{
     height: 40px;
@@ -22,13 +26,14 @@ h1, h2, h3, h4, h5, h6{
     margin-top: 15px;
 }
 
+/**----------------------------- Lists Style -------------------------------------**/
 form ul{
     margin: 0 0 0 0;
     padding: 0 0 0 0;
     list-style-type: none;
+    display: block;
 }
 
-/**----------------------------- Lists Style -------------------------------------**/
 form ul li{
     border-bottom: 1px solid #CCCCCC;
     border-left: 1px solid #CCCCCC;
@@ -47,8 +52,18 @@ form ul li input{
     margin: 12px 0 12px 10px;
 }
 
-.textFont8{
-    font-size: 8px !important;
+form ul li select{
+    width: 100%;
+    border: none;
+    background: none;
+    margin: 13px 0 13px 10px;
+}
+
+form ul li textarea{
+    width: 98%;
+    border: none;
+    background: none;
+    margin: 12px 0 12px 10px;
 }
 
 /**----------------------------- Colors Style ------------------------------------**/
