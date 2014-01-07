@@ -33,6 +33,8 @@ class UserController {
             }
         }
         if(users.size() > 0){
+            users.sort{it.id
+                it.distanceFromPoint}
             render users as JSON
         }
         else{
@@ -45,7 +47,7 @@ class UserController {
         def users = []
         User user = User.findByToken(UserToken.findByToken(params.token as String))
         if(userService.validatePro(user)){
-            User.findAllByLocationWithinCircle([user.location, 30 / 69]).each {
+            User.findAllByLocationWithinCircle([user.location, (30 as double) / 69]).each {
                 if(user.id != it.id && it.showOnMap && !it.usersBlocked?.contains(user.id) && it.status != UserStatus.REMOVED){
                     users.add(it.showInformation(user.location[0],user.location[1]))
                 }
@@ -53,7 +55,7 @@ class UserController {
         }
         else{
             def count = 0
-            User.findAllByLocationWithinCircle([user.location, 30 / 69]).each {
+            User.findAllByLocationWithinCircle([user.location, (30 as double) / 69]).each {
                 if(count < 10){
                     if(user.id != it.id && it.showOnMap && !it.usersBlocked?.contains(user.id) && it.status != UserStatus.REMOVED){
                         users.add(it.showInformation(user.location[0],user.location[1]))
@@ -62,6 +64,8 @@ class UserController {
             }
         }
         if(users.size() > 0){
+            users.sort{it.id
+                it.distanceFromPoint}
             render users as JSON
         }
         else{

@@ -45,13 +45,17 @@ form ul li input{
     margin: 12px 0 12px 10px;
 }
 
+.textFont8{
+    font-size: 8px !important;
+}
+
 /**----------------------------- Landing View ------------------------------------**/
-.ui-body-a{
+#landing{
     background-image:url("../../img/map01.png");
     position:absolute;
 }
 
-.ui-body-a form{
+#landing form{
     text-align: center;
     padding-top: 25%;
 }
@@ -73,11 +77,6 @@ form ul li input{
 
 .ui-body-login form{
     text-align: center;
-}
-
-/**----------------------------- Listing View --------------------------------------**/
-#listing-content{
-    width: 115%;
 }
 
 /*.ui-content #login-button{*/
