@@ -12,9 +12,13 @@ function UserCtrl($scope, DAO){
     $scope.showMessage = false;
     $scope.passwordConfirm = '';
     $scope.emailForgot = '';
-    $scope.images = [];
-    var appConfig = {serverHost:'192.168.0.102', appName:'ringlet', token:''};
+    $scope.ringlet=[];
+    $scope.ringlets=[];
+    var appConfig = {serverHost:'192.168.0.101', appName:'ringlet', token:''};
+    var owl = $("#listing-item-gallery");
     var carousel = $("#signup-carousel");
+    var photoCount = 0;
+    $scope.images = [];
 
     function initializeVariables(){
         $scope.user = {email:'', password:''};
@@ -62,8 +66,7 @@ function UserCtrl($scope, DAO){
                 else{
                     $scope.user = result;
                     appConfig.token = result.token.token;
-                    $.mobile.loading( 'hide', {textVisible: false});
-                    window.location.href="#home";
+                    $scope.getNearByRinglets();
                 }
             },
             function(error){
@@ -82,6 +85,31 @@ function UserCtrl($scope, DAO){
                 }
             });
     };
+    //-----------------------------Listings functions-------------------------------------------------
+    $scope.getNearByRinglets = function(){
+        DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'user', action:'nearBy',token: appConfig.token},
+            function(result){
+                if(result.response == "bad_request"){
+                    console.log("Error loading information");
+                }
+                else{
+                    $scope.ringlets=result;
+                    console.log($scope.ringlets);
+                    $.mobile.loading( 'hide', {textVisible: false});
+                    window.location.href="#home";
+                }
+            }
+        );
+    }
+
+    $scope.getRinglets = function(ringlet){
+        $scope.ringlet = ringlet;
+
+        deleteItems();
+        for(var i=0; i< $scope.ringlet.photos.length; i++){
+            addItem($scope.ringlet.photos[i].id, $scope.ringlet.photos[i].photo_protocol+$scope.ringlet.photos[i].photo_host+"/"+$scope.ringlet.photos[i].photo_path);
+        }
+    }
 
 //---------------------------- Facebook Authentication -------------------------------------------
     $scope.facebookLogin = function(){
@@ -160,10 +188,17 @@ function UserCtrl($scope, DAO){
 
 //---------------------------- Carousel Functions ------------------------------------------------
     carousel.owlCarousel({ autoPlay: false, itemsMobile : [479,3], itemsTablet: [768,3]});
-
-    function addItem(data, id){
+    owl.owlCarousel({navigation:true, slideSpeed:300, paginationSpeed:400, lazyLoad:true, singleItem:true});
+    
+    function addPhoto(data, id){
         var content = "<div class='item'><img class='user-image' id='"+id+"' onload='resizePhoto(this.id)' src='data:image/jpeg;base64,"+data+"'></div>";
         carousel.data('owlCarousel').addItem(content);
+    }
+
+    function addItem(id, src){
+        photoCount++;
+        var content = "<div class='item'><img class='lazyOwl' id='"+id+"' data-src='"+src+"' onload='changeSize(this)' onerror='carouselImageError(this)'></div>";
+        owl.data('owlCarousel').addItem(content);
     }
 
     $scope.deletePhoto = function(){
@@ -172,10 +207,16 @@ function UserCtrl($scope, DAO){
         $("#camera").popup("close");
     }
 
+    function deleteItems(){
+        for(photoCount; photoCount>0; photoCount--){
+            owl.data('owlCarousel').removeItem();
+        }
+    }
+
 //---------------------------- Camera Functions --------------------------------------------------
     function onPhotoDataSuccess(imageData){
         $scope.images.push({data:imageData, isPublic:false});
-        addItem(imageData, $scope.images.length);
+        addPhoto(imageData, $scope.images.length);
         $scope.$apply();
     }
 

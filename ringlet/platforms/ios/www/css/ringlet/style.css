@@ -5,7 +5,7 @@
 }
 
 h1, h2, h3, h4, h5, h6{
-    font-size: inherit;
+    font-size: inherit !important;
 }
 
 .center{
@@ -47,6 +47,7 @@ form ul li input{
     margin: 12px 0 12px 10px;
 }
 
+<<<<<<< HEAD
 /**----------------------------- Colors Style ------------------------------------**/
 .red{
     color: #FF0000;
@@ -63,15 +64,24 @@ form ul li input{
 /**----------------------------- Carousel Style ----------------------------------**/
 .user-image{
     width: 98% !important;
+=======
+.textFont8{
+    font-size: 8px !important;
+>>>>>>> 6c10124ddc1a378f7838e51c6520bb1f716d3ae7
 }
 
 /**----------------------------- Landing View ------------------------------------**/
-.ui-body-landing{
+#landing{
     background-image:url("../../img/map01.png");
     position:absolute;
 }
 
+<<<<<<< HEAD
 .ui-body-landing form{
+=======
+#landing form{
+    text-align: center;
+>>>>>>> 6c10124ddc1a378f7838e51c6520bb1f716d3ae7
     padding-top: 25%;
 }
 
