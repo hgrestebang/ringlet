@@ -38,6 +38,14 @@ function resizePhoto(elementId){
     $('#'+elementId).css({'height': height+'px'});
 }
 
+function resizePhotoProfile(elementId){
+    var width = $('#profile-image').width();
+    var height = $('#profile-image').height();
+    $('#'+elementId).css({'width': width+'px'});
+    $('#'+elementId).css({'height': height+'px'});
+    console.log(width, height);
+}
+
 function changeSizeImgList(img){
     document.getElementById(img.id).height = 76;
     document.getElementById(img.id).width = 76;

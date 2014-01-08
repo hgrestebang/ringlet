@@ -88,7 +88,7 @@ class User {
     def showInformation(){
         def photos = []
         this.photos.each {
-            photos.add(Picture.findByIdAndIsPublic(it, true).toObject())
+            photos.add(Picture.findById(it).toObject())
         }
         return [id: this.id,
                 username: this.username,

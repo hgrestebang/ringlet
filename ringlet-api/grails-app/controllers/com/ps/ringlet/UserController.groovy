@@ -109,11 +109,14 @@ class UserController {
                 if(params.user.userLocation){
                     user.setLocation([params.user.userLocation.lat as Double, params.user.userLocation.lgn as Double])
                 }
+                else{
+                    user.setLocation([37.33234141 as Double, -122.031286 as Double])
+                }
                 user.save(flush: true)
                 if(params.images){
                     params.images.each{
                         if(it.data != ""){
-                            Picture image = new Picture(isPublic: it.isPublic as Boolean).save(flush: true)
+                            Picture image = new Picture().save(flush: true)
                             rackSpaceService.storeImage(it.data.toString(), image.id)
                             image.path = RackSpace.findById(1).cdnUri+"/"+image.id+".jpeg"
                             image.save(flush: true)
@@ -148,9 +151,7 @@ class UserController {
                         if(it.id != ""){
                             Picture image = Picture.findById(it.id as Long)
                             if(image){
-                                image.setIsPublic(it.isPublic as Boolean)
-                                image.save(flush: true)
-                                if(it.delete == "true"){
+                                if(it.delete == true){
                                     rackSpaceService.deleteImage(image.id)
                                     if(user.photos.contains(image.id)){
                                         user.photos.remove(image.id)
@@ -166,7 +167,7 @@ class UserController {
                             }
                         }
                         else if(it.data != ""){
-                            Picture image = new Picture(isPublic: it.isPublic as Boolean).save(flush: true)
+                            Picture image = new Picture().save(flush: true)
                             rackSpaceService.storeImage(it.data.toString(), image.id)
                             image.path = RackSpace.findById(1).cdnUri+"/"+image.id+".jpeg"
                             image.save(flush: true)

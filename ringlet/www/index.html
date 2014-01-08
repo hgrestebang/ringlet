@@ -44,8 +44,8 @@
     <div data-role="content">
         <form class="center">
             <img id="landing-icon" src="img/logo01.png" onload="resizeLogo()"/>
-            <a href="#login" data-role="button" data-transition="slide" data-corners="false" data-ng-click="errorValidation()">Login</a>
-            <a href="#signup" data-role="button" data-transition="slide" data-corners="false" data-ng-click="errorValidation()">Signup</a>
+            <a href="#login" data-role="button" data-transition="slide" data-corners="false" data-ng-click="errorValidation(); getLocation()">Login</a>
+            <a href="#signup" data-role="button" data-transition="slide" data-corners="false" data-ng-click="errorValidation(); getLocation()">Signup</a>
         </form>
     </div>
 </div>
@@ -113,9 +113,9 @@
                 <div id="signup-carousel" ><div class='item'><img id="carousel-image" class="user-image" src='img/edit-image.png' ></div></div>
             </a>
             <div data-role="popup" data-overlay-theme="a" id="camera">
-                <a data-corners="false" data-role="button" data-ng-click="capturePhoto()">Take a Picture</a>
-                <a data-corners="false" data-role="button" data-ng-click="getPhoto()">Phone Library</a>
-                <a data-corners="false" data-role="button" data-ng-hide="images.length==0" data-ng-click="deletePhoto()">Delete Last Photo</a>
+                <a data-corners="false" data-role="button" data-ng-hide="images.length>7" data-ng-click="capturePhoto()">Take a Picture</a>
+                <a data-corners="false" data-role="button" data-ng-hide="images.length>7" data-ng-click="getPhoto()">Phone Library</a>
+                <a data-corners="false" data-role="button" data-ng-hide="images.length<1" data-ng-click="deletePhoto()">Delete Last Photo</a>
                 <a href="#" data-rel="back" data-role="button" data-corners="false">Cancel</a>
             </div>
             <div data-ng-show="showErrors" class="center red">
@@ -128,12 +128,12 @@
                 <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
             </div>
             <ul>
-                <li><input data-role="none" name="name" type="text" placeholder="Your Name" data-ng-model="user.name" data-ng-change="showFunctionError=false; showServerError=false" required></li>
+                <li><input data-role="none" name="name" type="text" placeholder="Name" data-ng-model="user.name" data-ng-change="showFunctionError=false; showServerError=false" required></li>
                 <li><input data-role="none" name="email" type="email" placeholder="Email Address" data-ng-model="user.email" data-ng-change="showFunctionError=false; showServerError=false" required></li>
                 <li><input data-role="none" name="password" type="password" placeholder="Password" data-ng-model="user.password" data-ng-change="showFunctionError=false; showServerError=false" data-ng-minlength=5 required></li>
-                <li><input data-role="none" name="phone" type="number" placeholder="Phone Number" data-ng-model="user.phone" data-ng-change="showFunctionError=false; showServerError=false"></li>
+                <li><input data-role="none" name="phone" type="tel" placeholder="Phone Number" data-ng-model="user.phone" data-ng-change="showFunctionError=false; showServerError=false"></li>
                 <li><select data-role="none" name="gender" id="gender" data-ng-model="user.gender" data-ng-change="showFunctionError=false; showServerError=false"><option value="MALE">Male</option><option value="FEMALE">Female</option></select></li>
-                <li><textarea data-role="none" name="bio" rows="5" id="bio" data-ng-model="user.bio" data-ng-change="showFunctionError=false; showServerError=false"></textarea></li>
+                <li><textarea data-role="none" name="bio" placeholder="Biography" rows="5" id="bio" data-ng-model="user.bio" data-ng-change="showFunctionError=false; showServerError=false"></textarea></li>
             </ul>
         </form>
     </div>
@@ -164,35 +164,40 @@
 </div>
 <!----------------------------------Profile View---------------------------------------------------->
 <div data-role="page" id="profile" data-theme="a">
-    <div data-role="header" id="profile-header" data-theme="d"  >
-        <a href="#panel-menu"   data-shadow="false" data-corners="false" data-ng-click="errorValidation()"><i class="icon-reorder icons-big white-text"></i></a>
-        <h4>My Profile</h4>
+    <div data-role="header">
+        <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-ng-click="errorValidation()">Menu</a>
+        <h3>My Profile</h3>
+        <a data-role="button" data-mini="true" data-inline="true" data-corners="false" data-ng-click="validateProfile(formProfile.$invalid)">Save</a>
     </div>
-    <div data-role="content" id="profile-content">
-        <form id="profile-form" name="formProfile">
-            <div>
-                <label for="profile-name">Name:</label>
-                <input type="text" placeholder="required" name="profileName" id="profile-name" data-ng-model="user.name" data-mini="true" data-ng-change="showServerError=false; showFunctionError=false; showMessage=false" required/>
+    <div data-role="content">
+        <form name="formProfile">
+            <a href="#profile-camera" data-rel="popup" data-position-to="window">
+                <div id="profile-carousel" ><div class='item'><img id="profile-image" class="user-image" src='img/edit-image.png' ></div></div>
+            </a>
+            <div data-role="popup" data-overlay-theme="a" id="profile-camera">
+                <a data-corners="false" data-role="button" data-ng-hide="images.length>7" data-ng-click="capturePhotoProfile()">Take a Picture</a>
+                <a data-corners="false" data-role="button" data-ng-hide="images.length>7" data-ng-click="getPhotoProfile()">Phone Library</a>
+                <a data-corners="false" data-role="button" data-ng-hide="images.length<1" data-ng-click="deletePhotoProfile('false')">Delete Last Photo</a>
+                <a href="#" data-rel="back" data-role="button" data-corners="false">Cancel</a>
             </div>
-            <div>
-                <label for="profile-email">Email:</label>
-                <input type="email" placeholder="required" name="profileEmail" id="profile-email" data-mini="true" data-ng-model="user.username" data-ng-change="showServerError=false; showFunctionError=false; showMessage=false" required/>
-            </div>
-            <div data-ng-show="showErrors">
-                <p data-ng-show="formProfile.profileName.$error.required">"Name required"</p>
-                <p data-ng-show="formProfile.profileEmail.$error.required">"Email required"</p>
-                <p data-ng-show="formProfile.profileEmail.$invalid && formProfile.profileEmail.$error.email">"Wrong email format"</p>
-                <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
+            <div data-ng-show="showErrors" class="center red">
+                <p data-ng-show="formProfile.name.$error.required">"Name required"</p>
+                <p data-ng-show="formProfile.email.$error.required">"Email required"</p>
+                <p data-ng-show="formProfile.email.$invalid && formProfile.email.$error.email">"Wrong email format"</p>
                 <p data-ng-show="showFunctionError">"The email is already used"</p>
+                <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
                 <p data-ng-show="showMessage">"Information updated"</p>
             </div>
-            <div class="slider" onclick="window.location.href='#change-password'">
-                <a style="color: gray;">Change Password<i class="icon-chevron-right right"></i></a>
-            </div>
-            <a href="" data-role="button" data-corners="false" data-theme="b" id="save-profile-button" data-ng-click="validateProfile(formProfile.$invalid)">Save</a>
+            <ul>
+                <li><input data-role="none" name="name" type="text" placeholder="Name" data-ng-model="user.name" data-ng-change="showFunctionError=false; showServerError=false" required></li>
+                <li><input data-role="none" name="email" type="email" placeholder="Email Address" data-ng-model="user.username" data-ng-change="showFunctionError=false; showServerError=false" required></li>
+                <li><input data-role="none" name="phone" type="tel" placeholder="Phone Number" data-ng-model="user.phone" data-ng-change="showFunctionError=false; showServerError=false"></li>
+                <li><select data-role="none" name="gender" data-ng-model="user.gender" data-ng-change="showFunctionError=false; showServerError=false"><option value="MALE">Male</option><option value="FEMALE">Female</option></select></li>
+                <li><textarea data-role="none" name="bio" placeholder="Biography" rows="5" data-ng-model="user.bio" data-ng-change="showFunctionError=false; showServerError=false"></textarea></li>
+            </ul>
+            <a href="#change-password" data-role="button" data-corners="false">Change Password</a>
         </form>
     </div>
-
 </div>
 <!----------------------------------Change password View--------------------------------------------------->
 <div data-role="page" id="change-password" data-theme="a">
@@ -477,7 +482,7 @@
     <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
         <li data-role="list-divider" class="center">Menu</li>
         <li><a href="#home" data-transition="slide" data-rel="close">Listing</a></li>
-        <li><a href="#profile" data-transition="slide">My Profile</a></li>
+        <li><a data-ng-click="currentUser()">My Profile</a></li>
         <li><a href="#search" data-ng-click="getStates()" data-transition="slide">Search</a></li>
         <li><a href="#favorites" data-ng-click="getFavorites()" data-transition="slide">Favorites</a></li>
         <li><a data-ng-click="logout()">Log Out</a></li>
