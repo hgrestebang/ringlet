@@ -22,6 +22,19 @@ var app = {
     }
 };
 
+function loadPopUp(img){
+    var myNode = document.getElementById("imagePopUpDiv");
+    myNode.innerHTML = '';
+
+    var elem = document.createElement("img");
+    elem.setAttribute("src", img.src);
+    elem.setAttribute("alt", "Image User");
+    document.getElementById("imagePopUpDiv").appendChild(elem)
+    var positionTo = $( ".selector" ).popup( "option", "positionTo" );
+    $("#imagePopUpDiv").popup( "open", "option", "positionTo", "window" );
+
+}
+
 function resizeLogo(){
     if(window.innerHeight < window.innerWidth){
         $('#landing-icon').css({'height': (window.innerHeight/2)+'px'});
@@ -29,13 +42,6 @@ function resizeLogo(){
     else{
         $('#landing-icon').css({'height': (window.innerWidth/2)+'px'});
     }
-}
-
-function resizePhoto(elementId){
-    var width = $('#carousel-image').width();
-    var height = $('#carousel-image').height();
-    $('#'+elementId).css({'width': width+'px'});
-    $('#'+elementId).css({'height': height+'px'});
 }
 
 function changeSizeImgList(img){
@@ -49,9 +55,10 @@ function imgError(image){
     document.getElementById(image.id).width = 76;
 }
 function changeSize(img){
-    document.getElementById(img.id).height = (screen.height*0.4);
+    $('#'+img.id).css({'width': ((screen.width-32)/3) + 'px'});
+    $('#'+img.id).css({'height': ((screen.width-32)/3)+ 'px'});
 }
 
 function carouselImageError(img){
-    document.getElementById(img.id).height = (screen.height*0.4);
+    document.getElementById(img.id).height = (screen.height*0.3);
 }
