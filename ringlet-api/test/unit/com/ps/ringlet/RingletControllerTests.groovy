@@ -4,152 +4,68 @@ package com.ps.ringlet
 
 import org.junit.*
 import grails.test.mixin.*
+import groovy.mock.interceptor.*
+import grails.converters.*
 
 @TestFor(RingletController)
-@Mock(Ringlet)
+@Mock([User,UserToken,UserService,Ringlet])
 class RingletControllerTests {
+    def user
+    def token
+    def ringlet
 
-    def populateValidParams(params) {
-        assert params != null
-        // TODO: Populate valid properties like...
-        //params["name"] = 'someValidName'
+    void setUp() {
+        mockForConstraintsTests(User)
+        mockForConstraintsTests(UserToken)
+        mockForConstraintsTests(UserService)
+        mockForConstraintsTests(Ringlet)
+
+
+        token = new UserToken(
+                token: 'token123',
+                valid: true
+        ).save()
+
+        user = new User(
+                username: 'test@ringlet.me',
+                passwordHash: '5bbf1a9e0de062225a1b',
+                facebookId: '12345',
+                name: 'User Test',
+                phone: '123456789',
+                bio: 'User for test',
+                distanceFromPoint: 12,
+                coins: 50,
+                showOnMap: true,
+                sound: true,
+                connectionStatus: true,
+                location: [37.33233141d, -122.031286d],
+                token: token,
+                gender: 'MALE',
+                status: 'ACTIVE',
+                //proPurchase: purchase,
+                ringlets:[3],
+                friends:['2','3'],
+                usersBlocked:[],
+                photos:['http://test']
+        ).save()
+
+        ringlet = new Ringlet(
+                name: 'Ringlet Test',
+                owner: user
+        ).save()
     }
 
-    void testIndex() {
-        controller.index()
-        assert "/ringlet/list" == response.redirectedUrl
+    void testGetByUser(){
+        params.token = 'token123'
+        controller.getByUser()
+        assert response.getJson().size() > 0
     }
 
-    void testList() {
-
-        def model = controller.list()
-
-        assert model.ringletInstanceList.size() == 0
-        assert model.ringletInstanceTotal == 0
+    void testCreateFail(){
+        params.token = 'token123'
+        params.name = 'Ringlet Test'
+        controller.create()
+        assert response.text == '{"response":"ringlet_name_used"}'
     }
 
-    void testCreate() {
-        def model = controller.create()
-
-        assert model.ringletInstance != null
-    }
-
-    void testSave() {
-        controller.save()
-
-        assert model.ringletInstance != null
-        assert view == '/ringlet/create'
-
-        response.reset()
-
-        populateValidParams(params)
-        controller.save()
-
-        assert response.redirectedUrl == '/ringlet/show/1'
-        assert controller.flash.message != null
-        assert Ringlet.count() == 1
-    }
-
-    void testShow() {
-        controller.show()
-
-        assert flash.message != null
-        assert response.redirectedUrl == '/ringlet/list'
-
-        populateValidParams(params)
-        def ringlet = new Ringlet(params)
-
-        assert ringlet.save() != null
-
-        params.id = ringlet.id
-
-        def model = controller.show()
-
-        assert model.ringletInstance == ringlet
-    }
-
-    void testEdit() {
-        controller.edit()
-
-        assert flash.message != null
-        assert response.redirectedUrl == '/ringlet/list'
-
-        populateValidParams(params)
-        def ringlet = new Ringlet(params)
-
-        assert ringlet.save() != null
-
-        params.id = ringlet.id
-
-        def model = controller.edit()
-
-        assert model.ringletInstance == ringlet
-    }
-
-    void testUpdate() {
-        controller.update()
-
-        assert flash.message != null
-        assert response.redirectedUrl == '/ringlet/list'
-
-        response.reset()
-
-        populateValidParams(params)
-        def ringlet = new Ringlet(params)
-
-        assert ringlet.save() != null
-
-        // test invalid parameters in update
-        params.id = ringlet.id
-        //TODO: add invalid values to params object
-
-        controller.update()
-
-        assert view == "/ringlet/edit"
-        assert model.ringletInstance != null
-
-        ringlet.clearErrors()
-
-        populateValidParams(params)
-        controller.update()
-
-        assert response.redirectedUrl == "/ringlet/show/$ringlet.id"
-        assert flash.message != null
-
-        //test outdated version number
-        response.reset()
-        ringlet.clearErrors()
-
-        populateValidParams(params)
-        params.id = ringlet.id
-        params.version = -1
-        controller.update()
-
-        assert view == "/ringlet/edit"
-        assert model.ringletInstance != null
-        assert model.ringletInstance.errors.getFieldError('version')
-        assert flash.message != null
-    }
-
-    void testDelete() {
-        controller.delete()
-        assert flash.message != null
-        assert response.redirectedUrl == '/ringlet/list'
-
-        response.reset()
-
-        populateValidParams(params)
-        def ringlet = new Ringlet(params)
-
-        assert ringlet.save() != null
-        assert Ringlet.count() == 1
-
-        params.id = ringlet.id
-
-        controller.delete()
-
-        assert Ringlet.count() == 0
-        assert Ringlet.get(ringlet.id) == null
-        assert response.redirectedUrl == '/ringlet/list'
-    }
 }
