@@ -110,7 +110,7 @@
     <div data-role="content">
         <form name="formSignup">
             <a href="#camera" data-rel="popup" data-position-to="window">
-                <div id="signup-carousel" ><div class='item'><img id="carousel-image" class="user-image" src='img/edit-image.png' ></div></div>
+                <div id="signup-carousel" ><div class='item'><img id="carousel-image" class="user-image" src='img/edit-image.png' onload="changeSize(this)"></div></div>
             </a>
             <div data-role="popup" data-overlay-theme="a" id="camera">
                 <a data-corners="false" data-role="button" data-ng-hide="images.length>7" data-ng-click="capturePhoto()">Take a Picture</a>
@@ -172,7 +172,7 @@
     <div data-role="content">
         <form name="formProfile">
             <a href="#profile-camera" data-rel="popup" data-position-to="window">
-                <div id="profile-carousel" ><div class='item'><img id="profile-image" class="user-image" src='img/edit-image.png' ></div></div>
+                <div id="profile-carousel" ><div class='item'><img id="profile-image" class="user-image" src='img/edit-image.png' onload="changeSize(this)"></div></div>
             </a>
             <div data-role="popup" data-overlay-theme="a" id="profile-camera">
                 <a data-corners="false" data-role="button" data-ng-hide="images.length>7" data-ng-click="capturePhotoProfile()">Take a Picture</a>

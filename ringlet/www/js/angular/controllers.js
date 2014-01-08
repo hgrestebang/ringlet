@@ -15,7 +15,7 @@ function UserCtrl($scope, DAO){
     $scope.emailForgot = '';
     $scope.ringlet=[];
     $scope.ringlets=[];
-    var appConfig = {serverHost:'192.168.0.102', appName:'ringlet', token:''};
+    var appConfig = {serverHost:'192.168.0.101', appName:'ringlet', token:''};
     var owl = $("#listing-item-gallery");
     var carousel = $("#signup-carousel");
     var profileCarousel = $("#profile-carousel");
@@ -37,7 +37,7 @@ function UserCtrl($scope, DAO){
         $scope.images = [];
         $scope.deleteImages = [];
         carouselLength = 0;
-        appConfig = {serverHost:'192.168.0.102', appName:'ringlet', token:''};
+        appConfig = {serverHost:'192.168.0.101', appName:'ringlet', token:''};
     }
 
     $scope.errorValidation = function(){
@@ -112,7 +112,7 @@ function UserCtrl($scope, DAO){
         $scope.ringlet = ringlet;
         deleteItems();
         for(var i=0; i< $scope.ringlet.photos.length; i++){
-            addItem($scope.ringlet.photos[i].id, $scope.ringlet.photos[i].path);
+            addItem('info'+$scope.ringlet.photos[i].id, $scope.ringlet.photos[i].path);
         }
     }
 
@@ -160,7 +160,7 @@ function UserCtrl($scope, DAO){
                 $scope.user = result;
                 for(var i=0; i<$scope.user.photos.length; i++){
                     $scope.images.push({id:$scope.user.photos[i].id, path:$scope.user.photos[i].path, delete:false, data:''});
-                    addPhotoProfile($scope.user.photos[i].path, $scope.images.length, true);
+                    addPhotoProfile($scope.user.photos[i].path, 'profile'+$scope.images.length, true);
                 }
                 $.mobile.loading( 'hide', {textVisible: false});
                 window.location.href="#profile";
@@ -264,7 +264,6 @@ function UserCtrl($scope, DAO){
 
     $scope.updateProfile = function(){
         $.mobile.loading( 'show', {textVisible: false});
-        console.log($scope.deleteImages);
         for(var i=0; i<$scope.deleteImages.length; i++){
             $scope.images.push($scope.deleteImages[i]);
         }
@@ -295,28 +294,27 @@ function UserCtrl($scope, DAO){
 
     function afterAction(){
         carouselLength = this.owl.owlItems.length;
-        console.log(carouselLength);
     }
 
     function addPhoto(data, id){
-        var content = "<div class='item'><img class='user-image' id='"+id+"' onload='resizePhoto(this.id)' src='data:image/jpeg;base64,"+data+"'></div>";
+        var content = "<div class='item'><img class='user-image' id='"+id+"' onload='changeSize(this)' src='data:image/jpeg;base64,"+data+"'></div>";
         carousel.data('owlCarousel').addItem(content);
     }
 
     function addPhotoProfile(data, id, isPath){
         var content = "";
         if(isPath){
-            content = "<div class='item'><img class='user-image' id='"+id+"' onload='resizePhotoProfile(this.id)' src='"+data+"'></div>";
+            content = "<div class='item'><img class='user-image' id='"+id+"' onload='changeSize(this)' src='"+data+"'></div>";
         }
         else{
-            content = "<div class='item'><img class='user-image' id='"+id+"' onload='resizePhotoProfile(this.id)' src='data:image/jpeg;base64,"+data+"'></div>";
+            content = "<div class='item'><img class='user-image' id='"+id+"' onload='changeSize(this)' src='data:image/jpeg;base64,"+data+"'></div>";
         }
         profileCarousel.data('owlCarousel').addItem(content);
     }
 
     function addItem(id, src){
         photoCount++;
-        var content = "<div class='item'><img class='user-image' id='"+id+"' onclick='loadPopUp(this,this.id)' onload='changeSize(this)' src='"+src+"'></div>";
+        var content = "<div class='item'><img class='user-image' id='"+id+"' onclick='loadPopUp(this)' onload='changeSize(this)' src='"+src+"'></div>";
         owl.data('owlCarousel').addItem(content);
     }
 
@@ -336,7 +334,6 @@ function UserCtrl($scope, DAO){
             if($scope.images[$scope.images.length-1].id != ""){
                 $scope.images[$scope.images.length-1].delete = true;
                 $scope.deleteImages.push($scope.images.pop());
-                console.log($scope.deleteImages)
             }
             else{
                 $scope.images.pop()
@@ -355,13 +352,13 @@ function UserCtrl($scope, DAO){
 //---------------------------- Camera Functions --------------------------------------------------
     function onPhotoDataSuccess(imageData){
         $scope.images.push({data:imageData});
-        addPhoto(imageData, $scope.images.length);
+        addPhoto(imageData, 'signup'+$scope.images.length);
         $scope.$apply();
     }
 
     function onPhotoDataSuccessProfile(imageData){
         $scope.images.push({id:"", data:imageData, delete:false});
-        addPhotoProfile(imageData, $scope.images.length, false);
+        addPhotoProfile(imageData, 'profile'+$scope.images.length, false);
         $scope.$apply();
     }
 

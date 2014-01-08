@@ -22,9 +22,7 @@ var app = {
     }
 };
 
-function loadPopUp(img,imgID){
-    console.log(img);
-    console.log(imgID);
+function loadPopUp(img){
     var myNode = document.getElementById("imagePopUpDiv");
     myNode.innerHTML = '';
 
@@ -44,21 +42,6 @@ function resizeLogo(){
     else{
         $('#landing-icon').css({'height': (window.innerWidth/2)+'px'});
     }
-}
-
-function resizePhoto(elementId){
-    var width = $('#carousel-image').width();
-    var height = $('#carousel-image').height();
-    $('#'+elementId).css({'width': width+'px'});
-    $('#'+elementId).css({'height': height+'px'});
-}
-
-function resizePhotoProfile(elementId){
-    var width = $('#profile-image').width();
-    var height = $('#profile-image').height();
-    $('#'+elementId).css({'width': width+'px'});
-    $('#'+elementId).css({'height': height+'px'});
-    console.log(width, height);
 }
 
 function changeSizeImgList(img){

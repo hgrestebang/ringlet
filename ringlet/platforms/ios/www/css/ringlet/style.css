@@ -94,6 +94,10 @@ form ul li textarea{
     padding-top: 25%;
 }
 
+#landing form img{
+    width: 50%;
+}
+
 /**----------------------------- Login View --------------------------------------**/
 .hr-left{
     display: block;
@@ -107,4 +111,12 @@ form ul li textarea{
     float: right;
     margin-right: 0;
     width: 40.5%;
+}
+
+/**----------------------------- Ringster Info View ------------------------------**/
+
+div#imagePopUpDiv-popup.ui-popup-container.ui-popup-active{
+    top: 25% !important;
+    left: 15% !important;
+    max-width: 500px !important;
 }

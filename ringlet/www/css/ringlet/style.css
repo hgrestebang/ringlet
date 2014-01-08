@@ -94,6 +94,10 @@ form ul li textarea{
     padding-top: 25%;
 }
 
+#landing form img{
+    width: 50%;
+}
+
 /**----------------------------- Login View --------------------------------------**/
 .hr-left{
     display: block;
