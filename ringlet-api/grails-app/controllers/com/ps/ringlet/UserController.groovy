@@ -106,6 +106,7 @@ class UserController {
                 if(params.user.facebookId){
                     user.setFacebookId(new Sha256Hash(params.user.facebookId as String).toHex() as String)
                 }
+                user.setLocation([37.33234141 as Double, -122.031286 as Double])
                 if(params.user.userLocation){
                     user.setLocation([params.user.userLocation.lat as Double, params.user.userLocation.lgn as Double])
                 }

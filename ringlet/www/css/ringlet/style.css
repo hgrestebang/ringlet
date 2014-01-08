@@ -108,3 +108,11 @@ form ul li textarea{
     margin-right: 0;
     width: 40.5%;
 }
+
+/**----------------------------- Ringster Info View ------------------------------**/
+
+div#imagePopUpDiv-popup.ui-popup-container.ui-popup-active{
+    top: 25% !important;
+    left: 15% !important;
+    max-width: 500px !important;
+}

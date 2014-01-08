@@ -101,7 +101,6 @@ function UserCtrl($scope, DAO){
                 }
                 else{
                     $scope.ringlets=result;
-                    console.log($scope.ringlets);
                     $.mobile.loading( 'hide', {textVisible: false});
                     window.location.href="#home";
                 }
@@ -111,10 +110,9 @@ function UserCtrl($scope, DAO){
 
     $scope.getRinglets = function(ringlet){
         $scope.ringlet = ringlet;
-
         deleteItems();
         for(var i=0; i< $scope.ringlet.photos.length; i++){
-            addItem($scope.ringlet.photos[i].id, $scope.ringlet.photos[i].photo_protocol+$scope.ringlet.photos[i].photo_host+"/"+$scope.ringlet.photos[i].photo_path);
+            addItem($scope.ringlet.photos[i].id, $scope.ringlet.photos[i].path);
         }
     }
 
@@ -292,8 +290,8 @@ function UserCtrl($scope, DAO){
 
 //---------------------------- Carousel Functions ------------------------------------------------
     carousel.owlCarousel({ autoPlay: false, itemsMobile : [479,3], itemsTablet: [768,3]});
+    owl.owlCarousel({autoplay:false, itemsMobile : [479,3], itemsTablet: [768,3]});
     profileCarousel.owlCarousel({ autoPlay: false, itemsMobile : [479,3], itemsTablet: [768,3], afterAction : afterAction});
-    owl.owlCarousel({autoplay:true,navigation:true, slideSpeed:300, paginationSpeed:400, lazyLoad:true, singleItem:true});
 
     function afterAction(){
         carouselLength = this.owl.owlItems.length;
@@ -318,7 +316,7 @@ function UserCtrl($scope, DAO){
 
     function addItem(id, src){
         photoCount++;
-        var content = "<div class='item'><img class='lazyOwl' id='"+id+"' data-src='"+src+"' onload='changeSize(this)' onerror='carouselImageError(this)'></div>";
+        var content = "<div class='item'><img class='user-image' id='"+id+"' onclick='loadPopUp(this,this.id)' onload='changeSize(this)' src='"+src+"'></div>";
         owl.data('owlCarousel').addItem(content);
     }
 
