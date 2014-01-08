@@ -112,6 +112,14 @@ form ul li textarea{
 /**----------------------------- Signup View -------------------------------------**/
 
 
+/**----------------------------- ringster Info View ------------------------------**/
+
+div#imagePopUpDiv-popup.ui-popup-container.ui-popup-active{
+    top: 25% !important;
+    left: 20% !important;
+     max-width: 500px !important;
+}
+
 /*.ui-content #login-button{*/
 /*background: firebrick;*/
 /*color: #ffffff;*/

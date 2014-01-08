@@ -106,9 +106,9 @@ class UserController {
                 if(params.user.facebookId){
                     user.setFacebookId(new Sha256Hash(params.user.facebookId as String).toHex() as String)
                 }
+                user.setLocation([37.33234141 as Double, -122.031286 as Double])
                 if(params.user.userLocation){
-                    [37.33233141d, -122.031286d]
-                    user.setLocation([37.33234141 as Double, -122.031286 as Double])
+                    user.setLocation([params.user.userLocation.lat as Double, params.user.userLocation.lgn as Double])
                 }
                 user.save(flush: true)
                 if(params.images){
