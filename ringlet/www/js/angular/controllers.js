@@ -46,6 +46,8 @@ function UserCtrl($scope, DAO){
         $scope.showServerError = false;
         $scope.showPasswordError = false;
         $scope.showMessage = false;
+        $scope.currentPassword = '';
+        $scope.newPassword = '';
         $scope.passwordConfirm = '';
         $scope.emailForgot = '';
     }
@@ -65,9 +67,15 @@ function UserCtrl($scope, DAO){
         $.mobile.loading( 'show', {textVisible: false});
         DAO.save({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'auth', action:'login', username:$scope.user.email, passwordHash:$scope.user.password, facebookId:$scope.user.id},
             function(result){
+                console.log(result.id)
                 if(result.response == "bad_login"){
                     $scope.showErrors = true;
                     $scope.showFunctionError = true;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                }
+                else if(result.id == undefined){
+                    $scope.showErrors = true;
+                    $scope.showServerError = true;
                     $.mobile.loading( 'hide', {textVisible: false});
                 }
                 else{
@@ -152,6 +160,7 @@ function UserCtrl($scope, DAO){
 //---------------------------- User Functions ----------------------------------------------------
     $scope.currentUser = function(){
         $.mobile.loading( 'show', {textVisible: false});
+        $scope.errorValidation();
         $scope.deletePhotoProfile('true');
         $scope.images = [];
         $scope.deleteImages = [];
@@ -285,6 +294,47 @@ function UserCtrl($scope, DAO){
                 $scope.showServerError = true;
                 $.mobile.loading( 'hide', {textVisible: false});
             });
+    }
+
+    $scope.validateChangePassword = function(notValid){
+        if(notValid){
+            $scope.showErrors = true;
+        }
+        else{
+            $scope.showErrors = false;
+            $scope.showFunctionError = false;
+            $scope.showServerError = false;
+            $scope.showPasswordError = false;
+            $scope.changePassword();
+        }
+    }
+
+    $scope.changePassword = function(){
+        if($scope.newPassword == $scope.passwordConfirm){
+            $.mobile.loading( 'show', {textVisible: false});
+            DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'user', action:'changePassword', currentPassword:$scope.currentPassword, newPassword:$scope.newPassword},
+                function(result){
+                    if(result.response == "user_updated"){
+                        $.mobile.loading( 'hide', {textVisible: false});
+                        $scope.currentUser();
+                    }
+                    else if(result.response == "password_incorrect"){
+                        $scope.showErrors = true;
+                        $scope.showFunctionError = true;
+                        $.mobile.loading( 'hide', {textVisible: false});
+                    }
+                },
+                function(error){
+                    $scope.showErrors = true;
+                    $scope.showServerError = true;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                });
+        }
+        else{
+            $scope.showErrors = true;
+            $scope.showPasswordError = true;
+            $.mobile.loading( 'hide', {textVisible: false});
+        }
     }
 
 //---------------------------- Carousel Functions ------------------------------------------------

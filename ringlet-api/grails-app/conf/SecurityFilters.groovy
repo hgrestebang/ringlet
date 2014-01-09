@@ -1,4 +1,3 @@
-import com.ps.ringlet.User
 import com.ps.ringlet.UserToken
 import grails.converters.JSON
 
@@ -11,14 +10,15 @@ class SecurityFilters {
                     return true
                 }
                 else{
-                    User user = User.findByToken(UserToken.findByToken(params.token as String))
-                    if(user.token.valid){
-                        return true
-                    }else{
-                        def message = [response:"bad_token"]
-                        render message as JSON
-                        return false
+                    UserToken token = UserToken.findByToken(params.token as String)
+                    if(token){
+                        if(token.valid){
+                            return true
+                        }
                     }
+                    def message = [response:"bad_token"]
+                    render message as JSON
+                    return false
                 }
             }
             after = { Map model ->}

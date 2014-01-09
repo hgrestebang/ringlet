@@ -195,33 +195,24 @@
                 <li><select data-role="none" name="gender" data-ng-model="user.gender" data-ng-change="showFunctionError=false; showServerError=false"><option value="MALE">Male</option><option value="FEMALE">Female</option></select></li>
                 <li><textarea data-role="none" name="bio" placeholder="Biography" rows="5" data-ng-model="user.bio" data-ng-change="showFunctionError=false; showServerError=false"></textarea></li>
             </ul>
-            <a href="#change-password" data-role="button" data-corners="false">Change Password</a>
+            <a href="#change-password" data-role="button" data-corners="false" data-ng-click="errorValidation()">Change Password</a>
         </form>
     </div>
 </div>
 <!----------------------------------Change password View--------------------------------------------------->
 <div data-role="page" id="change-password" data-theme="a">
-    <div data-role="header"    id="change-password-header">
-        <a href="#profile"    data-shadow="false" data-corners="false" data-transition="slidedown" data-ng-click="errorValidation()">
-            <i class="icon-remove icons-big"></i>
-        </a>
+    <div data-role="header">
+        <a data-role="button" data-icon="arrow-l" data-iconpos="notext" data-ng-click="currentUser()">Login</a>
         <h3>Change password</h3>
     </div>
-    <div data-role="content" id="change-password-content">
-        <form id="change-password-form" name="formChangePassword">
-            <div>
-                <label for="currentPassword">Current password:</label>
-                <input type="password" id="currentPassword" name="currentPassword" data-ng-model="currentPassword" data-mini="true" data-ng-change="showFunctionError=false; showServerError=false; showPasswordError=false" data-ng-minlength=5 required/>
-            </div>
-            <div>
-                <label for="newPassword">Enter new password:</label>
-                <input type="password" id="newPassword" name="newPassword" data-ng-model="newPassword" data-mini="true" data-ng-change="showFunctionError=false; showServerError=false; showPasswordError=false" data-ng-minlength=5 required/>
-            </div>
-            <div>
-                <label for="passwordConfirm">Confirm new password:</label>
-                <input type="password" id="passwordConfirm" data-ng-model="passwordConfirm" data-mini="true" data-ng-change="showFunctionError=false; showServerError=false; showPasswordError=false"/>
-            </div>
-            <div data-ng-show="showErrors">
+    <div data-role="content">
+        <form name="formChangePassword">
+            <ul>
+                <li><input data-role="none" name="currentPassword" type="password" placeholder="Current Password" data-ng-model="currentPassword" data-ng-change="showFunctionError=false; showServerError=false; showPasswordError=false" data-ng-minlength=5 required></li>
+                <li><input data-role="none" name="newPassword" type="password" placeholder="New Password" data-ng-model="newPassword" data-ng-change="showFunctionError=false; showServerError=false; showPasswordError=false" data-ng-minlength=5 required></li>
+                <li><input data-role="none" name="passwordConfirm" type="password" placeholder="Confirm Password" data-ng-model="passwordConfirm" data-ng-change="showFunctionError=false; showServerError=false; showPasswordError=false"></li>
+            </ul>
+            <div data-ng-show="showErrors" class="center red">
                 <p data-ng-show="formChangePassword.currentPassword.$error.required">"Current password required"</p>
                 <p data-ng-show="formChangePassword.currentPassword.$error.minlength">"Current password too short"</p>
                 <p data-ng-show="formChangePassword.newPassword.$error.required">"New password required"</p>
@@ -230,10 +221,48 @@
                 <p data-ng-show="showFunctionError">"The current password is incorrect"</p>
                 <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
             </div>
-            <a href="" data-role="button" data-corners="false" data-theme="b" id="changePassword-btn" data-ng-click="validateChangePassword(formChangePassword.$invalid)">Change password</a>
+            <a data-role="button" data-corners="false" data-ng-click="validateChangePassword(formChangePassword.$invalid)">Change password</a>
         </form>
     </div>
 </div>
+<!---------------------------------Search View----------------------------------------------------------------->
+<div data-role="page" id="search" data-theme="a">
+    <div data-role="header">
+        <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-ng-click="errorValidation()">Menu</a>
+        <h3>Search</h3>
+        <a data-role="button" data-mini="true" data-inline="true" data-corners="false" data-ng-click="validateProfile(formProfile.$invalid)">Search</a>
+    </div>
+    <div data-role="content">
+        <form name="formProfile">
+            <a href="#profile-camera" data-rel="popup" data-position-to="window">
+                <div id="profile-carousel" ><div class='item'><img id="profile-image" class="user-image" src='img/edit-image.png' onload="changeSize(this)"></div></div>
+            </a>
+            <div data-role="popup" data-overlay-theme="a" id="profile-camera">
+                <a data-corners="false" data-role="button" data-ng-hide="images.length>7" data-ng-click="capturePhotoProfile()">Take a Picture</a>
+                <a data-corners="false" data-role="button" data-ng-hide="images.length>7" data-ng-click="getPhotoProfile()">Phone Library</a>
+                <a data-corners="false" data-role="button" data-ng-hide="images.length<1" data-ng-click="deletePhotoProfile('false')">Delete Last Photo</a>
+                <a href="#" data-rel="back" data-role="button" data-corners="false">Cancel</a>
+            </div>
+            <div data-ng-show="showErrors" class="center red">
+                <p data-ng-show="formProfile.name.$error.required">"Name required"</p>
+                <p data-ng-show="formProfile.email.$error.required">"Email required"</p>
+                <p data-ng-show="formProfile.email.$invalid && formProfile.email.$error.email">"Wrong email format"</p>
+                <p data-ng-show="showFunctionError">"The email is already used"</p>
+                <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
+                <p data-ng-show="showMessage">"Information updated"</p>
+            </div>
+            <ul>
+                <li><input data-role="none" name="name" type="text" placeholder="Name" data-ng-model="user.name" data-ng-change="showFunctionError=false; showServerError=false" required></li>
+                <li><input data-role="none" name="email" type="email" placeholder="Email Address" data-ng-model="user.username" data-ng-change="showFunctionError=false; showServerError=false" required></li>
+                <li><input data-role="none" name="phone" type="tel" placeholder="Phone Number" data-ng-model="user.phone" data-ng-change="showFunctionError=false; showServerError=false"></li>
+                <li><select data-role="none" name="gender" data-ng-model="user.gender" data-ng-change="showFunctionError=false; showServerError=false"><option value="MALE">Male</option><option value="FEMALE">Female</option></select></li>
+                <li><textarea data-role="none" name="bio" placeholder="Biography" rows="5" data-ng-model="user.bio" data-ng-change="showFunctionError=false; showServerError=false"></textarea></li>
+            </ul>
+            <a href="#change-password" data-role="button" data-corners="false" data-ng-click="errorValidation()">Change Password</a>
+        </form>
+    </div>
+</div>
+
 <!---------------------------------------ringster Info View---------------------------------------------------->
 <div data-role="page" id="listing-item" data-theme="a">
     <div data-role="header" id="listing-item-header"  >
@@ -260,127 +289,6 @@
     <div data-role="popup" data-overlay-theme="b" class="ui-content" id="imagePopUpDiv">
     </div>
 </div>
-
-<!---------------------------------Search View---------------------------------------------------->
-<div data-role="page" id="search" data-theme="a">
-    <div data-role="header" id="search-header"  >
-        <a href="#listing"    data-shadow="false" data-corners="false" data-transition="slidedown"><i class="icon-remove icons-big white-text"></i></i></a>
-        <h3>Search</h3>
-    </div>
-    <div data-role="content" id="search-content">
-        <form id="search-form" name="search-form"><br/>
-            <p>Search for  listings using the search criteria bellow.</p>
-             <label for="search-tLocation" style="font-weight: bold;">Location:</label><br/>
-
-            <div id="search-divState" class="slider" data-inline="true">
-                <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" data-iconshadow="false">
-                    <legend>State:</legend>
-                    <select id="search-states" name="search-states" data-icon="" data-ng-change="getCities(selectState)" data-ng-model="selectState">
-                        <option value="Select your State">Select your State</option>
-                        <option data-ng-repeat="state in states" value="{{state.state}}" data-ng-bind="state.description"></option>
-                    </select>
-                </fieldset>
-            </div><br/>
-
-            <div id="search-divCity" class="slider" data-inline="true" data-ng-disabled="cityLoad">
-                <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" data-iconshadow="false">
-                    <legend>City:</legend>
-                    <select id="search-city" name="search-city" data-icon="" data-ng-model="selectCity">
-                        <option>Select your City</option>
-                        <option data-ng-repeat="city in cities" value="{{city.city}}" data-ng-bind="city.city"></option>
-                    </select>
-                </fieldset>
-            </div><br/>
-            <input type="text"placeholder="Zip,Code,Country" id="search-tLocation" value="" data-mini="true" />
-            <br/>
-            <div id="search-divPrice" class="slider" data-inline="true">
-                <fieldset data-role="controlgroup" data-type="horizontal" data-mini="true" data-iconshadow="false">
-                    <legend>Price:</legend>
-                    <label for="search-sMin">Min</label>
-                    <select name="search-sMin" id="search-sMin" data-icon="">
-                        <option>Min</option>
-                        <option value="">Any</option>
-                        <option value="100">$100</option>
-                        <option value="200">$200</option>
-                        <option value="300">$300</option>
-                        <option value="400">$400</option>
-                        <option value="300">$500</option>
-                        <option value="400">$600</option>
-                    </select>
-                    <select data-icon="" disabled>
-                        <option>-</option>
-                    </select>
-
-                    <label for="search-sMax">Max</label>
-                    <select name="search-sMin" id="search-sMax" data-icon="">
-                        <option>Max</option>
-                        <option value="">Any</option>
-                        <option value="100">$100</option>
-                        <option value="200">$200</option>
-                        <option value="300">$300</option>
-                        <option value="400">$400</option>
-                        <option value="300">$500</option>
-                        <option value="400">$600</option>
-                    </select>
-                </fieldset>
-            </div><br/>
-
-            <strong>Beds</strong>
-            <fieldset id="search-rBeds" data-role="controlgroup" data-type="horizontal" data-mini="true" data-corners="false">
-                <input type="radio" name="search-rBeds" id="search-rBedsAny" value="0" checked="checked" />
-                <label for="search-rBedsAny">Any</label>
-
-                <input type="radio" name="search-rBeds" id="search-rBeds1+" value="1"  />
-                <label class="gray-text" for="search-rBeds1+">1+</label>
-
-                <input type="radio" name="search-rBeds" id="search-rBeds2+" value="2"  />
-                <label class="gray-text" for="search-rBeds2+">2+</label>
-
-                <input type="radio" name="search-rBeds" id="search-rBeds3+" value="3"  />
-                <label class="gray-text" for="search-rBeds3+">3+</label>
-
-                <input type="radio" name="search-rBeds" id="search-rBeds4+" value="4"  />
-                <label class="gray-text" for="search-rBeds4+">4+</label>
-
-                <input type="radio" name="search-rBeds" id="search-rBeds5+" value="5"  />
-                <label class="gray-text" for="search-rBeds5+">5+</label>
-            </fieldset><br/>
-
-            <strong>Baths</strong>
-            <fieldset id="search-rBaths" data-role="controlgroup" data-type="horizontal" data-mini="true" data-corners="false">
-                <input type="radio" name="search-rBaths" id="search-rBathsAny" value="0" checked="checked" />
-                <label for="search-rBathsAny">Any</label>
-
-                <input type="radio" name="search-rBaths" id="search-rBaths1+" value="1"  />
-                <label class="gray-text" for="search-rBaths1+">1+</label>
-
-                <input type="radio" name="search-rBaths" id="search-rBaths2+" value="2"  />
-                <label class="gray-text" for="search-rBaths2+">2+</label>
-
-                <input type="radio" name="search-rBaths" id="search-rBaths3+" value="3"  />
-                <label class="gray-text" for="search-rBaths3+">3+</label>
-
-                <input type="radio" name="search-rBaths" id="search-rBaths4+" value="4"  />
-                <label class="gray-text" for="search-rBaths4+">4+</label>
-
-                <input type="radio" name="search-rBaths" id="search-rBaths5+" value="5"  />
-                <label class="gray-text" for="search-rBaths5+">5+</label>
-            </fieldset><br/>
-            <strong>Options</strong>
-            <div id="search-divPhotos" class="slider">
-                <label for="search-sPhotos" data-inline="true" style="font-weight: bold;">Photos Only</label>
-                <select data-inline="true" name="favorite" id="search-sPhotos" data-role="slider">
-                    <option value="0"></option>
-                    <option value="1"></option>
-                </select>
-            </div>
-            <a href="" data-role="button" data-corners="false" data-theme="b" id="search-bSearch" data-ng-click="Search()">Search</a>
-            <span id="search-reset"><input id="search-bReset" type="reset" value="Reset" data-corners="false" /></span>
-        </form>
-    </div>
-</div>
-</div>
-
 <!---------------------------------Pro View---------------------------------------------------->
 <div data-role="page" id="pro">
     <div data-role="header" id="pro-header" data-theme="d"  >
@@ -477,7 +385,6 @@
         </div>
     </div>
 </div>
-
 <!--Panel-->
 <div data-role="panel" id="panel-menu" data-theme="a" data-position="left">
     </br>
@@ -485,7 +392,7 @@
         <li data-role="list-divider" class="center">Menu</li>
         <li><a href="#home" data-transition="slide" data-rel="close">Listing</a></li>
         <li><a data-ng-click="currentUser()">My Profile</a></li>
-        <li><a href="#search" data-ng-click="getStates()" data-transition="slide">Search</a></li>
+        <li><a href="#search" data-transition="slide">Search</a></li>
         <li><a href="#favorites" data-ng-click="getFavorites()" data-transition="slide">Favorites</a></li>
         <li><a data-ng-click="logout()">Log Out</a></li>
     </ul>
