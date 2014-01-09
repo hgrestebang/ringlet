@@ -19,13 +19,33 @@ function UserCtrl($scope, $compile, DAO){
     $scope.ringsters=[];
     $scope.images = [];
     $scope.deleteImages = [];
-    var appConfig = {serverHost:'192.168.0.100', appName:'ringlet', token:''};
+    $scope.announcement = {location:[]};
+    $scope.searchRadius = [
+        {miles:'5', radius:'5 miles'},
+        {miles:'10', radius:'10 miles'},
+        {miles:'20', radius:'20 miles'},
+        {miles:'30', radius:'30 miles'},
+        {miles:'40', radius:'40 miles'},
+        {miles:'50', radius:'50 miles'}];
+    $scope.announcement.radius = $scope.searchRadius[0];
+
+    var appConfig = {serverHost:'192.168.0.109', appName:'ringlet', token:''};
     var owl = $("#listing-item-gallery");
     var carousel = $("#signup-carousel");
     var profileCarousel = $("#profile-carousel");
     var photoCount = 0;
     var carouselLength = 0;
     var map = L.map('map-area');
+    var mapAnnouncemnt = L.map('map-Announcement',{
+        dragging: false,
+        touchZoom: false,
+        zoomControl: true,
+        scrollWheelZoom: false,
+        doubleClickZoom: false,
+        boxZoom: true,
+        tap: false,
+        trackResize: true
+    });
 
     function initializeVariables(){
         $scope.user = {email:'', password:'', gender:'MALE'};
@@ -637,6 +657,36 @@ function UserCtrl($scope, $compile, DAO){
             console.log("In-App Purchases not available.");
         }
     };
+    //----------------------------------Announcement Functions--------------------------------------------------------------
+    $scope.saveAnnouncement = function(){
+        if($scope.announcement.body!=""){
+            $.mobile.loading( 'show', {textVisible: false});
+            DAO.save({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'announcement', action:'create',token:appConfig.token, announcement: $scope.announcement},
+                function(result){
+                    if(result.response == "announcement_created"){
+                        $scope.announcement.total=result.totalSend
+                        $scope.announcement.body=""
+                        $scope.announcement.radius = $scope.searchRadius[0];
+                        var positionTo = $( ".selector" ).popup( "option", "positionTo" );
+                        $("#popup-Announcement").popup( "open", "option", "positionTo", "window" );
+                    }
+                    else{
+
+                    }
+                    $.mobile.loading( 'hide', {textVisible: false});
+                },
+                function(error){
+                    $scope.showErrors = true;
+                    $scope.showServerError = true;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                });
+        }
+        else
+        {
+            $scope.showErrors = true;
+            $scope.showFunctionError = true;
+        }
+    }
 
     //----------------------------------Map Functions--------------------------------------------------------------
     $scope.initMap = function(){
@@ -648,24 +698,27 @@ function UserCtrl($scope, $compile, DAO){
             attribution: 'Powered by PureSrc', maxZoom: 18, setView: true}).addTo(map);
         map.setView([$scope.userLocation.lat, $scope.userLocation.lgn], 14);
 
-//        var markers = L.markerClusterGroup();
-//
-//        for (var i=0; i< $scope.ringsters.length; i++){
-//
-//            var msg =  '<div class="clickDiv" id="'+$scope.ringsters[i].id+'" style="width:'+(sWidth-45)+'px"><a href="#listing-item" data-transition="slidefade">';
-//            //msg +=      '<img id="imgMap-'+$scope.ringsters[i].id+'" class="img-popup" src="'+$scope.ringsters[i].photos[0].photo_protocol+$scope.ringsters[i].photos[0].photo_host+"/"+$scope.ringsters[i].photos[0].photo_path+'" onload="changeSizeImgList(this)" onerror="imgError(this)>';
-//            msg +=      '<strong style="color: black;">'+""+$scope.ringsters[i].name+""+'</strong><br/><br/>';
-//            msg +=    '</a></div>';
-//            var marker = L.marker(new L.LatLng($scope.ringsters[i].location.lat, $scope.ringsters[i].location.lgn));
-//            marker.bindPopup(msg);
-//            markers.addLayer(marker);
-//        }
-//
-//        map.addLayer(markers);
+        var markers = L.markerClusterGroup();
+
+        for (var i=0; i< $scope.ringsters.length; i++){
+
+            var msg =  '<div class="clickDiv" id="'+$scope.ringsters[i].id+'"><a data-transition="slidefade">';
+            msg +=      '<img id="imgMap-'+$scope.ringsters[i].id+'" class="img-popup" src="'+$scope.ringsters[i].photos[0].path+'" onload="changeSizeImgList(this)" onerror="imgError(this)>';
+            msg +=      '<br/><strong style="color: black; text-decoration: none">'+""+$scope.ringsters[i].name+""+'</strong><br/><br/>';
+            msg +=    '</a></div>';
+            var marker = L.marker(new L.LatLng($scope.ringsters[i].location.lat, $scope.ringsters[i].location.lgn));
+            marker.bindPopup(msg);
+            markers.addLayer(marker);
+        }
+
+        map.addLayer(markers);
     }
 
     $('#map').bind('pageshow', function() {
         map.invalidateSize();
+    });
+    $('#announcement').bind('pageshow', function() {
+        mapAnnouncemnt.invalidateSize();
     });
 
     function clearMap() {
@@ -680,4 +733,51 @@ function UserCtrl($scope, $compile, DAO){
         }
     }
 
+    $( document ).on( "click", ".clickDiv", function() {
+        for(var i=0; i<$scope.ringsters.length; i++){
+            if(this.id.toString()==$scope.ringsters[i].id.toString()){
+                $scope.getRingsters($scope.ringsters[i])
+            }
+        }
+        $scope.$apply();
+        window.location.href="#listing-item";
+
+    });
+
+    $scope.announcementForm = function(){
+        $scope.announcement.location[0]=$scope.userLocation.lat;
+        $scope.announcement.location[1]=$scope.userLocation.lgn;
+        mapAnnouncemnt.setView([$scope.announcement.location[0],$scope.announcement.location[1]], 9);
+        L.tileLayer('http://{s}.tile.cloudmade.com/2bb3a432a04845c3bda71c1fb668f4e5/997/256/{z}/{x}/{y}.png', {
+            attribution: 'Powered by PureSrc',
+            setView: true
+        }).addTo(mapAnnouncemnt);
+        $scope.printRadius();
+        var userIcon = L.AwesomeMarkers.icon({
+            icon: 'bullhorn',
+            color: 'darkgreen'
+        })
+       var marker = L.marker([$scope.announcement.location[0],$scope.announcement.location[1]], {icon:userIcon}, {draggable:false}).addTo(mapAnnouncemnt);
+    }
+    $scope.printRadius = function(){
+        markRadius(mapAnnouncemnt, $scope.announcement.location[0], $scope.announcement.location[1], $scope.announcement.radius.miles );
+    }
+
+    function markRadius(map, lat, lng, radius){
+        if(!$scope.circle){
+            $scope.circle = L.circle([lat, lng], radius*1600, {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.5
+            }).addTo(map);
+        }
+        else{
+            map.removeLayer($scope.circle);
+            $scope.circle =  L.circle([lat, lng], radius*1600, {
+                color: 'red',
+                fillColor: '#f03',
+                fillOpacity: 0.5
+            }).addTo(map);
+        }
+    }
 }
