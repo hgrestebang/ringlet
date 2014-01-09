@@ -164,7 +164,7 @@
         <p>
             <a href="#search"  data-role="button" data-transition="slide" data-direction="reverse" data-icon="search" data-iconpos="notext"></a>
             <a href="#map" data-ng-show="user.isPro" data-ng-click="initMap()" class="centerFloat" data-role="button" data-transition="slide" data-direction="reverse" data-icon="location" data-iconpos="notext"></a>
-            <a href="#" data-ng-show="user.isPro" class="right" data-role="button" data-transition="slide" data-direction="reverse" data-icon="tag" data-iconpos="notext"></a>
+            <a href="#announcement" data-ng-show="user.isPro" data-ng-click="announcementForm()" class="right" data-role="button" data-transition="slide" data-direction="reverse" data-icon="tag" data-iconpos="notext"></a>
 
             <!--no Pro-->
             <a href="#pro" data-ng-show="!user.isPro" class="centerFloat" data-role="button" data-transition="slide" data-direction="reverse" data-icon="location" data-iconpos="notext"></a>
@@ -244,10 +244,46 @@
         </form>
     </div>
 </div>
+<!----------------------------------Announcement Create View----------------------------------------------->
+<div data-role="page" id="announcement" data-theme="a">
+    <div data-role="header" id="announcement-header"  >
+        <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
+        </a>
+        <h3>Announcement</h3>
+        <a data-role="button" data-mini="true" data-inline="true" data-corners="false" data-ng-click="saveAnnouncement()">Save</a>
+    </div>
+    <div data-role="content" id="announcement-content">
+        <br/>
+        <br/>
+        <div id="info-box" class="info-box-announcement">
+            <span class="dark-text info-text">It's easy to do! Just type your message, choose the radius you want to cover.</span>
+        </div>
+        <div data-ng-show="showErrors" class="center red">
+            <p data-ng-show="showFunctionError">"You have not added the message"</p>
+            <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
+        </div>
+        <h2>Message</h2>
+        <textarea class="topcoat-textarea" required data-ng-model="announcement.body" data-ng-change="showFunctionError=false; showServerError=false"></textarea>
+        <p></p>
+        <div id="select-box">
+            <span class="dark-text">Radius</span>
+            <select data-ng-model="announcement.radius" data-ng-change="printRadius();" data-ng-options="search.radius for search in searchRadius">
+            </select>
+        </div>
+        </br>
+        <div id="map-Announcement"></div>
+        <div data-role="popup" data-overlay-theme="a" id="popup-Announcement">
+            <br/>
+              <p>Announcement delibered to {{announcement.total}} Ringsters</p>
+            <br/>
+            <a href="#home" data-rel="back" data-role="button" data-corners="false">OK</a>
+        </div>
+    </div>
+</div>
 <!---------------------------------------ringster Info View---------------------------------------------------->
 <div data-role="page" id="listing-item" data-theme="a">
     <div data-role="header" id="listing-item-header"  >
-        <a href="#home" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-shadow="false" data-corners="false">
+        <a href="#home" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
         </a>
         <h2 data-ng-bind="ringster.name"></h2>
     </div>

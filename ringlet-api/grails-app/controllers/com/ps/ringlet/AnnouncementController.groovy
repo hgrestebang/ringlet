@@ -26,14 +26,17 @@ class AnnouncementController {
 
     def create() {
         def message = [response:""]
+        def totalSend=0
         User user = User.findByToken(UserToken.findByToken(params.token as String))
         String code = RandomStringUtils.random(12, true, true)
-        User.findAllByLocationWithinCircle([[params.announcement.announcementLocation.lat as Double, params.announcement.announcementLocation.lgn as Double], (params.announcement.radius as Integer) / 69]).each {
-            if(user.id != it.id && !it.usersBlocked.contains(user.id) && !user.usersBlocked.contains(it.id) && it.status != UserStatus.REMOVED){
-                new Announcement(message: params.announcement.message as String, groupCode: code, dateCreated: new Date(), owner: user, recipient: it, location: [params.announcement.announcementLocation.lat as Double, params.announcement.announcementLocation.lgn as Double], radius: params.announcement.radius as Integer).save(flush: true)
+        User.findAllByLocationWithinCircle([[user.location[0] as Double, user.location[1] as Double], (params.announcement.radius.miles as Double) / 69]).each {
+            if(user.id != it.id && !it.usersBlocked?.contains(user.id) && !user.usersBlocked?.contains(it.id) && it.status != UserStatus.REMOVED){
+                new Announcement(message: params.announcement.body as String, groupCode: code, dateCreated: new Date(), owner: user, recipient: it, location: [user.location[0] as Double, user.location[1] as Double], radius: params.announcement.radius.miles as Double).save(flush: true)
+                totalSend++;
             }
         }
         message.response = "announcement_created"
+        message.totalSend=totalSend.toString()
         render message as JSON
     }
 
