@@ -20,7 +20,7 @@ class Chat {
 
     def beforeInsert(){
         ownerStatus = MessageStatus.SEEN
-        recipientStatus = MessageStatus.UNSEEN
+        recipientStatus = MessageStatus.DELETED
     }
 
     def toObject(){

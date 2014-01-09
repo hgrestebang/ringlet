@@ -1,5 +1,7 @@
 package com.ps.ringlet
 
+import org.apache.shiro.crypto.hash.Sha256Hash
+
 import static org.junit.Assert.*
 
 import grails.test.mixin.*
@@ -13,18 +15,18 @@ import grails.converters.*
  */
 //@TestMixin(GrailsUnitTestMixin)
 @TestFor(UserController)
-@Mock([User,UserToken,UserService,Purchase])
+@Mock([User,UserToken,UserService,Purchase,Ringlet])
 class UserControllerTests {
     def user,user2,user3
-    def token
-    def purchase
+    def token,purchase,ringlet
 
     void setUp() {
         mockForConstraintsTests(User)
         mockForConstraintsTests(UserToken)
         mockForConstraintsTests(UserService)
         mockForConstraintsTests(Purchase)
-        //mockFor(UserToken)
+        mockForConstraintsTests(Ringlet)
+
         token = new UserToken(
                 token: 'token123',
                 valid: true
@@ -42,7 +44,7 @@ class UserControllerTests {
 
         user = new User(
                 username: 'test@ringlet.me',
-                passwordHash: '5bbf1a9e0de062225a1b',
+                passwordHash: new Sha256Hash('admin').toHex(),
                 facebookId: '12345',
                 name: 'User Test',
                 phone: '123456789',
@@ -58,8 +60,8 @@ class UserControllerTests {
                 status: 'ACTIVE',
                 proPurchase: purchase,
                 ringlets:[],
-                friends:['2','3'],
-                usersBlocked:[],
+                friends:[2],
+                usersBlocked:[3],
                 photos:['http://test']
         ).save()
 
@@ -76,13 +78,16 @@ class UserControllerTests {
                 sound: true,
                 connectionStatus: true,
                 location: [37.33233141d, -122.031286d],
-                token: token,
+                token: new UserToken(
+                        token: 'token12345',
+                        valid: true
+                ).save(),
                 gender: 'MALE',
                 status: 'ACTIVE',
-                proPurchase: purchase,
-                ringlets:[2,3],
-                friends:[4,3],
-                usersBlocked:[5,7],
+                //proPurchase: purchase,
+                ringlets:[1],
+                friends:[1],
+                usersBlocked:[],
                 photos:['http://test']
         ).save()
 
@@ -99,14 +104,24 @@ class UserControllerTests {
                 sound: true,
                 connectionStatus: true,
                 location: [37.33233141d, -122.031286d],
-                token: token,
+                token: new UserToken(
+                        token: 'token1234',
+                        valid: true
+                ).save(),
                 gender: 'MALE',
                 status: 'ACTIVE',
-                proPurchase: purchase,
+                //proPurchase: purchase,
                 ringlets:[],
                 friends:[],
                 usersBlocked:[],
                 photos:[]
+        ).save()
+
+        ringlet = new Ringlet(
+                name: 'Ringlet Test',
+                owner: user2,
+                users: [2]
+
         ).save()
     }
 
@@ -117,7 +132,6 @@ class UserControllerTests {
     void testGetCurrent(){
         params.token = 'token123'
         controller.getCurrent()
-        println(response)
         assert response != null
     }
 
@@ -134,19 +148,26 @@ class UserControllerTests {
     }
 
     void testCreateFail(){
-        params.user = user
+        def userT = [username: "test@ringlet.me"]
+        params.user = userT
         controller.create()
         assert response.text == '{"response":"email_used"}'
     }
 
     void testCreate(){
-        //params.user = user2
-        params.user.username = 'test1@ringlet.me'
+        def userT = [email: "test5@ringlet.me",password: "test1234"]
+        params.user = userT
         controller.create()
         assert response.text == '{"response":"user_created"}'
     }
 
     void testForgotPassword(){
+        params.username = 'test@ringlet.me'
+        controller.forgotPassword()
+        assert response.text == '{"response":"email_send"}'
+    }
+
+    void testForgotPasswordFailUser(){
          params.username = 'test1@ringlet.me'
          controller.forgotPassword()
          assert response.text == '{"response":"user_not_found"}'
@@ -155,7 +176,7 @@ class UserControllerTests {
     void testForgotPasswordEmail(){
         params.username = 'test@ringlet.me'
         controller.forgotPassword()
-        assert response.text == '{"response":"email_send"}'
+        assert response.text == '{"response":"email_not_send"}'
     }
 
     void testGetAll(){
@@ -164,11 +185,12 @@ class UserControllerTests {
         assert response.text != '{"response":"bad_request"}'
     }
 
+    /*
     void testGetAllFail(){
-        params.token = 'token123'
+        params.token = 'token1234'
         controller.getAll()
         assert response.text == '{"response":"bad_request"}'
-    }
+    } */
 
     void testNearBy(){
         /*params.token = 'token123'
@@ -184,19 +206,28 @@ class UserControllerTests {
         assert response.getJson().size() > 0
     }
 
-    void testGetFriendsNot(){
-        params.token = 'token123'
+    void testGetFriendsFail(){
+        params.token = 'token1234'
         controller.getFriends()
         assert response.getJson().size() == 0
     }
 
     void testUpdate(){
-        /*params.token = 'token123'
-        params.user = user
+        params.token = 'token123'
+        def userT = [username: "test@ringlet.me"]
+        params.user = userT
         //params.user.userLocation = '{lat:37.33233141d, lgn:-122.031286d}'
         controller.update()
-        def message = JSON.parse(response.getJson()[0].toString())
-        assert message == 'user_updated'*/
+        //def message = JSON.parse(response.getJson()[0].toString())
+        assert response.text == '{"response":"user_updated"}'
+    }
+
+    void testUpdateFail(){
+        params.token = 'token1234'
+        def userT = [username: "test@ringlet.me"]
+        params.user = userT
+        controller.update()
+        assert response.text == '{"response":"email_used"}'
     }
 
     void testAddBlockUser(){
@@ -215,8 +246,24 @@ class UserControllerTests {
     }
 
     void testDeleteAccount(){
-        /*params.token = 'token123'
+        params.token = 'token123'
         controller.deleteAccount()
-        assert response.text == '{"response":"user_deleted"}'*/
+        assert response.text == '{"response":"user_deleted"}'
+    }
+
+    void testChangePassword(){
+        params.token = 'token123'
+        params.currentPassword =  'admin'
+        params.newPassword = 'admin123'
+        controller.changePassword()
+        assertEquals(response.text,'{"response":"user_updated"}')
+    }
+
+    void testChangePasswordFail(){
+        params.token = 'token123'
+        params.currentPassword =  'admin'
+        params.newPassword = 'admin123'
+        controller.changePassword()
+        assertEquals(response.text,'{"response":"password_incorrect"}')
     }
 }

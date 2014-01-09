@@ -4,152 +4,83 @@ package com.ps.ringlet
 
 import org.junit.*
 import grails.test.mixin.*
+import groovy.mock.interceptor.*
+import grails.converters.*
 
 @TestFor(ChatController)
-@Mock(Chat)
+@Mock([Chat,User,UserService,UserToken])
 class ChatControllerTests {
+    def user,user2,token,chat
 
-    def populateValidParams(params) {
-        assert params != null
-        // TODO: Populate valid properties like...
-        //params["name"] = 'someValidName'
+    void setUp() {
+        mockForConstraintsTests(User)
+        mockForConstraintsTests(UserToken)
+        mockForConstraintsTests(UserService)
+        mockForConstraintsTests(Chat)
+
+        token = new UserToken(
+                token: 'token123',
+                valid: true
+        ).save()
+
+        user = new User(
+                username: 'test@ringlet.me',
+                passwordHash: '5bbf1a9e0de062225a1b',
+                facebookId: '12345',
+                name: 'User Test',
+                phone: '123456789',
+                token: token
+        ).save()
+
+        user2 = new User(
+                username: 'test2@ringlet.me',
+                passwordHash: '5bbf1a9e0de062225a1b',
+                facebookId: '12345',
+                name: 'User Test2',
+                phone: '123456789',
+                token: new UserToken(
+                        token: 'token1234',
+                        valid: true
+                ).save()
+        ).save()
+
+        chat = new Chat(
+                message: 'Chat message test',
+                dateCreated: new Date(),
+                owner: user,
+                recipient: user2,
+                ownerStatus: MessageStatus.SEEN,
+                recipientStatus: MessageStatus.DELETED
+        ).save()
     }
 
-    void testIndex() {
-        controller.index()
-        assert "/chat/list" == response.redirectedUrl
+    void testGetByUser(){
+        params.token = 'token123'
+        params.recipientId = 2
+        controller.getByUser()
+        assert response.getJson().size() > 0
     }
 
-    void testList() {
-
-        def model = controller.list()
-
-        assert model.chatInstanceList.size() == 0
-        assert model.chatInstanceTotal == 0
+    void testGetByUserNOTUSER(){
+        params.token = 'token123'
+        params.recipientId = 2
+        controller.getByUser()
+        assert response.getJson().size() == 0
     }
 
-    void testCreate() {
-        def model = controller.create()
-
-        assert model.chatInstance != null
+    void testCreate(){
+        params.token = 'token1234'
+        def InvitationT = [message: "Test Invitation 2",recipientId: 1]
+        params.invitation = InvitationT
+        controller.create()
+        assert response.text == '{"response":"invitation_created"}'
     }
 
-    void testSave() {
-        controller.save()
-
-        assert model.chatInstance != null
-        assert view == '/chat/create'
-
-        response.reset()
-
-        populateValidParams(params)
-        controller.save()
-
-        assert response.redirectedUrl == '/chat/show/1'
-        assert controller.flash.message != null
-        assert Chat.count() == 1
-    }
-
-    void testShow() {
-        controller.show()
-
-        assert flash.message != null
-        assert response.redirectedUrl == '/chat/list'
-
-        populateValidParams(params)
-        def chat = new Chat(params)
-
-        assert chat.save() != null
-
-        params.id = chat.id
-
-        def model = controller.show()
-
-        assert model.chatInstance == chat
-    }
-
-    void testEdit() {
-        controller.edit()
-
-        assert flash.message != null
-        assert response.redirectedUrl == '/chat/list'
-
-        populateValidParams(params)
-        def chat = new Chat(params)
-
-        assert chat.save() != null
-
-        params.id = chat.id
-
-        def model = controller.edit()
-
-        assert model.chatInstance == chat
-    }
-
-    void testUpdate() {
-        controller.update()
-
-        assert flash.message != null
-        assert response.redirectedUrl == '/chat/list'
-
-        response.reset()
-
-        populateValidParams(params)
-        def chat = new Chat(params)
-
-        assert chat.save() != null
-
-        // test invalid parameters in update
-        params.id = chat.id
-        //TODO: add invalid values to params object
-
-        controller.update()
-
-        assert view == "/chat/edit"
-        assert model.chatInstance != null
-
-        chat.clearErrors()
-
-        populateValidParams(params)
-        controller.update()
-
-        assert response.redirectedUrl == "/chat/show/$chat.id"
-        assert flash.message != null
-
-        //test outdated version number
-        response.reset()
-        chat.clearErrors()
-
-        populateValidParams(params)
-        params.id = chat.id
-        params.version = -1
-        controller.update()
-
-        assert view == "/chat/edit"
-        assert model.chatInstance != null
-        assert model.chatInstance.errors.getFieldError('version')
-        assert flash.message != null
-    }
-
-    void testDelete() {
-        controller.delete()
-        assert flash.message != null
-        assert response.redirectedUrl == '/chat/list'
-
-        response.reset()
-
-        populateValidParams(params)
-        def chat = new Chat(params)
-
-        assert chat.save() != null
-        assert Chat.count() == 1
-
-        params.id = chat.id
-
-        controller.delete()
-
-        assert Chat.count() == 0
-        assert Chat.get(chat.id) == null
-        assert response.redirectedUrl == '/chat/list'
+    void testCreateFail(){
+        params.token = 'token1234'
+        def InvitationT = [message: "Test Invitation 2"]
+        params.invitation = InvitationT
+        controller.create()
+        assert response.text == '{"response":"invitation_not_created"}'
     }
 }
