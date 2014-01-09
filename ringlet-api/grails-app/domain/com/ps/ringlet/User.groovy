@@ -9,7 +9,6 @@ class User {
     String phone
     String bio
     int distanceFromPoint
-    int coins
     Boolean showOnMap
     Boolean sound
     Boolean connectionStatus
@@ -17,9 +16,8 @@ class User {
     UserToken token
     UserGender gender
     UserStatus status
-    Purchase proPurchase
 
-    static hasMany = [ringlets:Long, friends:Long, usersBlocked:Long, photos:Long]
+    static hasMany = [ringlets:Long, friends:Long, usersBlocked:Long, photos:Long, proPurchase: Long]
 
     static transients = ["distanceFromPoint"]
 
@@ -35,7 +33,6 @@ class User {
         phone nullable: true
         bio nullable: true
         distanceFromPoint nullable: true
-        coins nullable: true
         showOnMap nullable: true
         sound nullable: true
         connectionStatus nullable: true
@@ -51,7 +48,6 @@ class User {
     }
 
     def beforeInsert(){
-        coins = 10
         showOnMap = true
         sound = true
         connectionStatus = false
@@ -63,6 +59,8 @@ class User {
         this.photos.each {
             photos.add(Picture.findById(it).toObject())
         }
+        Date actual = new Date()
+        Purchase purchase = Purchase.findById(this.proPurchase?.last() as Long)
         return [id: this.id,
                 username: this.username,
                 facebookId: this.facebookId,
@@ -70,7 +68,6 @@ class User {
                 phone: this.phone,
                 bio: this.bio,
                 distanceFromPoint: this.distanceFromPoint,
-                coins: this.coins,
                 showOnMap: this.showOnMap,
                 sound: this.sound,
                 connectionStatus: this.connectionStatus,
@@ -78,7 +75,7 @@ class User {
                 token: this.token?.toObject(),
                 gender:this.gender?.toString(),
                 status:this.status?.toString(),
-                lastPurchase: this.proPurchase?.toObject(),
+                isPro: purchase?actual.before(purchase?.expirationDate):false,
                 ringlets: this.ringlets,
                 friends: this.friends,
                 usersBlocked: this.usersBlocked,
