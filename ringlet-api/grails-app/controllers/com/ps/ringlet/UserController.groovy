@@ -95,7 +95,7 @@ class UserController {
 
     def create(){
         def message = [response:""]
-        if(User.findByUsername(params.user.username)){
+        if(User.findByUsername(params.user.email)){
             message.response = "email_used"
         }
         else{

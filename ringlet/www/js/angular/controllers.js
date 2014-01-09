@@ -1,7 +1,7 @@
 'use strict';
 var ringlet = angular.module('ringlet',['services']);
 
-function UserCtrl($scope, DAO){
+function UserCtrl($scope, $compile, DAO){
 
 //---------------------------- Variables Initialization ------------------------------------------
     $scope.user = {email:'', password:'', gender:'MALE'};
@@ -13,16 +13,17 @@ function UserCtrl($scope, DAO){
     $scope.showMessage = false;
     $scope.passwordConfirm = '';
     $scope.emailForgot = '';
-    $scope.ringlet=[];
-    $scope.ringlets=[];
-    var appConfig = {serverHost:'192.168.0.101', appName:'ringlet', token:''};
+    $scope.ringster=[];
+    $scope.ringsters=[];
+    $scope.images = [];
+    $scope.deleteImages = [];
+    var appConfig = {serverHost:'192.168.0.109', appName:'ringlet', token:''};
     var owl = $("#listing-item-gallery");
     var carousel = $("#signup-carousel");
     var profileCarousel = $("#profile-carousel");
     var photoCount = 0;
     var carouselLength = 0;
-    $scope.images = [];
-    $scope.deleteImages = [];
+    var map = L.map('map-area');
 
     function initializeVariables(){
         $scope.user = {email:'', password:'', gender:'MALE'};
@@ -37,7 +38,7 @@ function UserCtrl($scope, DAO){
         $scope.images = [];
         $scope.deleteImages = [];
         carouselLength = 0;
-        appConfig = {serverHost:'192.168.0.101', appName:'ringlet', token:''};
+        appConfig = {serverHost:'192.168.0.109', appName:'ringlet', token:''};
     }
 
     $scope.errorValidation = function(){
@@ -72,8 +73,9 @@ function UserCtrl($scope, DAO){
                 }
                 else{
                     $scope.user = result;
+                    $scope.loadPurchase();
                     appConfig.token = result.token.token;
-                    $scope.getNearByRinglets();
+                    $scope.getNearByRingsters();
                 }
             },
             function(error){
@@ -93,14 +95,14 @@ function UserCtrl($scope, DAO){
             });
     };
     //-----------------------------Listings functions-------------------------------------------------
-    $scope.getNearByRinglets = function(){
+    $scope.getNearByRingsters = function(){
         DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'user', action:'nearBy',token: appConfig.token},
             function(result){
                 if(result.response == "bad_request"){
                     console.log("Error loading information");
                 }
                 else{
-                    $scope.ringlets=result;
+                    $scope.ringsters=result;
                     $.mobile.loading( 'hide', {textVisible: false});
                     window.location.href="#home";
                 }
@@ -108,11 +110,11 @@ function UserCtrl($scope, DAO){
         );
     }
 
-    $scope.getRinglets = function(ringlet){
-        $scope.ringlet = ringlet;
+    $scope.getRingsters = function(ringster){
+        $scope.ringster = ringster;
         deleteItems();
-        for(var i=0; i< $scope.ringlet.photos.length; i++){
-            addItem('info'+$scope.ringlet.photos[i].id, $scope.ringlet.photos[i].path);
+        for(var i=0; i< $scope.ringster.photos.length; i++){
+            addItem('info'+$scope.ringster.photos[i].id, $scope.ringster.photos[i].path);
         }
     }
 
@@ -396,4 +398,157 @@ function UserCtrl($scope, DAO){
                 });
         }
     }
+
+//-----------------------------APP Purchase-------------------------------------------------------
+    $scope.loadPurchase=function(){
+        $scope.IAP.initialize();
+    }
+
+    $scope.IAP = {
+        list: [ "com.ps.mconn.ringlet.prouser"],
+        products: {}
+    };
+    var localStorage = window.localStorage || {};
+    $scope.reload = "yes";
+    $scope.IAP.initialize = function () {
+        // Check availability of the storekit plugin
+
+        if (!window.InAppPurchase) {
+            console.log('In-App Purchases not available');
+            return;
+        }
+
+
+        InAppPurchase.prototype.init({
+            ready:    $scope.IAP.onReady,
+            purchase: $scope.IAP.onPurchase,
+            restore:  $scope.IAP.onRestore,
+            error:    $scope.IAP.onError
+        });
+    };
+
+    $scope.IAP.onReady = function () {
+        // Once setup is done, load all product data.
+        InAppPurchase.prototype.load($scope.IAP.list, function (products, invalidIds) {
+            console.log('IAPs loading done:');
+            for (var j = 0; j < products.length; ++j) {
+                var p = products[j];
+                console.log('Loaded IAP(' + j + '). title:' + p.title +
+                    ' description:' + p.description +
+                    ' price:' + p.price +
+                    ' id:' + p.id);
+                $scope.IAP.products[p.id] = p;
+            }
+            $scope.IAP.loaded = true;
+
+            for (var i = 0; i < invalidIds.length; ++i) {
+                console.log('Error: could not load ' + invalidIds[i]);
+            }
+            renderIAPs();
+        });
+    };
+
+    $scope.IAP.onPurchase = function (transactionId, productId, receipt) {
+//        save in db  transactionId, productId
+        var n = (localStorage['storekit.' + productId]|0) + 1;
+        localStorage['storekit.' + productId] = n;
+        if ($scope.IAP.purchaseCallback) {
+            $scope.IAP.purchaseCallback(productId);
+            delete $scope.IAP.purchaseCallbackl;
+        }
+        $scope.makePurchase(transactionId, productId, $scope.IAP.products[productId].price);
+    };
+
+    $scope.makePurchase =function(transaction,item,amount){
+        DAO.save({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'purchase', action:'makePurchase', itemId:item,transaction:transaction, amount:amount},
+            function(result){
+                if(result.response=="user_updated"){
+                    $scope.user.isPro=true;
+                }
+
+            });
+    }
+
+    $scope.IAP.buy = function (productId, callback) {
+        $scope.IAP.purchaseCallback = callback;
+        InAppPurchase.prototype.purchase(productId);
+    };
+
+    $scope.IAP.onError = function (errorCode, errorMessage) {
+        alert('Error: ' + errorMessage);
+    };
+
+    $scope.IAP.onRestore = function (transactionId, productId/*, transactionReceipt*/) {
+        var n = (localStorage['storekit.' + productId]|0) + 1;
+        localStorage['storekit.' + productId] = n;
+    };
+
+    $scope.IAP.restore = function () {
+        InAppPurchase.prototype.restore();
+    };
+
+    $scope.buyItem= function(id){
+        $scope.IAP.buy(id);
+    }
+    var renderIAPs = function () {
+        if ($scope.IAP.loaded) {
+            var html = "";
+            for (var id in $scope.IAP.products) {
+                var prod = $scope.IAP.products[id];
+
+                html+="<a data-role='button' data-ng-click='buyItem(\"" + id + "\")'>"+
+                    '<span class="left">'+ prod.title +
+                    '</span><span>'  + prod.price  +'</span></a>'
+
+            }
+            var compile = $compile(html)($scope);
+            $('#pro-ulPackages').append(compile);
+        }
+        else {
+            console.log("In-App Purchases not available.");
+        }
+    };
+
+    //----------------------------------Map Functions--------------------------------------------------------------
+    $scope.initMap = function(){
+//        clearMap();
+        var sHeight = screen.height;
+        var sWidth = screen.width;
+
+        L.tileLayer('http://{s}.tile.cloudmade.com/2bb3a432a04845c3bda71c1fb668f4e5/997/256/{z}/{x}/{y}.png', {
+            attribution: 'Powered by PureSrc', maxZoom: 18, setView: true}).addTo(map);
+        map.setView([$scope.userLocation.lat, $scope.userLocation.lgn], 14);
+
+//        var markers = L.markerClusterGroup();
+//
+//        for (var i=0; i< $scope.ringsters.length; i++){
+//
+//            var msg =  '<div class="clickDiv" id="'+$scope.ringsters[i].id+'" style="width:'+(sWidth-45)+'px"><a href="#listing-item" data-transition="slidefade">';
+//            //msg +=      '<img id="imgMap-'+$scope.ringsters[i].id+'" class="img-popup" src="'+$scope.ringsters[i].photos[0].photo_protocol+$scope.ringsters[i].photos[0].photo_host+"/"+$scope.ringsters[i].photos[0].photo_path+'" onload="changeSizeImgList(this)" onerror="imgError(this)>';
+//            msg +=      '<strong style="color: black;">'+""+$scope.ringsters[i].name+""+'</strong><br/><br/>';
+//            msg +=    '</a></div>';
+//            var marker = L.marker(new L.LatLng($scope.ringsters[i].location.lat, $scope.ringsters[i].location.lgn));
+//            marker.bindPopup(msg);
+//            markers.addLayer(marker);
+//        }
+//
+//        map.addLayer(markers);
+    }
+
+    $('#map').bind('pageshow', function() {
+        map.invalidateSize();
+    });
+
+    function clearMap() {
+        for(var i in map._layers) {
+            try {
+                map.removeLayer(map._layers[i]);
+            }
+            catch(e) {
+                console.log("problem with " + e + map._layers[i]);
+            }
+
+        }
+    }
+
 }

@@ -18,9 +18,11 @@ class UserService {
     }
 
     def validatePro(User user){
+        Date actual = new Date()
         if(user.proPurchase){
-            Date date = new Date()
-            if(user.proPurchase.expirationDate >= new Date().parse("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'",date.format("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"))){
+                Purchase purchase = Purchase.findById(user.proPurchase.last() as Long)
+            if(actual.before(purchase.expirationDate))
+            {
                 return true
             }
         }
