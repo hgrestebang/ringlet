@@ -5,6 +5,7 @@ function UserCtrl($scope, DAO){
 
 //---------------------------- Variables Initialization ------------------------------------------
     $scope.user = {email:'', password:'', gender:'MALE'};
+    $scope.userSearch = {name:'', username:'', phone:''};
     $scope.userLocation = {};
     $scope.showErrors = false;
     $scope.showFunctionError = false;
@@ -13,9 +14,9 @@ function UserCtrl($scope, DAO){
     $scope.showMessage = false;
     $scope.passwordConfirm = '';
     $scope.emailForgot = '';
-    $scope.ringlet=[];
-    $scope.ringlets=[];
-    var appConfig = {serverHost:'192.168.0.101', appName:'ringlet', token:''};
+    $scope.ringster=[];
+    $scope.ringsters=[];
+    var appConfig = {serverHost:'192.168.0.100', appName:'ringlet', token:''};
     var owl = $("#listing-item-gallery");
     var carousel = $("#signup-carousel");
     var profileCarousel = $("#profile-carousel");
@@ -26,6 +27,7 @@ function UserCtrl($scope, DAO){
 
     function initializeVariables(){
         $scope.user = {email:'', password:'', gender:'MALE'};
+        $scope.userSearch = {name:'', username:'', phone:''};
         $scope.userLocation = {};
         $scope.showErrors = false;
         $scope.showFunctionError = false;
@@ -37,7 +39,7 @@ function UserCtrl($scope, DAO){
         $scope.images = [];
         $scope.deleteImages = [];
         carouselLength = 0;
-        appConfig = {serverHost:'192.168.0.101', appName:'ringlet', token:''};
+        appConfig = {serverHost:'192.168.0.100', appName:'ringlet', token:''};
     }
 
     $scope.errorValidation = function(){
@@ -176,6 +178,42 @@ function UserCtrl($scope, DAO){
             },
             function(error){
                 console.log(error);
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+    }
+
+    $scope.validateSearch = function(){
+        if($scope.userSearch.name == "" && $scope.userSearch.username == "" && $scope.userSearch.phone == ""){
+            $scope.showErrors = true;
+            $scope.showMessage = true;
+        }
+        else{
+            $scope.showErrors = false;
+            $scope.showFunctionError = false;
+            $scope.showServerError = false;
+            $scope.showMessage = false;
+            $scope.makeSearch();
+        }
+    }
+
+    $scope.makeSearch = function(){
+        $.mobile.loading( 'show', {textVisible: false});
+        DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'user', action:'search', name:$scope.userSearch.name, username:$scope.userSearch.username, phone:$scope.userSearch.phone},
+            function(result){
+                console.log(result);
+                if(result[0].response == "not_found"){
+                    console.log("No users");
+                    $scope.showErrors = true;
+                    $scope.showFunctionError = false;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                }
+                else{
+                    $.mobile.loading( 'hide', {textVisible: false});
+                }
+            },
+            function(error){
+                $scope.showErrors = true;
+                $scope.showServerError = true;
                 $.mobile.loading( 'hide', {textVisible: false});
             });
     }

@@ -230,35 +230,15 @@
     <div data-role="header">
         <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-ng-click="errorValidation()">Menu</a>
         <h3>Search</h3>
-        <a data-role="button" data-mini="true" data-inline="true" data-corners="false" data-ng-click="validateProfile(formProfile.$invalid)">Search</a>
     </div>
     <div data-role="content">
-        <form name="formProfile">
-            <a href="#profile-camera" data-rel="popup" data-position-to="window">
-                <div id="profile-carousel" ><div class='item'><img id="profile-image" class="user-image" src='img/edit-image.png' onload="changeSize(this)"></div></div>
-            </a>
-            <div data-role="popup" data-overlay-theme="a" id="profile-camera">
-                <a data-corners="false" data-role="button" data-ng-hide="images.length>7" data-ng-click="capturePhotoProfile()">Take a Picture</a>
-                <a data-corners="false" data-role="button" data-ng-hide="images.length>7" data-ng-click="getPhotoProfile()">Phone Library</a>
-                <a data-corners="false" data-role="button" data-ng-hide="images.length<1" data-ng-click="deletePhotoProfile('false')">Delete Last Photo</a>
-                <a href="#" data-rel="back" data-role="button" data-corners="false">Cancel</a>
-            </div>
-            <div data-ng-show="showErrors" class="center red">
-                <p data-ng-show="formProfile.name.$error.required">"Name required"</p>
-                <p data-ng-show="formProfile.email.$error.required">"Email required"</p>
-                <p data-ng-show="formProfile.email.$invalid && formProfile.email.$error.email">"Wrong email format"</p>
-                <p data-ng-show="showFunctionError">"The email is already used"</p>
-                <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
-                <p data-ng-show="showMessage">"Information updated"</p>
-            </div>
+        <form name="formSearch">
             <ul>
-                <li><input data-role="none" name="name" type="text" placeholder="Name" data-ng-model="user.name" data-ng-change="showFunctionError=false; showServerError=false" required></li>
-                <li><input data-role="none" name="email" type="email" placeholder="Email Address" data-ng-model="user.username" data-ng-change="showFunctionError=false; showServerError=false" required></li>
-                <li><input data-role="none" name="phone" type="tel" placeholder="Phone Number" data-ng-model="user.phone" data-ng-change="showFunctionError=false; showServerError=false"></li>
-                <li><select data-role="none" name="gender" data-ng-model="user.gender" data-ng-change="showFunctionError=false; showServerError=false"><option value="MALE">Male</option><option value="FEMALE">Female</option></select></li>
-                <li><textarea data-role="none" name="bio" placeholder="Biography" rows="5" data-ng-model="user.bio" data-ng-change="showFunctionError=false; showServerError=false"></textarea></li>
+                <li><input data-role="none" name="name" type="text" placeholder="Find by Name" data-ng-model="userSearch.name" data-ng-change="showFunctionError=false; showServerError=false; showMessage=false"></li>
+                <li><input data-role="none" name="email" type="text" placeholder="Find by Email" data-ng-model="userSearch.username" data-ng-change="showFunctionError=false; showServerError=false; showMessage=false"></li>
+                <li><input data-role="none" name="phone" type="tel" placeholder="Find by Phone" data-ng-model="userSearch.phone" data-ng-change="showFunctionError=false; showServerError=false; showMessage=false"></li>
             </ul>
-            <a href="#change-password" data-role="button" data-corners="false" data-ng-click="errorValidation()">Change Password</a>
+            <a data-role="button" data-corners="false" data-ng-click="validateSearch()">Search</a>
         </form>
     </div>
 </div>

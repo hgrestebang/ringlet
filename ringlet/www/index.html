@@ -230,15 +230,18 @@
     <div data-role="header">
         <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-ng-click="errorValidation()">Menu</a>
         <h3>Search</h3>
-        <a data-role="button" data-mini="true" data-inline="true" data-corners="false" data-ng-click="validateSearch(formSearch.$invalid)">Search</a>
     </div>
     <div data-role="content">
         <form name="formSearch">
-
+            <ul>
+                <li><input data-role="none" name="name" type="text" placeholder="Find by Name" data-ng-model="userSearch.name" data-ng-change="showFunctionError=false; showServerError=false; showMessage=false"></li>
+                <li><input data-role="none" name="email" type="text" placeholder="Find by Email" data-ng-model="userSearch.username" data-ng-change="showFunctionError=false; showServerError=false; showMessage=false"></li>
+                <li><input data-role="none" name="phone" type="tel" placeholder="Find by Phone" data-ng-model="userSearch.phone" data-ng-change="showFunctionError=false; showServerError=false; showMessage=false"></li>
+            </ul>
+            <a data-role="button" data-corners="false" data-ng-click="validateSearch()">Search</a>
         </form>
     </div>
 </div>
-
 <!---------------------------------------ringster Info View---------------------------------------------------->
 <div data-role="page" id="listing-item" data-theme="a">
     <div data-role="header" id="listing-item-header"  >
