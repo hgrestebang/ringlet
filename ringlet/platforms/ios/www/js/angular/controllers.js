@@ -5,6 +5,7 @@ function UserCtrl($scope, $compile, DAO){
 
 //---------------------------- Variables Initialization ------------------------------------------
     $scope.user = {email:'', password:'', gender:'MALE'};
+    $scope.userSearch = {name:'', username:'', phone:''};
     $scope.userLocation = {};
     $scope.showErrors = false;
     $scope.showFunctionError = false;
@@ -45,9 +46,9 @@ function UserCtrl($scope, $compile, DAO){
         trackResize: true
     });
 
-
     function initializeVariables(){
         $scope.user = {email:'', password:'', gender:'MALE'};
+        $scope.userSearch = {name:'', username:'', phone:''};
         $scope.userLocation = {};
         $scope.showErrors = false;
         $scope.showFunctionError = false;
@@ -59,15 +60,18 @@ function UserCtrl($scope, $compile, DAO){
         $scope.images = [];
         $scope.deleteImages = [];
         carouselLength = 0;
-        appConfig = {serverHost:'192.168.0.109', appName:'ringlet', token:''};
+        appConfig = {serverHost:'192.168.0.100', appName:'ringlet', token:''};
     }
 
     $scope.errorValidation = function(){
+        $scope.userSearch = {name:'', username:'', phone:''};
         $scope.showErrors = false;
         $scope.showFunctionError = false;
         $scope.showServerError = false;
         $scope.showPasswordError = false;
         $scope.showMessage = false;
+        $scope.currentPassword = '';
+        $scope.newPassword = '';
         $scope.passwordConfirm = '';
         $scope.emailForgot = '';
     }
@@ -90,6 +94,11 @@ function UserCtrl($scope, $compile, DAO){
                 if(result.response == "bad_login"){
                     $scope.showErrors = true;
                     $scope.showFunctionError = true;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                }
+                else if(result.id == undefined){
+                    $scope.showErrors = true;
+                    $scope.showServerError = true;
                     $.mobile.loading( 'hide', {textVisible: false});
                 }
                 else{
@@ -175,6 +184,7 @@ function UserCtrl($scope, $compile, DAO){
 //---------------------------- User Functions ----------------------------------------------------
     $scope.currentUser = function(){
         $.mobile.loading( 'show', {textVisible: false});
+        $scope.errorValidation();
         $scope.deletePhotoProfile('true');
         $scope.images = [];
         $scope.deleteImages = [];
@@ -190,6 +200,42 @@ function UserCtrl($scope, $compile, DAO){
             },
             function(error){
                 console.log(error);
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+    }
+
+    $scope.validateSearch = function(){
+        if($scope.userSearch.name == "" && $scope.userSearch.username == "" && $scope.userSearch.phone == ""){
+            $scope.showErrors = true;
+            $scope.showMessage = true;
+        }
+        else{
+            $scope.showErrors = false;
+            $scope.showFunctionError = false;
+            $scope.showServerError = false;
+            $scope.showMessage = false;
+            $scope.makeSearch();
+        }
+    }
+
+    $scope.makeSearch = function(){
+        $.mobile.loading( 'show', {textVisible: false});
+        DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'user', action:'search', name:$scope.userSearch.name, username:$scope.userSearch.username, phone:$scope.userSearch.phone},
+            function(result){
+                if(result[0].response == "not_found"){
+                    $scope.showErrors = true;
+                    $scope.showFunctionError = true;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                }
+                else{
+                    $scope.ringsters = result;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                    $.mobile.changePage("#home");
+                }
+            },
+            function(error){
+                $scope.showErrors = true;
+                $scope.showServerError = true;
                 $.mobile.loading( 'hide', {textVisible: false});
             });
     }
@@ -308,6 +354,47 @@ function UserCtrl($scope, $compile, DAO){
                 $scope.showServerError = true;
                 $.mobile.loading( 'hide', {textVisible: false});
             });
+    }
+
+    $scope.validateChangePassword = function(notValid){
+        if(notValid){
+            $scope.showErrors = true;
+        }
+        else{
+            $scope.showErrors = false;
+            $scope.showFunctionError = false;
+            $scope.showServerError = false;
+            $scope.showPasswordError = false;
+            $scope.changePassword();
+        }
+    }
+
+    $scope.changePassword = function(){
+        if($scope.newPassword == $scope.passwordConfirm){
+            $.mobile.loading( 'show', {textVisible: false});
+            DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'user', action:'changePassword', currentPassword:$scope.currentPassword, newPassword:$scope.newPassword},
+                function(result){
+                    if(result.response == "user_updated"){
+                        $.mobile.loading( 'hide', {textVisible: false});
+                        $scope.currentUser();
+                    }
+                    else if(result.response == "password_incorrect"){
+                        $scope.showErrors = true;
+                        $scope.showFunctionError = true;
+                        $.mobile.loading( 'hide', {textVisible: false});
+                    }
+                },
+                function(error){
+                    $scope.showErrors = true;
+                    $scope.showServerError = true;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                });
+        }
+        else{
+            $scope.showErrors = true;
+            $scope.showPasswordError = true;
+            $.mobile.loading( 'hide', {textVisible: false});
+        }
     }
 
 //---------------------------- Carousel Functions ------------------------------------------------
@@ -562,7 +649,7 @@ function UserCtrl($scope, $compile, DAO){
 
     //----------------------------------Map Functions--------------------------------------------------------------
     $scope.initMap = function(){
-        clearMap();
+//        clearMap();
         var sHeight = screen.height;
         var sWidth = screen.width;
 
