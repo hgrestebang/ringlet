@@ -22,12 +22,12 @@ class InvitationController {
         def message = [response:""]
         User owner = User.findByToken(UserToken.findByToken(params.token as String))
         User recipient = User.findById(params.invitation.recipientId as Long)
-        if(recipient){
-            new Invitation(message: params.invitation.message, dateCreated: new Date(), owner: owner, recipient: recipient).save(flush: true)
-            message.response = "invitation_created"
+        if(Invitation.findByOwnerAndRecipient(owner, recipient)){
+            message.response = "invitation_not_created"
         }
         else{
-            message.response = "invitation_not_created"
+            new Invitation(message: params.invitation.message, dateCreated: new Date(), owner: owner, recipient: recipient).save(flush: true)
+            message.response = "invitation_created"
         }
         render message as JSON
     }

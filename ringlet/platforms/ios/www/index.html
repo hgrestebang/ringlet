@@ -144,7 +144,7 @@
     <div data-role="header" id="listing-header"  >
         <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
         </a>
-        <h4>Listing</h4>
+        <h4>Home</h4>
     </div>
     <div data-role="content" id="listing-content">
         <div id="listing-information">
@@ -257,7 +257,7 @@
         </form>
     </div>
 </div>
-<!---------------------------------------ringster Info View---------------------------------------------------->
+<!---------------------------------------Ringster Info View---------------------------------------------------->
 <div data-role="page" id="listing-item" data-theme="a">
     <div data-role="header" id="listing-item-header"  >
         <a href="#home" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-shadow="false" data-corners="false">
@@ -278,9 +278,31 @@
                     </a>
                 </p>
             </div>
+            <a href="#invitation" data-role="button" data-corners="false" data-ng-hide="isFriend()">Send Friend Request</a>
         </form>
     </div>
     <div data-role="popup" data-overlay-theme="b" class="ui-content" id="imagePopUpDiv">
+    </div>
+</div>
+<!------------------------Invitation View-------------------------------------->
+<div data-role="page" id="invitation" data-theme="a">
+    <div data-role="header">
+        <a href="#listing-item" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-ng-click="errorValidation()">User</a>
+        <h3>Invitation</h3>
+    </div>
+    <div data-role="content">
+        <form name="formInvitation">
+            <label>Message:</label>
+            <div data-ng-show="showErrors" class="center red">
+                <p data-ng-show="formInvitation.message.$error.required">"Message required"</p>
+                <p data-ng-show="showFunctionError">"Can not send more invitations to this user"</p>
+                <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
+            </div>
+            <ul>
+                <li><input data-role="none" name="message" type="text" placeholder="Message" data-ng-model="invitation.message" data-ng-change="showFunctionError=false; showServerError=false" required></li>
+            </ul>
+            <a data-role="button" data-corners="false" data-ng-click="validateInvitation(formInvitation.$invalid)">Send</a>
+        </form>
     </div>
 </div>
 <!---------------------------------Pro View---------------------------------------------------->
@@ -519,35 +541,12 @@
         <div id="map-area"></div>
     </div>
 </div>
-<!---------------------------------Search result View---------------------------------------------------->
-<div data-role="page" id="listing-result" data-theme="a">
-    <div data-role="header" id="listing-result-header"  >
-        <a href="#search"    data-shadow="false" data-corners="false" data-transition="slidedown"><i class="icon-remove icons-big white-text"></i></i></a>
-        <h4>Listing Result</h4>
-    </div>
-    <div data-role="content" id="listing-result-content"  >
-       <div id="listing-result-information" data-ng-show="loadedSearch">
-            <ul id="result-lImages" data-role="listview" data-icon="">
-                <li data-ng-repeat="result in resultSearch| filter:refreshResultImages">
-                    <a href="#listing-item" data-ng-click="getHouse(result)" data-transition="slidefade">
-                        <img id="imgResult-{{result.id}}" src="{{result.photos[0].photo_protocol}}{{result.photos[0].photo_host}}/{{result.photos[0].photo_path}}" onload="changeSizeImgList(this)" onerror="imgError(this)" />
-                        <h2 data-ng-bind="'$'+result.price_monthly+'/mo'" data-ng-show="result.price_monthly!=0"></h2>
-                        <h2 data-ng-bind="'$'+result.price_sale" data-ng-hide="result.price_monthly!=0"></h2>
-                        <p class="gray-text" data-ng-bind="result.bedrooms+' bed,'+result.bathrooms+' bath'"></p>
-                        <p class="gray-text" data-ng-bind="result.street_address"></p>
-                        <i class="icon-angle-right right"></i>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
 <!--Panel-->
 <div data-role="panel" id="panel-menu" data-theme="a" data-position="left">
     </br>
     <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
         <li data-role="list-divider" class="center">Menu</li>
-        <li><a href="#home" data-transition="slide" data-rel="close">Listing</a></li>
+        <li><a href="#home" data-transition="slide" data-rel="close">Home</a></li>
         <li><a data-ng-click="currentUser()">My Profile</a></li>
         <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
         <li><a href="#favorites" data-ng-click="getFavorites()" data-transition="slide">Favorites</a></li>

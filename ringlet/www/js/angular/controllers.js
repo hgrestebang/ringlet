@@ -6,6 +6,7 @@ function UserCtrl($scope, $compile, DAO){
 //---------------------------- Variables Initialization ------------------------------------------
     $scope.user = {email:'', password:'', gender:'MALE'};
     $scope.userSearch = {name:'', username:'', phone:''};
+    $scope.invitation = {message:'I want to add you to my friends', recipientId:''};
     $scope.userLocation = {};
     $scope.showErrors = false;
     $scope.showFunctionError = false;
@@ -29,6 +30,7 @@ function UserCtrl($scope, $compile, DAO){
     function initializeVariables(){
         $scope.user = {email:'', password:'', gender:'MALE'};
         $scope.userSearch = {name:'', username:'', phone:''};
+        $scope.invitation = {message:'I want to add you to my friends', recipientId:''};
         $scope.userLocation = {};
         $scope.showErrors = false;
         $scope.showFunctionError = false;
@@ -45,6 +47,7 @@ function UserCtrl($scope, $compile, DAO){
 
     $scope.errorValidation = function(){
         $scope.userSearch = {name:'', username:'', phone:''};
+        $scope.invitation = {message:'I want to add you to my friends', recipientId:''};
         $scope.showErrors = false;
         $scope.showFunctionError = false;
         $scope.showServerError = false;
@@ -162,6 +165,10 @@ function UserCtrl($scope, $compile, DAO){
     }
 
 //---------------------------- User Functions ----------------------------------------------------
+    $scope.isFriend = function(){
+        return ($scope.user.friends.indexOf($scope.ringster.id) > -1);
+    }
+
     $scope.currentUser = function(){
         $.mobile.loading( 'show', {textVisible: false});
         $scope.errorValidation();
@@ -180,6 +187,40 @@ function UserCtrl($scope, $compile, DAO){
             },
             function(error){
                 console.log(error);
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+    }
+
+    $scope.validateInvitation = function(notValid){
+        if(notValid){
+            $scope.showErrors = true;
+        }
+        else{
+            $scope.showErrors = false;
+            $scope.showFunctionError = false;
+            $scope.showServerError = false;
+            $scope.sendInvitation();
+        }
+    }
+
+    $scope.sendInvitation = function(){
+        $.mobile.loading( 'show', {textVisible: false});
+        $scope.invitation.recipientId = $scope.ringster.id;
+        DAO.save({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'invitation', action:'create', invitation:$scope.invitation},
+            function(result){
+                if(result.response == "invitation_created"){
+                    $.mobile.loading( 'hide', {textVisible: false});
+                    window.location.href="#listing-item";
+                }
+                else if(result.response == "invitation_not_created"){
+                    $scope.showErrors = true;
+                    $scope.showFunctionError = true;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                }
+            },
+            function(error){
+                $scope.showErrors = true;
+                $scope.showServerError = true;
                 $.mobile.loading( 'hide', {textVisible: false});
             });
     }
