@@ -6,10 +6,45 @@ import grails.converters.JSON
 
 class UserController {
 
-    static allowedMethods = [getAll: "GET", nearBy: "GET", getFriends: "GET", getCurrent: "GET", getByUsername: "GET", getById: "GET",create: "POST", update: "PUT", changePassword: "PUT", forgotPassword: "PUT", addBlockUser: "PUT", removeBlockUser: "PUT", deleteAccount: "PUT"]
+    static allowedMethods = [search: "GET", getAll: "GET", nearBy: "GET", getFriends: "GET", getCurrent: "GET", getByUsername: "GET", getById: "GET",create: "POST", update: "PUT", changePassword: "PUT", forgotPassword: "PUT", addBlockUser: "PUT", removeBlockUser: "PUT", deleteAccount: "PUT"]
 
     def rackSpaceService
     def userService
+
+    def search(){
+        User user = User.findByToken(UserToken.findByToken(params.token as String))
+        def criteria = User.createCriteria()
+        def users = []
+        if(userService.validatePro(user)){
+            criteria.list(){
+                and{
+                    if(params.name != "")ilike('name', "%${params.name}%")
+                    if(params.username != "")ilike('username', "%${params.username}%")
+                    if(params.phone != "")ilike('phone', "%${params.phone}%")
+                }
+            }.each {
+                users.add(it.showInformation(user.location[0],user.location[1]))
+            }
+        }
+        else{
+            criteria.list(max: 10){
+                and{
+                    if(params.name != "")ilike('name', "%${params.name}%")
+                    if(params.username != "")ilike('username', "%${params.username}%")
+                    if(params.phone != "")ilike('phone', "%${params.phone}%")
+                }
+            }.each {
+                users.add(it.showInformation(user.location[0],user.location[1]))
+            }
+        }
+        if(users.size() > 0){
+            render users as JSON
+        }
+        else{
+            users.add([response:"not_found"])
+            render users as JSON
+        }
+    }
 
     def getAll(){
         def users = []
@@ -95,7 +130,7 @@ class UserController {
 
     def create(){
         def message = [response:""]
-        if(User.findByUsername(params.user.username)){
+        if(User.findByUsername(params.user.email)){
             message.response = "email_used"
         }
         else{

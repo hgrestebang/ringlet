@@ -44,6 +44,9 @@
 		7E7966E61810823500FA85AD /* icon-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E7966DC1810823500FA85AD /* icon-small.png */; };
 		7E7966E71810823500FA85AD /* icon-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E7966DD1810823500FA85AD /* icon-small@2x.png */; };
 		84380753187B426B00549F1B /* FacebookSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 84380752187B426B00549F1B /* FacebookSDK.framework */; };
+		848BB2D1187DEA1500B13F6C /* InAppPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = 848BB2CE187DEA1500B13F6C /* InAppPurchase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		848BB2D2187DEA1500B13F6C /* SKProduct+LocalizedPrice.m in Sources */ = {isa = PBXBuildFile; fileRef = 848BB2D0187DEA1500B13F6C /* SKProduct+LocalizedPrice.m */; };
+		848BB2D5187DEA3600B13F6C /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 848BB2D4187DEA3600B13F6C /* StoreKit.framework */; };
 		89E148445ACE45E3897BE875 /* CDVCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = A539D2735945406AB36FF023 /* CDVCamera.m */; };
 		9219841F0A8442389B60BB12 /* CDVDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = B6E209F29D234DE69DE6AF56 /* CDVDevice.m */; };
 		AD3B32A159074B898F94DF34 /* CDVJpegHeaderWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDEBE39132A4C938A33C15A /* CDVJpegHeaderWriter.m */; };
@@ -118,6 +121,11 @@
 		7E7966DC1810823500FA85AD /* icon-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-small.png"; sourceTree = "<group>"; };
 		7E7966DD1810823500FA85AD /* icon-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-small@2x.png"; sourceTree = "<group>"; };
 		84380752187B426B00549F1B /* FacebookSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FacebookSDK.framework; path = ../../../../../Documents/FacebookSDK/FacebookSDK.framework; sourceTree = "<group>"; };
+		848BB2CD187DEA1500B13F6C /* InAppPurchase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InAppPurchase.h; sourceTree = "<group>"; };
+		848BB2CE187DEA1500B13F6C /* InAppPurchase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InAppPurchase.m; sourceTree = "<group>"; };
+		848BB2CF187DEA1500B13F6C /* SKProduct+LocalizedPrice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKProduct+LocalizedPrice.h"; sourceTree = "<group>"; };
+		848BB2D0187DEA1500B13F6C /* SKProduct+LocalizedPrice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SKProduct+LocalizedPrice.m"; sourceTree = "<group>"; };
+		848BB2D4187DEA3600B13F6C /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		8D1107310486CEB800E47090 /* ringlet-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "ringlet-Info.plist"; path = "../ringlet-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		A539D2735945406AB36FF023 /* CDVCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVCamera.m; path = org.apache.cordova.camera/CDVCamera.m; sourceTree = "<group>"; };
 		B6E209F29D234DE69DE6AF56 /* CDVDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVDevice.m; path = org.apache.cordova.device/CDVDevice.m; sourceTree = "<group>"; };
@@ -143,6 +151,7 @@
 				305D5FD1115AB8F900A74A75 /* MobileCoreServices.framework in Frameworks */,
 				5AEE5B35173C68D80009041E /* CoreLocation.framework in Frameworks */,
 				634F4B3B000D49CD99A5F8C9 /* ImageIO.framework in Frameworks */,
+				848BB2D5187DEA3600B13F6C /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,6 +239,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				848BB2D4187DEA3600B13F6C /* StoreKit.framework */,
 				84380752187B426B00549F1B /* FacebookSDK.framework */,
 				42B3F571187B267100A5065E /* Accounts.framework */,
 				42B3F56F187B266900A5065E /* AdSupport.framework */,
@@ -254,6 +264,10 @@
 		307C750510C5A3420062BCA9 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				848BB2CD187DEA1500B13F6C /* InAppPurchase.h */,
+				848BB2CE187DEA1500B13F6C /* InAppPurchase.m */,
+				848BB2CF187DEA1500B13F6C /* SKProduct+LocalizedPrice.h */,
+				848BB2D0187DEA1500B13F6C /* SKProduct+LocalizedPrice.m */,
 				42B3F567187B261900A5065E /* ios */,
 				A539D2735945406AB36FF023 /* CDVCamera.m */,
 				1BDEBE39132A4C938A33C15A /* CDVJpegHeaderWriter.m */,
@@ -361,6 +375,11 @@
 				TargetAttributes = {
 					1D6058900D05DD3D006BFB54 = {
 						DevelopmentTeam = MD27A7JGVW;
+						SystemCapabilities = {
+							com.apple.InAppPurchase = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -466,6 +485,8 @@
 				89E148445ACE45E3897BE875 /* CDVCamera.m in Sources */,
 				AD3B32A159074B898F94DF34 /* CDVJpegHeaderWriter.m in Sources */,
 				42B3F56A187B262A00A5065E /* FacebookConnectPlugin.m in Sources */,
+				848BB2D1187DEA1500B13F6C /* InAppPurchase.m in Sources */,
+				848BB2D2187DEA1500B13F6C /* SKProduct+LocalizedPrice.m in Sources */,
 				9219841F0A8442389B60BB12 /* CDVDevice.m in Sources */,
 				46C03EDCDC2246A4828F3D69 /* CDVLocation.m in Sources */,
 			);

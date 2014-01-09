@@ -7,9 +7,17 @@
 h1, h2, h3, h4, h5, h6{
     font-size: inherit !important;
 }
-
 .center{
-    text-align: center;
+    text-align:center;
+}
+.centerFloat{
+    left: 35%
+}
+.left{
+    float: left;
+}
+.right{
+    float: right;
 }
 
 .textFont8{
@@ -119,4 +127,40 @@ div#imagePopUpDiv-popup.ui-popup-container.ui-popup-active{
     top: 25% !important;
     left: 15% !important;
     max-width: 500px !important;
+}
+
+/**----------------------------- Map View -----------------------------**/
+#map .ui-content {
+    position: absolute;
+    top: 10%;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 0!important;
+}
+
+#announcement .ui-content {
+    position: absolute;
+    top: 10%;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 0!important;
+}
+
+#map-Announcement{
+    height: 40%;
+}
+
+#map-area {
+    height: 100%;
+}
+
+.img-popup{
+    float: left;
+    padding-right: 10px;
+}
+
+#map div.leaflet-popup-content-wrapper{
+    min-width: 115px
 }
