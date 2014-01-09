@@ -62,3 +62,7 @@ function changeSize(img){
 function carouselImageError(img){
     document.getElementById(img.id).height = (screen.height*0.3);
 }
+
+$(document).on("pageshow","#home",function(){
+    $("#listing-lImages" ).listview( "refresh" );
+});

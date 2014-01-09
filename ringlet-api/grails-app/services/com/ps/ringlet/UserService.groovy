@@ -13,6 +13,7 @@ class UserService {
         }else if(user.token.lastUpdated.time > valid.time || !user.token.valid){
             user.token.token = UUID.randomUUID()
             user.token.valid = true
+            user.token.save(flush: true)
             user.save(flush: true)
         }
     }
