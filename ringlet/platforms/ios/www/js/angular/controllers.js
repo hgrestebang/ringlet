@@ -17,6 +17,8 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     $scope.emailForgot = '';
     $scope.ringster=[];
     $scope.ringsters=[];
+    $scope.announcements=[];
+    $scope.announcementItem=[];
     $scope.images = [];
     $scope.deleteImages = [];
     $scope.announcement = {location:[]};
@@ -35,6 +37,9 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     var profileCarousel = $("#profile-carousel");
     var photoCount = 0;
     var carouselLength = 0;
+    var chatFunction = null;
+    var announcementFunction = null;
+    var invitationFunction = null;
     var map = L.map('map-area');
     var mapAnnouncemnt = L.map('map-Announcement',{
         dragging: false,
@@ -46,9 +51,16 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         tap: false,
         trackResize: true
     });
-    var chatFunction = null;
-    var announcementFunction = null;
-    var invitationFunction = null;
+    var mapItemAnnouncement = L.map('map-Item-Announcement',{
+        dragging: false,
+        touchZoom: false,
+        zoomControl: true,
+        scrollWheelZoom: false,
+        doubleClickZoom: false,
+        boxZoom: true,
+        tap: false,
+        trackResize: true
+    });
 
     function initializeVariables(){
         $scope.user = {email:'', password:'', gender:'MALE'};
@@ -454,7 +466,12 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     var serverAnnouncement = function(){
         DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'announcement', action:'getByUser'},
             function(result){
-                $scope.announcements = result;
+                if(result.response == "not_found"){
+                    $scope.announcements = [];
+                }
+                else{
+                    $scope.announcements=result;
+                }
                 announcementFunction = $timeout(serverAnnouncement, 15000);
             });
     };
@@ -864,6 +881,77 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         }
     }
 
+    $scope.getAnnouncements = function(){
+        DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'announcement', action:'getByUser',token: appConfig.token},
+            function(result){
+                if(result.response == "not_found"){
+                    $scope.announcements=[];
+                    console.log("Error loading information");
+                }
+                else{
+                    $scope.announcements=[];
+                    $scope.announcements=result;
+                }
+            }
+        );
+    }
+
+    $scope.getTimeAgo = function (dateIn){
+        var date = Date.parse(dateIn);
+        var time;
+        var minutes = Math.round((((new Date() - date) % 86400000) % 3600000) / 60000);
+        if(minutes == 0) time = "a few seconds ago";
+        else if(minutes == 1) time = "1 minute ago";
+        else if(minutes < 60) time = minutes+" minutes ago";
+        else{
+            var hours = Math.round(((new Date() - date) % 86400000) / 3600000);
+            if(hours == 1) time = "1 hour ago";
+            else if(hours < 24) time = hours+" hours ago";
+            else{
+                var days = Math.round((new Date() - date) / 86400000);
+                if(days == 1) time = "1 day ago";
+                else time = days+" days ago";
+            }
+        }
+        return time;
+    }
+
+    $scope.getAnnouncement=function(announcement){
+        $scope.announcementItem = announcement;
+        $scope.announcementItemForm();
+    }
+
+    $scope.deleteAnnouncement = function(){
+        $.mobile.loading( 'show', {textVisible: false});
+        var ref=""
+        if($scope.announcements[1]!=undefined)
+        {
+            ref="#announcement-List";
+        }else{
+            ref="#home";
+        }
+        DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'announcement', action:'delete',token: appConfig.token,id:$scope.announcementItem.id},
+            function(result){
+                if(result.response == "announcement_deleted"){
+                    console.log("element deleted");
+                    $scope.getAnnouncements();
+                    $scope.$apply();
+                    console.log(ref)
+                        window.location.href=ref;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                }
+                else{
+                    $scope.showErrors = true;
+                    $scope.showServerError = true;
+                }
+            },
+            function(error){
+                $scope.showErrors = true;
+                $scope.showServerError = true;
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+    }
+
     //----------------------------------Map Functions--------------------------------------------------------------
     $scope.initMap = function(){
 //        clearMap();
@@ -895,6 +983,9 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     });
     $('#announcement').bind('pageshow', function() {
         mapAnnouncemnt.invalidateSize();
+    });
+    $('#announcement-item').bind('pageshow', function() {
+        mapItemAnnouncement.invalidateSize();
     });
 
     function clearMap() {
@@ -935,6 +1026,20 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         })
        var marker = L.marker([$scope.announcement.location[0],$scope.announcement.location[1]], {icon:userIcon}, {draggable:false}).addTo(mapAnnouncemnt);
     }
+    $scope.announcementItemForm = function(){
+        mapItemAnnouncement.setView([$scope.announcementItem.location[0],$scope.announcementItem.location[1]], 9);
+        L.tileLayer('http://{s}.tile.cloudmade.com/2bb3a432a04845c3bda71c1fb668f4e5/997/256/{z}/{x}/{y}.png', {
+            attribution: 'Powered by PureSrc',
+            setView: true
+        }).addTo(mapItemAnnouncement);
+        markRadius(mapAnnouncemnt, $scope.announcementItem.location[0], $scope.announcementItem.location[1], $scope.announcementItem.radius );
+        var userIcon = L.AwesomeMarkers.icon({
+            icon: 'bullhorn',
+            color: 'darkgreen'
+        })
+        var marker = L.marker([$scope.announcementItem.location[0],$scope.announcementItem.location[1]], {icon:userIcon}, {draggable:false}).addTo(mapItemAnnouncement);
+    }
+
     $scope.printRadius = function(){
         markRadius(mapAnnouncemnt, $scope.announcement.location[0], $scope.announcement.location[1], $scope.announcement.radius.miles );
     }
