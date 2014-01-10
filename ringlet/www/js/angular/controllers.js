@@ -1,7 +1,7 @@
 'use strict';
 var ringlet = angular.module('ringlet',['services']);
 
-function UserCtrl($scope, $compile, DAO){
+function UserCtrl($scope, $compile, DAO, $timeout){
 
 //---------------------------- Variables Initialization ------------------------------------------
     $scope.user = {email:'', password:'', gender:'MALE'};
@@ -29,7 +29,7 @@ function UserCtrl($scope, $compile, DAO){
         {miles:'50', radius:'50 miles'}];
     $scope.announcement.radius = $scope.searchRadius[0];
 
-    var appConfig = {serverHost:'192.168.0.109', appName:'ringlet', token:''};
+    var appConfig = {serverHost:'186.15.176.147', appName:'ringlet', token:''};
     var owl = $("#listing-item-gallery");
     var carousel = $("#signup-carousel");
     var profileCarousel = $("#profile-carousel");
@@ -62,7 +62,7 @@ function UserCtrl($scope, $compile, DAO){
         $scope.images = [];
         $scope.deleteImages = [];
         carouselLength = 0;
-        appConfig = {serverHost:'192.168.0.100', appName:'ringlet', token:''};
+        appConfig = {serverHost:'186.15.176.147', appName:'ringlet', token:''};
     }
 
     $scope.errorValidation = function(){
@@ -106,8 +106,10 @@ function UserCtrl($scope, $compile, DAO){
                 }
                 else{
                     $scope.user = result;
+                    if($scope.user.friends == null) $scope.user.friends = [];
                     $scope.loadPurchase();
                     appConfig.token = result.token.token;
+                    $timeout(serverCall, 5000);
                     $scope.getNearByRingsters();
                 }
             },
@@ -204,6 +206,21 @@ function UserCtrl($scope, $compile, DAO){
                 }
                 $.mobile.loading( 'hide', {textVisible: false});
                 window.location.href="#profile";
+            },
+            function(error){
+                console.log(error);
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+    }
+
+    $scope.getFriends = function(){
+        $.mobile.loading( 'show', {textVisible: false});
+        $scope.errorValidation();
+        DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'user', action:'getFriends'},
+            function(result){
+                $scope.ringsters = result;
+                $.mobile.loading( 'hide', {textVisible: false});
+                window.location.href="#home";
             },
             function(error){
                 console.log(error);
@@ -436,6 +453,26 @@ function UserCtrl($scope, $compile, DAO){
             $scope.showPasswordError = true;
             $.mobile.loading( 'hide', {textVisible: false});
         }
+    }
+
+//---------------------------- Server Functions --------------------------------------------------
+    var serverCall = function(){
+        DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'invitation', action:'getByUser'},
+            function(result){
+                $scope.invitations = result;
+                console.log('invitations')
+                DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'announcement', action:'getByUser'},
+                    function(result){
+                        $scope.announcements = result;
+                        console.log('announcements')
+                        DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'chat', action:'getAll'},
+                            function(result){
+                                $scope.chats = result;
+                                console.log('chats')
+                                $timeout(serverCall, 5000);
+                            });
+                    });
+            });
     }
 
 //---------------------------- Carousel Functions ------------------------------------------------

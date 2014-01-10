@@ -4,16 +4,25 @@ import grails.converters.JSON
 
 class ChatController {
 
-    static allowedMethods = [getByUser: "GET", create: "POST", update: "PUT", delete: "PUT"]
+    static allowedMethods = [getAll: "GET", getByUser: "GET", create: "POST", update: "PUT", delete: "PUT"]
+
+    def getAll(){
+        User user = User.findByToken(UserToken.findByToken(params.token as String))
+        def chats = []
+        Chat.findAllByRecipientAndRecipientStatus(user, MessageStatus.UNSEEN).each {
+            chats.add(it.showInformation())
+        }
+        render chats as JSON
+    }
 
     def getByUser(){
         User user = User.findByToken(UserToken.findByToken(params.token as String))
         User recipient = User.findById(params.recipientId as Long)
         def chats = []
-        Chat.findAllByOwnerAndRecipientAndOwnerStatus(user, recipient, MessageStatus.DELETED).each {
+        Chat.findAllByOwnerAndRecipientAndOwnerStatusNotEqual(user, recipient, MessageStatus.DELETED).each {
             chats.add(it.showInformation())
         }
-        Chat.findAllByOwnerAndRecipientAndRecipientStatus(recipient, user, MessageStatus.DELETED).each {
+        Chat.findAllByOwnerAndRecipientAndRecipientStatusNotEqual(recipient, user, MessageStatus.DELETED).each {
             chats.add(it.showInformation())
         }
         render chats as JSON
