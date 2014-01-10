@@ -66,7 +66,3 @@ function carouselImageError(img){
 $(document).on("pageshow","#home",function(){
     $("#listing-lImages" ).listview( "refresh" );
 });
-
-$(document).on("pageshow","#announcement-List",function(){
-    $("#listing-Announcement" ).listview( "refresh" );
-});

@@ -9,10 +9,14 @@ class ChatController {
     def getAll(){
         User user = User.findByToken(UserToken.findByToken(params.token as String))
         def chats = []
-        Chat.findAllByRecipientAndRecipientStatus(user, MessageStatus.UNSEEN).each {
+        Chat.findAllByRecipientAndRecipientStatusNotEqual(user, MessageStatus.DELETED).each {
             chats.add(it.showInformation())
         }
 
+        Chat.findAllByownerAndOwnerStatusNotEqual(user, MessageStatus.DELETED).each {
+            chats.add(it.showInformation())
+        }
+        chats.sort{it.dateCreated}
         render chats as JSON
     }
 
