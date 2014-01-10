@@ -618,26 +618,14 @@
     </div>
     <div data-role="content" id="chat-content">
 
-        <div class="bubbledLeft">
-            Hi
-        </div>
-        <div class="bubbledRight">
-            Hi there yourself
-        </div>
-        <div class="bubbledLeft">
-            Do you speak Latin?
-        </div>
-        <div class="bubbledRight">
-            Yes
-        </div>
-        <div class="bubbledLeft">
-            Prove it
-        </div>
-
-
-
-
-
+        <span data-ng-repeat="chat in chats">
+               <div data-ng-show="chat.owner.username==user.username" class="bubbledLeft">
+                   {{chat.message}}
+               </div>
+               <div data-ng-show="chat.recipient.username==ringster.username" class="bubbledRight">
+                   {{chat.message}}
+               </div>
+        </span>
 
         <div  data-id="footer" id="chat-footer" data-role="footer" class="ui-bar">
             <p>
