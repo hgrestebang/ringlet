@@ -21,7 +21,14 @@ class AnnouncementController {
         Announcement.findAllByRecipientAndRecipientStatusNotEqual(user, MessageStatus.DELETED).each {
             announcements.add(it.showInformation())
         }
-        render announcements as JSON
+        if(announcements.size() > 0){
+            render announcements as JSON
+        }
+        else{
+            def message = [response:""]
+            message.response = "not_found"
+            render message as JSON
+        }
     }
 
     def create() {

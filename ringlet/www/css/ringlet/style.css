@@ -106,6 +106,24 @@ form ul li textarea{
     width: 50%;
 }
 
+/**----------------------------- Announcement View --------------------------------------**/
+.note-box
+{
+    margin: 8px;
+    padding: 10px;
+    line-height:30px;
+    text-align:center;
+    vertical-align: middle;
+    border:#C4C4C4 2px solid;
+    border-radius: 5px;
+}
+
+.span-Announcement{
+    vertical-align: middle;
+    position: relative;
+    top: -35px
+}
+
 /**----------------------------- Login View --------------------------------------**/
 .hr-left{
     display: block;
@@ -146,6 +164,20 @@ div#imagePopUpDiv-popup.ui-popup-container.ui-popup-active{
     bottom: 0;
     left: 0;
     padding: 0!important;
+}
+
+#announcement-item .ui-content {
+    position: absolute;
+    top: 10%;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 0!important;
+    text-align: center;
+}
+
+#map-Item-Announcement{
+    height: 40%;
 }
 
 #map-Announcement{

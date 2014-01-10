@@ -49,7 +49,7 @@ class Announcement {
                 dateCreated: this.dateCreated,
                 ownerStatus: this.ownerStatus?.toString(),
                 recipientStatus: this.recipientStatus?.toString(),
-                owner: this.owner?.id,
+                owner: this.owner?.showInformation(),
                 recipient: this.recipient?.id,
                 location: this.location,
                 radius: this.radius]

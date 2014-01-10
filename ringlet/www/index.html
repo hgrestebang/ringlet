@@ -269,6 +269,7 @@
         <br/>
         <br/>
         <div id="info-box" class="info-box-announcement">
+
             <span class="dark-text info-text">It's easy to do! Just type your message, choose the radius you want to cover.</span>
         </div>
         <div data-ng-show="showErrors" class="center red">
@@ -293,7 +294,61 @@
         </div>
     </div>
 </div>
-<!---------------------------------------ringster Info View---------------------------------------------------->
+<!----------------------------------Announcement List View--------------------------------------------------->
+<div data-role="page" id="announcement-List" data-theme="a">
+    <div data-role="header" id="announcement-List-header"  >
+        <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
+        </a>
+        <h3>Announcements</h3>
+    </div>
+    <div data-role="content" id="announcement-List-content">
+        <div id="announcement-List-information">
+            <ul id="listing-Announcement" data-role="listview">
+                <li data-ng-repeat="announcement in announcements">
+                    <a href="#announcement-item" data-ng-click="getAnnouncement(announcement)">
+                        <h2 data-ng-bind="announcement.owner.name"></h2>
+                        <span class="textFont8" data-ng-bind="getTimeAgo(announcement.dateCreated)"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!----------------------------------Announcement Item View--------------------------------------------------->
+<div data-role="page" id="announcement-item" data-theme="a">
+    <div data-role="header" id="announcement-Item-header"  >
+        <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
+        </a>
+        <h3>Announcement</h3>
+        <a data-role="button" href="#popup-Item-Announcement" data-rel="popup"  data-mini="true" data-inline="true" data-corners="false" >Delete</a>
+    </div>
+    <div data-role="content" id="announcement-Item-content">
+        <br/>
+        <br/>
+        <div data-ng-show="showErrors" class="center red">
+            <p data-ng-show="showFunctionError">"You have not added the message"</p>
+            <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
+        </div>
+        <div class="note-box">
+            <a href="#listing-item" class="textAnnouncement" data-ng-click="getRingsters(announcementItem.owner)">
+                <img id="imgList-{{announcementItem.owner.id}}" src="{{announcementItem.owner.photos[0].path}}" onload="changeSizeImgList(this)" onerror="imgError(this)" />
+                <span class="span-Announcement">{{announcementItem.owner.name}} send this message. </span>
+            </a>
+        </div>
+        <h2>Message:</h2>
+        <p>{{announcementItem.message}}</p>
+        <p></p>
+        <h2>This message was sent from:</h2>
+        <div id="map-Item-Announcement"></div>
+        <div data-role="popup" data-overlay-theme="a" id="popup-Item-Announcement">
+            <br/>
+            <p>Are you sure want delete this Announcement</p>
+            <br/>
+            <a href="#" data-rel="back" data-role="button" data-corners="false">No</a>
+            <a href="#" data-ng-click="deleteAnnouncement()" data-rel="back" data-role="button" data-corners="false">Yes</a>
+        </div>
+    </div>
+</div>
 <!---------------------------------------Ringster Info View---------------------------------------------------->
 <div data-role="page" id="listing-item" data-theme="a">
     <div data-role="header" id="listing-item-header"  >
@@ -587,6 +642,9 @@
         <li><a data-ng-click="currentUser()">My Profile</a></li>
         <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
         <li><a href="#favorites" data-ng-click="getFavorites()" data-transition="slide">Favorites</a></li>
+        <li><a href="#announcement-List" data-ng-show="announcements.length>0" data-transition="slide">Announcements <span>{{announcements.length}}</span></a></li>
+
+
         <li><a data-ng-click="logout()">Log Out</a></li>
     </ul>
 </div>
