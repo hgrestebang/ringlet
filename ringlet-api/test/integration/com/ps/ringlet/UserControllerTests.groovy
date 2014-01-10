@@ -4,6 +4,7 @@ import static org.junit.Assert.*
 import org.junit.*
 
 class UserControllerIntegrationTests {
+    def contUser = new UserController()
 
     @Before
     void setUp() {
@@ -17,6 +18,27 @@ class UserControllerIntegrationTests {
 
     @Test
     void testSearch(){
-        //params.token =
+        contUser.params.token = 'admin'
+        contUser.params.name = 'Administrator'
+        contUser.params.username = 'admin@ringlet.me'
+        contUser.params.phone = '123456789'
+        assert contUser.response.getJson().size() > 0
+        //assert contUser.response.json.response == 'not_found'
+    }
+
+    @Test
+    void testSearchFail(){
+        contUser.params.token = 'admin'
+        contUser.params.name = 'Administrator'
+        contUser.params.username = 'admin@ringlet.me'
+        contUser.params.phone = '123456789'
+        //assert contUser.response.getJson().size() > 0
+        assert contUser.response.json.response == 'not_found'
+    }
+
+    @Test
+    void testNearBy(){
+        contUser.params.token = 'admin'
+
     }
 }
