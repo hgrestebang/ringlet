@@ -69,8 +69,8 @@ class InvitationControllerTests {
     }
 
     void testCreateFail(){
-        params.token = 'token1234'
-        def InvitationT = [message: "Test Invitation 2"]
+        params.token = 'token123'
+        def InvitationT = [recipientId : 2]
         params.invitation = InvitationT
         controller.create()
         assert response.text == '{"response":"invitation_not_created"}'

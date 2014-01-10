@@ -6,150 +6,82 @@ import org.junit.*
 import grails.test.mixin.*
 
 @TestFor(AnnouncementController)
-@Mock(Announcement)
+@Mock([User,UserToken,UserService,Announcement])
 class AnnouncementControllerTests {
+    def user,user2,announcement
 
-    def populateValidParams(params) {
-        assert params != null
-        // TODO: Populate valid properties like...
-        //params["name"] = 'someValidName'
+    void setUp() {
+        mockForConstraintsTests(Announcement)
+
+        user = new User(
+                username: 'test@ringlet.me',
+                passwordHash: '5bbf1a9e0de062225a1b',
+                facebookId: '12345',
+                name: 'User Test',
+                phone: '123456789',
+                token: new UserToken(
+                        token: 'token123',
+                        valid: true
+                ).save(),
+                location: [37.33233141d, -122.031286d]
+        ).save()
+
+        user2 = new User(
+                username: 'test@ringlet.me',
+                passwordHash: '5bbf1a9e0de062225a1b',
+                facebookId: '1234',
+                name: 'User Test',
+                phone: '123456789',
+                token: new UserToken(
+                        token: 'token1234',
+                        valid: true
+                ).save(),
+                location: [37.33233141d, -122.031286d]
+        ).save()
+
+        announcement = new Announcement(
+                message: 'Announcement Test',
+                groupCode: '1',
+                dateCreated: new Date(),
+                ownerStatus: MessageStatus.SEEN,
+                recipientStatus: MessageStatus.UNSEEN,
+                owner: user,
+                recipient: user2,
+                location: [37.33233141d, -122.031286d],
+                radius: 30
+        ).save()
     }
 
-    void testIndex() {
-        controller.index()
-        assert "/announcement/list" == response.redirectedUrl
+    void testGetByUser(){
+        params.token = 'token123'
+        controller.getByUser()
+        assert response.getJson().size() > 0
     }
 
-    void testList() {
-
-        def model = controller.list()
-
-        assert model.announcementInstanceList.size() == 0
-        assert model.announcementInstanceTotal == 0
+    void testGetByUserNoAnnouncement(){
+        params.token = 'token123'
+        controller.getByUser()
+        assert response.getJson().size() == 0
     }
 
-    void testCreate() {
-        def model = controller.create()
-
-        assert model.announcementInstance != null
+    void testCreate(){
+        /*params.token = 'token1234'
+        def announcementT = [message: "Test Invitation 2",recipientId: 1]
+        params.announcement = announcementT
+        controller.create()
+        assert response.text == '{"response":"announcement_created"}'*/
     }
 
-    void testSave() {
-        controller.save()
-
-        assert model.announcementInstance != null
-        assert view == '/announcement/create'
-
-        response.reset()
-
-        populateValidParams(params)
-        controller.save()
-
-        assert response.redirectedUrl == '/announcement/show/1'
-        assert controller.flash.message != null
-        assert Announcement.count() == 1
+    void testCreateFail(){
+        /*params.token = 'token123'
+        controller.create()
+        assert response.text == '' */
     }
 
-    void testShow() {
-        controller.show()
-
-        assert flash.message != null
-        assert response.redirectedUrl == '/announcement/list'
-
-        populateValidParams(params)
-        def announcement = new Announcement(params)
-
-        assert announcement.save() != null
-
-        params.id = announcement.id
-
-        def model = controller.show()
-
-        assert model.announcementInstance == announcement
-    }
-
-    void testEdit() {
-        controller.edit()
-
-        assert flash.message != null
-        assert response.redirectedUrl == '/announcement/list'
-
-        populateValidParams(params)
-        def announcement = new Announcement(params)
-
-        assert announcement.save() != null
-
-        params.id = announcement.id
-
-        def model = controller.edit()
-
-        assert model.announcementInstance == announcement
-    }
-
-    void testUpdate() {
-        controller.update()
-
-        assert flash.message != null
-        assert response.redirectedUrl == '/announcement/list'
-
-        response.reset()
-
-        populateValidParams(params)
-        def announcement = new Announcement(params)
-
-        assert announcement.save() != null
-
-        // test invalid parameters in update
-        params.id = announcement.id
-        //TODO: add invalid values to params object
-
-        controller.update()
-
-        assert view == "/announcement/edit"
-        assert model.announcementInstance != null
-
-        announcement.clearErrors()
-
-        populateValidParams(params)
-        controller.update()
-
-        assert response.redirectedUrl == "/announcement/show/$announcement.id"
-        assert flash.message != null
-
-        //test outdated version number
-        response.reset()
-        announcement.clearErrors()
-
-        populateValidParams(params)
-        params.id = announcement.id
-        params.version = -1
-        controller.update()
-
-        assert view == "/announcement/edit"
-        assert model.announcementInstance != null
-        assert model.announcementInstance.errors.getFieldError('version')
-        assert flash.message != null
-    }
-
-    void testDelete() {
+    void testDelete(){
+        params.token = 'token123'
+        params.id = 1
         controller.delete()
-        assert flash.message != null
-        assert response.redirectedUrl == '/announcement/list'
-
-        response.reset()
-
-        populateValidParams(params)
-        def announcement = new Announcement(params)
-
-        assert announcement.save() != null
-        assert Announcement.count() == 1
-
-        params.id = announcement.id
-
-        controller.delete()
-
-        assert Announcement.count() == 0
-        assert Announcement.get(announcement.id) == null
-        assert response.redirectedUrl == '/announcement/list'
+        assert response.text == '{"response":"announcement_deleted"}'
     }
 }
