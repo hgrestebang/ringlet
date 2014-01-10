@@ -609,6 +609,44 @@
         <div id="map-area"></div>
     </div>
 </div>
+<!---------------------------------Chat View---------------------------------------------------->
+<div data-role="page" id="chat" data-theme="a">
+    <div data-role="header" id="chat-header"  >
+        <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
+        </a>
+        <h4>{{ringster.name}}</h4>
+    </div>
+    <div data-role="content" id="chat-content">
+
+        <div class="bubbledLeft">
+            Hi
+        </div>
+        <div class="bubbledRight">
+            Hi there yourself
+        </div>
+        <div class="bubbledLeft">
+            Do you speak Latin?
+        </div>
+        <div class="bubbledRight">
+            Yes
+        </div>
+        <div class="bubbledLeft">
+            Prove it
+        </div>
+
+
+
+
+
+
+        <div  data-id="footer" id="chat-footer" data-role="footer" class="ui-bar">
+            <p>
+                <textarea id="text-Chat" required data-ng-model="announcement.body" data-ng-change="showFunctionError=false; showServerError=false"></textarea>
+                <a data-role="button" id="button-Chat" href="#popup-Item-Announcement" data-rel="popup"  data-mini="true" data-inline="true" data-corners="false" >Send</a>
+            </p>
+        </div>
+    </div>
+</div>
 <!--Panel-->
 <div data-role="panel" id="panel-menu" data-theme="a" data-position="left">
     </br>
@@ -620,7 +658,7 @@
         <li><a data-ng-click="getFriends()">Friends</a></li>
         <li><a data-ng-click="">Invitations</a></li>       
         <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
-
+        <li><a href="#chat">TEST CHAT</a></li>
 
         <li><a data-ng-click="logout()">Log Out</a></li>
     </ul>
