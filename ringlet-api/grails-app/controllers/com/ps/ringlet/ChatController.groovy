@@ -12,6 +12,7 @@ class ChatController {
         Chat.findAllByRecipientAndRecipientStatus(user, MessageStatus.UNSEEN).each {
             chats.add(it.showInformation())
         }
+
         render chats as JSON
     }
 
@@ -31,7 +32,7 @@ class ChatController {
     def create() {
         def message = [response:""]
         User owner = User.findByToken(UserToken.findByToken(params.token as String))
-        User recipient = User.findById(params.chat.recipient as Long)
+        User recipient = User.findById(params.recipient as Long)
         if(recipient){
             new Chat(message: params.chat.message, dateCreated: new Date(), owner: owner, recipient: recipient).save(flush: true)
             message.response = "chat_created"
