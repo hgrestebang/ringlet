@@ -4,152 +4,96 @@ package com.ps.ringlet
 
 import org.junit.*
 import grails.test.mixin.*
+import groovy.mock.interceptor.*
+import grails.converters.*
 
 @TestFor(InvitationController)
-@Mock(Invitation)
+@Mock([User,UserToken,UserService,Invitation])
 class InvitationControllerTests {
+    def user,user2,token,invitation
 
-    def populateValidParams(params) {
-        assert params != null
-        // TODO: Populate valid properties like...
-        //params["name"] = 'someValidName'
+    void setUp() {
+        mockForConstraintsTests(User)
+        mockForConstraintsTests(UserToken)
+        mockForConstraintsTests(UserService)
+        mockForConstraintsTests(Invitation)
+
+        token = new UserToken(
+                token: 'token123',
+                valid: true
+        ).save()
+
+        user = new User(
+                username: 'test@ringlet.me',
+                passwordHash: '5bbf1a9e0de062225a1b',
+                facebookId: '12345',
+                name: 'User Test',
+                phone: '123456789',
+                token: token
+        ).save()
+
+        user2 = new User(
+                username: 'test2@ringlet.me',
+                passwordHash: '5bbf1a9e0de062225a1b',
+                facebookId: '12345',
+                name: 'User Test2',
+                phone: '123456789',
+                token: new UserToken(
+                        token: 'token1234',
+                        valid: true
+                ).save()
+        ).save()
+
+        invitation = new Invitation(
+                message: 'Invitation Test 1',
+                dateCreated: new Date(),
+                ownerStatus: MessageStatus.SEEN,
+                recipientStatus: MessageStatus.UNSEEN,
+                owner: user,
+                recipient: user2
+        ).save()
     }
 
-    void testIndex() {
-        controller.index()
-        assert "/invitation/list" == response.redirectedUrl
+    void testGetByUser(){
+        params.token = 'token123'
+        controller.getByUser()
+        assert response.getJson().size() > 0
     }
 
-    void testList() {
-
-        def model = controller.list()
-
-        assert model.invitationInstanceList.size() == 0
-        assert model.invitationInstanceTotal == 0
+    void testCreate(){
+        params.token = 'token1234'
+        def InvitationT = [message: "Test Invitation 2",recipientId: 1]
+        params.invitation = InvitationT
+        controller.create()
+        assert response.text == '{"response":"invitation_created"}'
     }
 
-    void testCreate() {
-        def model = controller.create()
-
-        assert model.invitationInstance != null
+    void testCreateFail(){
+        params.token = 'token1234'
+        def InvitationT = [message: "Test Invitation 2"]
+        params.invitation = InvitationT
+        controller.create()
+        assert response.text == '{"response":"invitation_not_created"}'
     }
 
-    void testSave() {
-        controller.save()
-
-        assert model.invitationInstance != null
-        assert view == '/invitation/create'
-
-        response.reset()
-
-        populateValidParams(params)
-        controller.save()
-
-        assert response.redirectedUrl == '/invitation/show/1'
-        assert controller.flash.message != null
-        assert Invitation.count() == 1
+    void testAcceptInvitation(){
+        params.token = 'token1234'
+        params.id = 1
+        controller.acceptInvitation()
+        assert response.text == '{"response":"invitation_accepted"}'
     }
 
-    void testShow() {
-        controller.show()
-
-        assert flash.message != null
-        assert response.redirectedUrl == '/invitation/list'
-
-        populateValidParams(params)
-        def invitation = new Invitation(params)
-
-        assert invitation.save() != null
-
-        params.id = invitation.id
-
-        def model = controller.show()
-
-        assert model.invitationInstance == invitation
+    void testDeclineInvitation(){
+        params.token = 'token1234'
+        params.id = 1
+        controller.declineInvitation()
+        assert response.text == '{"response":"invitation_declined"}'
     }
 
-    void testEdit() {
-        controller.edit()
-
-        assert flash.message != null
-        assert response.redirectedUrl == '/invitation/list'
-
-        populateValidParams(params)
-        def invitation = new Invitation(params)
-
-        assert invitation.save() != null
-
-        params.id = invitation.id
-
-        def model = controller.edit()
-
-        assert model.invitationInstance == invitation
-    }
-
-    void testUpdate() {
-        controller.update()
-
-        assert flash.message != null
-        assert response.redirectedUrl == '/invitation/list'
-
-        response.reset()
-
-        populateValidParams(params)
-        def invitation = new Invitation(params)
-
-        assert invitation.save() != null
-
-        // test invalid parameters in update
-        params.id = invitation.id
-        //TODO: add invalid values to params object
-
-        controller.update()
-
-        assert view == "/invitation/edit"
-        assert model.invitationInstance != null
-
-        invitation.clearErrors()
-
-        populateValidParams(params)
-        controller.update()
-
-        assert response.redirectedUrl == "/invitation/show/$invitation.id"
-        assert flash.message != null
-
-        //test outdated version number
-        response.reset()
-        invitation.clearErrors()
-
-        populateValidParams(params)
-        params.id = invitation.id
-        params.version = -1
-        controller.update()
-
-        assert view == "/invitation/edit"
-        assert model.invitationInstance != null
-        assert model.invitationInstance.errors.getFieldError('version')
-        assert flash.message != null
-    }
-
-    void testDelete() {
+    void testDelete(){
+        params.token = 'token123'
+        params.id = 1
         controller.delete()
-        assert flash.message != null
-        assert response.redirectedUrl == '/invitation/list'
-
-        response.reset()
-
-        populateValidParams(params)
-        def invitation = new Invitation(params)
-
-        assert invitation.save() != null
-        assert Invitation.count() == 1
-
-        params.id = invitation.id
-
-        controller.delete()
-
-        assert Invitation.count() == 0
-        assert Invitation.get(invitation.id) == null
-        assert response.redirectedUrl == '/invitation/list'
+        assert response.text == '{"response":"invitation_deleted"}'
     }
 }

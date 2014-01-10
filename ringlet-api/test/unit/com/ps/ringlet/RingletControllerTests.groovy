@@ -43,15 +43,17 @@ class RingletControllerTests {
                 gender: 'MALE',
                 status: 'ACTIVE',
                 //proPurchase: purchase,
-                ringlets:[3],
-                friends:['2','3'],
+                ringlets:[1],
+                friends:[2,3],
                 usersBlocked:[],
                 photos:['http://test']
         ).save()
 
         ringlet = new Ringlet(
                 name: 'Ringlet Test',
-                owner: user
+                owner: user,
+                users: [1]
+
         ).save()
     }
 
@@ -66,6 +68,64 @@ class RingletControllerTests {
         params.name = 'Ringlet Test'
         controller.create()
         assert response.text == '{"response":"ringlet_name_used"}'
+    }
+
+    void testCreate(){
+        params.token = 'token123'
+        params.name = 'Ringlet Create Test'
+        controller.create()
+        assert response.text == '{"response":"ringlet_created"}'
+    }
+
+    void testUpdateFail(){
+        params.ringlet = new Ringlet(
+                name: 'Ringlet Test',
+                owner: user,
+                users: [1,2,3]
+        ).save()
+        params.token = 'token123'
+        controller.update()
+        assert response.text == '{"response":"ringlet_name_used"}'
+    }
+
+    void testUpdate(){
+        params.ringlet = new Ringlet(
+                name: 'Ringlet Test 1',
+                owner: user
+        ).save()
+        params.token = 'token123'
+        controller.update()
+        assert response.text == '{"response":"ringlet_updated"}'
+    }
+
+    void testAddUser(){
+        params.token = 'token123'
+        params.ringletId = 1
+        params.userId = 2
+        controller.addUser()
+        assert response.text == '{"response":"user_added"}'
+    }
+
+    void testRemoveUser(){
+        params.token = 'token123'
+        params.ringletId = 1
+        params.userId = 1
+        controller.removeUser()
+        assert response.text == '{"response":"user_removed"}'
+    }
+
+    void testDeleteFail(){
+        params.token =  'token123'
+        params.id = 1
+        controller.delete()
+        assertEquals(response.text,'{"response":"ringlet_deleted"}')
+    }
+
+    void testDelete(){
+        params.token =  'token123'
+        params.id = 2
+        controller.delete()
+        assertEquals(response.text,'{"response":"ringlet_not_deleted"}')
     }
 
 }
