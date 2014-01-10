@@ -40,6 +40,7 @@ class Invitation {
                 ownerStatus: this.ownerStatus?.toString(),
                 recipientStatus: this.recipientStatus?.toString(),
                 owner: this.owner?.id,
-                recipient: this.recipient?.id]
+                recipient: this.recipient?.id,
+                ownerName: this.owner?.name]
     }
 }

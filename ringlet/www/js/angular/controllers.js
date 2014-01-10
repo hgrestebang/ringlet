@@ -31,12 +31,15 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         {miles:'50', radius:'50 miles'}];
     $scope.announcement.radius = $scope.searchRadius[0];
 
-    var appConfig = {serverHost:'192.168.0.6', appName:'ringlet', token:''};
+    var appConfig = {serverHost:'186.15.176.147', appName:'ringlet', token:''};
     var owl = $("#listing-item-gallery");
     var carousel = $("#signup-carousel");
     var profileCarousel = $("#profile-carousel");
     var photoCount = 0;
     var carouselLength = 0;
+    var chatFunction = null;
+    var announcementFunction = null;
+    var invitationFunction = null;
     var map = L.map('map-area');
     var mapAnnouncemnt = L.map('map-Announcement',{
         dragging: false,
@@ -74,7 +77,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         $scope.images = [];
         $scope.deleteImages = [];
         carouselLength = 0;
-        appConfig = {serverHost:'192.168.0.6', appName:'ringlet', token:''};
+        appConfig = {serverHost:'186.15.176.147', appName:'ringlet', token:''};
     }
 
     $scope.errorValidation = function(){
@@ -121,7 +124,9 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                     if($scope.user.friends == null) $scope.user.friends = [];
                     $scope.loadPurchase();
                     appConfig.token = result.token.token;
-                    $timeout(serverCall, 5000);
+                    chatFunction = $timeout(serverChat, 2000);
+                    announcementFunction = $timeout(serverAnnouncement, 4000);
+                    invitationFunction = $timeout(serverInvitation, 6000);
                     $scope.getNearByRingsters();
                 }
             },
@@ -200,7 +205,8 @@ function UserCtrl($scope, $compile, DAO, $timeout){
 
 //---------------------------- User Functions ----------------------------------------------------
     $scope.isFriend = function(){
-        return ($scope.user.friends.indexOf($scope.ringster.id) > -1);
+        if($scope.user.friends != null) return ($scope.user.friends.indexOf($scope.ringster.id) > -1);
+        else return false;
     }
 
     $scope.currentUser = function(){
@@ -236,40 +242,6 @@ function UserCtrl($scope, $compile, DAO, $timeout){
             },
             function(error){
                 console.log(error);
-                $.mobile.loading( 'hide', {textVisible: false});
-            });
-    }
-
-    $scope.validateInvitation = function(notValid){
-        if(notValid){
-            $scope.showErrors = true;
-        }
-        else{
-            $scope.showErrors = false;
-            $scope.showFunctionError = false;
-            $scope.showServerError = false;
-            $scope.sendInvitation();
-        }
-    }
-
-    $scope.sendInvitation = function(){
-        $.mobile.loading( 'show', {textVisible: false});
-        $scope.invitation.recipientId = $scope.ringster.id;
-        DAO.save({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'invitation', action:'create', invitation:$scope.invitation},
-            function(result){
-                if(result.response == "invitation_created"){
-                    $.mobile.loading( 'hide', {textVisible: false});
-                    window.location.href="#listing-item";
-                }
-                else if(result.response == "invitation_not_created"){
-                    $scope.showErrors = true;
-                    $scope.showFunctionError = true;
-                    $.mobile.loading( 'hide', {textVisible: false});
-                }
-            },
-            function(error){
-                $scope.showErrors = true;
-                $scope.showServerError = true;
                 $.mobile.loading( 'hide', {textVisible: false});
             });
     }
@@ -326,7 +298,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
 
     $scope.forgotPassword = function(){
         $.mobile.loading( 'show', {textVisible: false});
-        DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'user', action:'forgotPassword', username:$scope.emailForgot},
+        DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'user', action:'forgotPassword', username:$scope.emailForgot},
             function(result){
                 if(result.response == "email_send"){
                     $scope.showErrors = true;
@@ -467,31 +439,197 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         }
     }
 
-//---------------------------- Server Functions --------------------------------------------------
-    var serverCall = function(){
+    $scope.getInvitations = function(){
+        $.mobile.loading( 'show', {textVisible: false});
+        $scope.errorValidation();
         DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'invitation', action:'getByUser'},
             function(result){
                 $scope.invitations = result;
-                console.log('invitations')
-                DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'announcement', action:'getByUser'},
-                    function(result){
-                        if(result.response == "not_found"){
-                            $scope.announcements=[];
-                            console.log("Error loading information");
-                        }
-                        else{
-                            $scope.announcements=result;
-                        }
-                        console.log('announcements')
-                        DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'chat', action:'getAll'},
-                            function(result){
-                                $scope.chats = result;
-                                console.log('chats')
-                                $timeout(serverCall, 5000);
-                            });
-                    });
+                $.mobile.loading( 'hide', {textVisible: false});
+                window.location.href="#invitation-list";
+            },
+            function(error){
+                console.log(error);
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+    };
+
+//---------------------------- Server Functions --------------------------------------------------
+    var serverInvitation = function(){
+        DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'invitation', action:'getByUser'},
+            function(result){
+                $scope.invitations = result;
+                invitationFunction = $timeout(serverInvitation, 22000);
+            });
+    };
+
+    var serverAnnouncement = function(){
+        DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'announcement', action:'getByUser'},
+            function(result){
+                if(result.response == "not_found"){
+                    $scope.announcements = [];
+                }
+                else{
+                    $scope.announcements=result;
+                }
+                announcementFunction = $timeout(serverAnnouncement, 15000);
+            });
+    };
+
+    var serverChat = function(){
+        DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'chat', action:'getAll'},
+            function(result){
+                $scope.chats = result;
+                chatFunction = $timeout(serverChat, 4000);
+            });
+    };
+
+    $scope.stopInvitationFunction = function(){
+        $timeout.cancel(invitationFunction);
+    };
+
+    $scope.startInvitationFunction = function(){
+        invitationFunction = $timeout(serverInvitation, 22000);
+    };
+
+    $scope.stopAnnouncementFunction = function(){
+        $timeout.cancel(announcementFunction);
+    };
+
+    $scope.startAnnouncementFunction = function(){
+        announcementFunction = $timeout(serverAnnouncement, 15000);
+    };
+
+    $scope.stopChatFunction = function(){
+        $timeout.cancel(chatFunction);
+    };
+
+    $scope.startChatFunction = function(){
+        chatFunction = $timeout(serverChat, 4000);
+    };
+
+    $(document).on("pagebeforeshow","#invitation-list",function(){
+        $scope.stopInvitationFunction();
+    });
+
+    $(document).on("pageshow","#invitation-list",function(){
+        $("#invitation-list-view" ).listview( "refresh" );
+    });
+
+    $(document).on("pagehide","#invitation-list",function(){
+        $scope.startInvitationFunction();
+    });
+
+    $(document).on("pagebeforeshow","#announcement-List",function(){
+        $scope.stopInvitationFunction();
+    });
+
+    $(document).on("pageshow","#announcement-List",function(){
+        $("#listing-Announcement" ).listview( "refresh" );
+    });
+
+    $(document).on("pagehide","#announcement-List",function(){
+        $scope.startInvitationFunction();
+    });
+
+//---------------------------- Invitation Functions ----------------------------------------------
+    $scope.getInvitations = function(){
+        $.mobile.loading( 'show', {textVisible: false});
+        $scope.errorValidation();
+        DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'invitation', action:'getByUser'},
+            function(result){
+                $scope.invitations = result;
+                $.mobile.loading( 'hide', {textVisible: false});
+                window.location.href="#invitation-list";
+            },
+            function(error){
+                console.log(error);
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+    };
+
+    $scope.getInvitation = function(invitation){
+        $scope.invitation = invitation;
+    };
+
+    $scope.validateInvitation = function(notValid){
+        if(notValid){
+            $scope.showErrors = true;
+        }
+        else{
+            $scope.showErrors = false;
+            $scope.showFunctionError = false;
+            $scope.showServerError = false;
+            $scope.sendInvitation();
+        }
+    }
+
+    $scope.sendInvitation = function(){
+        $.mobile.loading( 'show', {textVisible: false});
+        $scope.invitation.recipientId = $scope.ringster.id;
+        DAO.save({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'invitation', action:'create', invitation:$scope.invitation},
+            function(result){
+                if(result.response == "invitation_created"){
+                    $.mobile.loading( 'hide', {textVisible: false});
+                    window.location.href="#listing-item";
+                }
+                else if(result.response == "invitation_not_created"){
+                    $scope.showErrors = true;
+                    $scope.showFunctionError = true;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                }
+            },
+            function(error){
+                $scope.showErrors = true;
+                $scope.showServerError = true;
+                $.mobile.loading( 'hide', {textVisible: false});
             });
     }
+
+    $scope.acceptInvitation = function(){
+        $.mobile.loading( 'show', {textVisible: false});
+        DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'invitation', action:'acceptInvitation', id:$scope.invitation.id},
+            function(result){
+                if(result.response == "invitation_accepted"){
+                    $.mobile.loading( 'hide', {textVisible: false});
+                    $scope.user.friends.push($scope.invitation.owner);
+                    $scope.getInvitations();
+
+                }
+                else{
+                    $scope.showErrors = true;
+                    $scope.showServerError = true;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                }
+            },
+            function(error){
+                $scope.showErrors = true;
+                $scope.showServerError = true;
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+    };
+
+    $scope.declineInvitation = function(){
+        $.mobile.loading( 'show', {textVisible: false});
+        DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'invitation', action:'declineInvitation', id:$scope.invitation.id},
+            function(result){
+                if(result.response == "invitation_declined"){
+                    $.mobile.loading( 'hide', {textVisible: false});
+                    $scope.getInvitations();
+
+                }
+                else{
+                    $scope.showErrors = true;
+                    $scope.showServerError = true;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                }
+            },
+            function(error){
+                $scope.showErrors = true;
+                $scope.showServerError = true;
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+    };
 
 //---------------------------- Carousel Functions ------------------------------------------------
     carousel.owlCarousel({ autoPlay: false, itemsMobile : [479,3], itemsTablet: [768,3]});
