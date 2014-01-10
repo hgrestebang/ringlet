@@ -1,7 +1,7 @@
 'use strict';
 var ringlet = angular.module('ringlet',['services']);
 
-function UserCtrl($scope, $compile, DAO){
+function UserCtrl($scope, $compile, DAO, $timeout){
 
 //---------------------------- Variables Initialization ------------------------------------------
     $scope.user = {email:'', password:'', gender:'MALE'};
@@ -118,8 +118,10 @@ function UserCtrl($scope, $compile, DAO){
                 }
                 else{
                     $scope.user = result;
+                    if($scope.user.friends == null) $scope.user.friends = [];
                     $scope.loadPurchase();
                     appConfig.token = result.token.token;
+                    $timeout(serverCall, 5000);
                     $scope.getNearByRingsters();
                 }
             },
@@ -153,7 +155,6 @@ function UserCtrl($scope, $compile, DAO){
                 }
             }
         );
-        $scope.getAnnouncements();
     }
 
     $scope.getRingsters = function(ringster){
@@ -217,6 +218,21 @@ function UserCtrl($scope, $compile, DAO){
                 }
                 $.mobile.loading( 'hide', {textVisible: false});
                 window.location.href="#profile";
+            },
+            function(error){
+                console.log(error);
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+    }
+
+    $scope.getFriends = function(){
+        $.mobile.loading( 'show', {textVisible: false});
+        $scope.errorValidation();
+        DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'user', action:'getFriends'},
+            function(result){
+                $scope.ringsters = result;
+                $.mobile.loading( 'hide', {textVisible: false});
+                window.location.href="#home";
             },
             function(error){
                 console.log(error);
@@ -449,6 +465,32 @@ function UserCtrl($scope, $compile, DAO){
             $scope.showPasswordError = true;
             $.mobile.loading( 'hide', {textVisible: false});
         }
+    }
+
+//---------------------------- Server Functions --------------------------------------------------
+    var serverCall = function(){
+        DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'invitation', action:'getByUser'},
+            function(result){
+                $scope.invitations = result;
+                console.log('invitations')
+                DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'announcement', action:'getByUser'},
+                    function(result){
+                        if(result.response == "not_found"){
+                            $scope.announcements=[];
+                            console.log("Error loading information");
+                        }
+                        else{
+                            $scope.announcements=result;
+                        }
+                        console.log('announcements')
+                        DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'chat', action:'getAll'},
+                            function(result){
+                                $scope.chats = result;
+                                console.log('chats')
+                                $timeout(serverCall, 5000);
+                            });
+                    });
+            });
     }
 
 //---------------------------- Carousel Functions ------------------------------------------------
@@ -743,19 +785,21 @@ function UserCtrl($scope, $compile, DAO){
 
     $scope.deleteAnnouncement = function(){
         $.mobile.loading( 'show', {textVisible: false});
+        var ref=""
+        if($scope.announcements[1]!=undefined)
+        {
+            ref="#announcement-List";
+        }else{
+            ref="#home";
+        }
         DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'announcement', action:'delete',token: appConfig.token,id:$scope.announcementItem.id},
             function(result){
                 if(result.response == "announcement_deleted"){
                     console.log("element deleted");
                     $scope.getAnnouncements();
                     $scope.$apply();
-                    console.log($scope.announcements.count())
-                    if($scope.announcements.count()>0)
-                    {
-                        window.location.href="#announcement-List";
-                    }else{
-                        window.location.href="#home";
-                    }
+                    console.log(ref)
+                        window.location.href=ref;
                     $.mobile.loading( 'hide', {textVisible: false});
                 }
                 else{

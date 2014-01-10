@@ -269,7 +269,6 @@
         <br/>
         <br/>
         <div id="info-box" class="info-box-announcement">
-
             <span class="dark-text info-text">It's easy to do! Just type your message, choose the radius you want to cover.</span>
         </div>
         <div data-ng-show="showErrors" class="center red">
@@ -370,7 +369,7 @@
                     </a>
                 </p>
             </div>
-            <a href="#invitation" data-role="button" data-corners="false" data-ng-hide="isFriend()">Send Friend Request</a>
+            <a href="#invitation" data-role="button" data-corners="false" data-ng-hide="isFriend()" data-ng-click="errorValidation()">Send Friend Request</a>
         </form>
     </div>
     <div data-role="popup" data-overlay-theme="b" class="ui-content" id="imagePopUpDiv">
@@ -599,29 +598,6 @@
         <p style="font-size: 11px; text-align: justify; margin: 0 5px 30px 5px">I HAVE READ THIS AGREEMENT AND AGREE TO ALL OF THE PROVISIONS CONTAINED ABOVE. <a href="#pro">Accept</a></p>
     </div>
 </div>
-
-<!---------------------------------Favorites View---------------------------------------------------->
-<div data-role="page" id="favorites">
-    <div data-role="header" id="favorites-header" data-theme="d"  >
-        <a href="#listing"    data-shadow="false" data-corners="false" data-transition="slidedown"><i class="icon-remove icons-big white-text"></i></i></a>
-        <h4>Favorites</h4>
-    </div>
-    <div data-role="content" id="favorites-content">
-        <div id="favorites-information">
-            <ul id="favorites-lImages" data-role="listview" data-icon="">
-                <li data-ng-repeat="favoriteHouse in favorites| filter:refreshFavoritesImages">
-                    <img id="imgFavorite-{{favoriteHouse.id}}" src="{{favoriteHouse.photos[0].photo_protocol}}{{favoriteHouse.photos[0].photo_host}}/{{favoriteHouse.photos[0].photo_path}}" onload="changeSizeImgList(this)" onerror="imgError(this)" />
-                    <h2 data-ng-bind="'$'+favoriteHouse.price_monthly+'/mo'"></h2>
-                    <p class="gray-text" data-ng-bind="favoriteHouse.bedrooms+' bed, '+favoriteHouse.bathrooms+' bath'"></p>
-                    <p class="gray-text" data-ng-bind="favoriteHouse.street_address"></p>
-                    <div class="div-area" data-ng-hide="favoriteHouse.favorite" data-ng-click="removeFavorites(favoriteHouse)"><i class="icon-star right" style="color: black!important;"></i></div>
-                    <div class="div-area" data-ng-show="favoriteHouse.favorite" data-ng-click="removeFavorites(favoriteHouse)"><i class="icon-star right" style="color: #f4a460!important;"></i></div>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
-
 <!---------------------------------Map View---------------------------------------------------->
 <div data-role="page" id="map" data-theme="a">
     <div data-role="header" id="map-header"  >
@@ -638,11 +614,12 @@
     </br>
     <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
         <li data-role="list-divider" class="center">Menu</li>
-        <li><a href="#home" data-transition="slide" data-rel="close">Home</a></li>
+        <li><a data-ng-click="getNearByRingsters()">Home</a></li>
         <li><a data-ng-click="currentUser()">My Profile</a></li>
         <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
-        <li><a href="#favorites" data-ng-click="getFavorites()" data-transition="slide">Favorites</a></li>
-        <li><a href="#announcement-List" data-ng-show="announcements.length>0" data-transition="slide">Announcements <span>{{announcements.length}}</span></a></li>
+        <li><a data-ng-click="getFriends()">Friends</a></li>
+        <li><a data-ng-click="">Invitations</a></li>       
+        <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
 
 
         <li><a data-ng-click="logout()">Log Out</a></li>

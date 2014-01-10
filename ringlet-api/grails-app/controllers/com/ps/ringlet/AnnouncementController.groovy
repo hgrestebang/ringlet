@@ -25,9 +25,8 @@ class AnnouncementController {
             render announcements as JSON
         }
         else{
-            def message = [response:""]
-            message.response = "not_found"
-            render message as JSON
+            announcements.add([response:"not_found"])
+            render announcements as JSON
         }
     }
 
