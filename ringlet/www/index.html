@@ -664,14 +664,14 @@
             <p data-ng-show="showFunctionError">"You have not added the message"</p>
             <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
         </div>
-        <span data-ng-repeat="chat in chats">
-               <div data-ng-show="chat.owner.username==user.username && chat.recipient.username==ringster.username" class="bubbledLeft">
+        <div data-ng-repeat="chat in chats">
+               <div data-ng-show="chat.owner==user.id && chat.recipient==ringster.id" class="bubbledLeft">
                    {{chat.message}}
                </div>
-               <div data-ng-show="chat.owner.username==ringster.username" class="bubbledRight">
+               <div data-ng-show="chat.owner==ringster.id" class="bubbledRight">
                    {{chat.message}}
                </div>
-        </span>
+        </div>
 
         <div  data-id="footer" id="chat-footer" data-role="footer" class="ui-bar">
             <p>
@@ -691,7 +691,7 @@
         <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
         <li><a data-ng-click="getFriends()">Friends</a></li>
         <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
-        <li><a data-ng-click="getInvitations()" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length+1}}</span></a></li>
+        <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length+1}}</span></a></li>
 
         <li><a data-ng-click="logout()">Log Out</a></li>
     </ul>

@@ -457,17 +457,20 @@ function UserCtrl($scope, $compile, DAO, $timeout){
 
 //---------------------------- Chat Functions ---------------------------------------------------
     $scope.sendMessage =function(){
-        $.mobile.loading( 'show', {textVisible: false});
+        if(  $scope.chat.message!=""){
+            $.mobile.loading( 'show', {textVisible: false});
 
-        DAO.save({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'chat', action:'create',token:appConfig.token,recipient:$scope.ringster.id,chat:$scope.chat },
-            function(result){
-                $.mobile.loading( 'hide', {textVisible: false});
-            },
-            function(error){
-                $scope.showErrors = true;
-                $scope.showServerError = true;
-                $.mobile.loading( 'hide', {textVisible: false});
-            });
+            DAO.save({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'chat', action:'create',token:appConfig.token,recipient:$scope.ringster.id,chat:$scope.chat.message },
+                function(result){
+                    $scope.chat.message=""
+                    $.mobile.loading( 'hide', {textVisible: false});
+                },
+                function(error){
+                    $scope.showErrors = true;
+                    $scope.showServerError = true;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                });
+        }
     }
 
 //---------------------------- Server Functions --------------------------------------------------

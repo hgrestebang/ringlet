@@ -38,7 +38,7 @@ class ChatController {
         User owner = User.findByToken(UserToken.findByToken(params.token as String))
         User recipient = User.findById(params.recipient as Long)
         if(recipient){
-            new Chat(message: params.chat.message, dateCreated: new Date(), owner: owner, recipient: recipient).save(flush: true)
+            new Chat(message: params.chat, dateCreated: new Date(), owner: owner, recipient: recipient).save(flush: true)
             message.response = "chat_created"
         }
         else{

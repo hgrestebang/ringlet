@@ -459,9 +459,10 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     $scope.sendMessage =function(){
         $.mobile.loading( 'show', {textVisible: false});
 
-        DAO.save({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'chat', action:'create',token:appConfig.token,recipient:$scope.ringster.id,chat:$scope.chat },
+        DAO.save({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'chat', action:'create',token:appConfig.token,recipient:$scope.ringster.id,chat:$scope.chat.message },
             function(result){
-
+                $scope.chat.message=""
+                $.mobile.loading( 'hide', {textVisible: false});
             },
             function(error){
                 $scope.showErrors = true;
@@ -496,6 +497,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'chat', action:'getAll'},
             function(result){
                 $scope.chats = result;
+                console.log($scope.chats)
                 chatFunction = $timeout(serverChat, 4000);
             });
     };
