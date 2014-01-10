@@ -12,9 +12,6 @@ class InvitationController {
         Invitation.findAllByRecipientAndRecipientStatus(user, MessageStatus.UNSEEN).each {
             invitations.add(it.showInformation())
         }
-        Invitation.findAllByOwnerAndOwnerStatus(user, MessageStatus.SEEN).each {
-            invitations.add(it.showInformation())
-        }
         render invitations as JSON
     }
 
@@ -37,8 +34,9 @@ class InvitationController {
         User user = User.findByToken(UserToken.findByToken(params.token as String))
         Invitation invitation = Invitation.findById(params.id as Long)
         if(invitation.recipient == user){
-            invitation.owner.addToFriends(user.id).save(flush: true)
-            user.addToFriends(invitation.owner.id).save(flush: true)
+            User owner = invitation.owner
+            owner.addToFriends(user.id).save(flush: true)
+            user.addToFriends(owner.id).save(flush: true)
             invitation.setRecipientStatus(MessageStatus.ACCEPTED)
             invitation.save(flush: true)
             message.response = "invitation_accepted"

@@ -341,6 +341,46 @@
         </form>
     </div>
 </div>
+<!------------------------Invitation List View---------------------------------------------------->
+<div data-role="page" id="invitation-list" data-theme="a">
+    <div data-role="header">
+        <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
+        </a>
+        <h4>Invitations</h4>
+    </div>
+    <div data-role="content">
+        <div>
+            <ul id="invitation-list-view" data-role="listview">
+                <li data-ng-repeat="invitation in invitations">
+                    <a href="#invitation-item" data-ng-click="getInvitation(invitation)">
+                        <h2 data-ng-bind="'Invitation from '+invitation.ownerName"></h2>
+                        <span class="textFont8" data-ng-bind="invitation.message"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!----------------------------------Invitation Item View--------------------------------------------------->
+<div data-role="page" id="invitation-item" data-theme="a">
+    <div data-role="header">
+        <a data-role="button" data-icon="arrow-l" data-iconpos="notext" data-ng-click="getInvitations()">Invitations</a>
+        <h3>Invitation</h3>
+    </div>
+    <div data-role="content">
+        <form name="formInvitationItem">
+            <div data-ng-show="showErrors" class="center red">
+                <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
+            </div>
+            <ul>
+                <li><input data-role="none" type="text" placeholder="Name" data-ng-model="invitation.ownerName" readonly></li>
+                <li><textarea data-role="none" placeholder="Message" rows="5" data-ng-model="invitation.message" readonly></textarea></li>
+            </ul>
+            <a data-role="button" data-corners="false" data-ng-click="acceptInvitation()">Accept</a>
+            <a data-role="button" data-corners="false" data-ng-click="declineInvitation()">Decline</a>
+        </form>
+    </div>
+</div>
 <!---------------------------------Pro View---------------------------------------------------->
 <div data-role="page" id="pro" data-theme="a">
     <div data-role="header" id="pro-header"  >
@@ -563,7 +603,7 @@
         <li><a data-ng-click="currentUser()">My Profile</a></li>
         <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
         <li><a data-ng-click="getFriends()">Friends</a></li>
-        <li><a data-ng-click="">Invitations</a></li>
+        <li><a data-ng-click="getInvitations()">Invitations</a></li>
         <li><a data-ng-click="logout()">Log Out</a></li>
     </ul>
 </div>
