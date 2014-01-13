@@ -22,6 +22,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     $scope.images = [];
     $scope.deleteImages = [];
     $scope.announcement = {location:[]};
+    $scope.chat=[];
     $scope.searchRadius = [
         {miles:'5', radius:'5 miles'},
         {miles:'10', radius:'10 miles'},
@@ -31,7 +32,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         {miles:'50', radius:'50 miles'}];
     $scope.announcement.radius = $scope.searchRadius[0];
 
-    var appConfig = {serverHost:'186.15.176.147', appName:'ringlet', token:''};
+    var appConfig = {serverHost:'192.168.0.6', appName:'ringlet', token:''};
     var owl = $("#listing-item-gallery");
     var carousel = $("#signup-carousel");
     var profileCarousel = $("#profile-carousel");
@@ -77,7 +78,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         $scope.images = [];
         $scope.deleteImages = [];
         carouselLength = 0;
-        appConfig = {serverHost:'186.15.176.147', appName:'ringlet', token:''};
+        appConfig = {serverHost:'192.168.0.6', appName:'ringlet', token:''};
     }
 
     $scope.errorValidation = function(){
@@ -454,6 +455,22 @@ function UserCtrl($scope, $compile, DAO, $timeout){
             });
     };
 
+//---------------------------- Chat Functions ---------------------------------------------------
+    $scope.sendMessage =function(){
+        $.mobile.loading( 'show', {textVisible: false});
+
+        DAO.save({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'chat', action:'create',token:appConfig.token,recipient:$scope.ringster.id,chat:$scope.chat.message },
+            function(result){
+                $scope.chat.message=""
+                $.mobile.loading( 'hide', {textVisible: false});
+            },
+            function(error){
+                $scope.showErrors = true;
+                $scope.showServerError = true;
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+    }
+
 //---------------------------- Server Functions --------------------------------------------------
     var serverInvitation = function(){
         DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'invitation', action:'getByUser'},
@@ -480,6 +497,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'chat', action:'getAll'},
             function(result){
                 $scope.chats = result;
+                console.log($scope.chats)
                 chatFunction = $timeout(serverChat, 4000);
             });
     };

@@ -369,7 +369,10 @@
                     </a>
                 </p>
             </div>
+            <a href="#chat" data-role="button" data-corners="false" data-ng-show="isFriend()" data-ng-click="errorValidation()">Let's chat</a>
             <a href="#invitation" data-role="button" data-corners="false" data-ng-hide="isFriend()" data-ng-click="errorValidation()">Send Friend Request</a>
+
+
         </form>
     </div>
     <div data-role="popup" data-overlay-theme="b" class="ui-content" id="imagePopUpDiv">
@@ -657,20 +660,23 @@
         <h4>{{ringster.name}}</h4>
     </div>
     <div data-role="content" id="chat-content">
-
-        <span data-ng-repeat="chat in chats">
-               <div data-ng-show="chat.owner.username==user.username" class="bubbledLeft">
+        <div data-ng-show="showErrors" class="center red">
+            <p data-ng-show="showFunctionError">"You have not added the message"</p>
+            <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
+        </div>
+        <div data-ng-repeat="chat in chats">
+               <div data-ng-show="chat.owner==user.id && chat.recipient==ringster.id" class="bubbledLeft">
                    {{chat.message}}
                </div>
-               <div data-ng-show="chat.recipient.username==ringster.username" class="bubbledRight">
+               <div data-ng-show="chat.owner==ringster.id" class="bubbledRight">
                    {{chat.message}}
                </div>
-        </span>
+        </div>
 
         <div  data-id="footer" id="chat-footer" data-role="footer" class="ui-bar">
             <p>
-                <textarea id="text-Chat"  data-ng-change="showFunctionError=false; showServerError=false"></textarea>
-                <a data-role="button" id="button-Chat" href="#popup-Item-Announcement" data-rel="popup"  data-mini="true" data-inline="true" data-corners="false" >Send</a>
+                <textarea id="text-Chat" data-ng-model="chat.message"  data-ng-change="showFunctionError=false; showServerError=false"></textarea>
+                <a data-role="button" id="button-Chat" href="#popup-Item-Announcement"  data-ng-click="sendMessage()" data-rel="popup"  data-mini="true" data-inline="true" data-corners="false" >Send</a>
             </p>
         </div>
     </div>
@@ -685,8 +691,7 @@
         <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
         <li><a data-ng-click="getFriends()">Friends</a></li>
         <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
-        <li><a data-ng-click="getInvitations()">Invitations</a></li>
-        <li><a href="#chat">TEST CHAT</a></li>
+        <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length+1}}</span></a></li>
 
         <li><a data-ng-click="logout()">Log Out</a></li>
     </ul>
