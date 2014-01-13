@@ -431,8 +431,8 @@
             <ul id="chat-list-view" data-role="listview">
                 <li data-ng-repeat="chat in chats | filter:filterChats">
                     <a href="#chat" data-ng-click="getRingsters(chat.recipient)">
-                        <h2 data-ng-bind="'Chat from '+chat.owner"></h2>
-
+                        <h2 data-ng-show="chat.owner.id==user.id && chat.recipient.id==ringster.id" data-ng-bind="'Chat from '+chat.recipient.name"></h2>
+                        <h2 data-ng-show="chat.owner.id==ringster.id" data-ng-bind="'Chat from '+chat.recipient.name"></h2>
                     </a>
                 </li>
             </ul>
@@ -685,12 +685,19 @@
             <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
         </div>
         <div data-ng-repeat="chat in chats">
-               <div id="chat.id" data-ng-show="chat.owner.id==user.id && chat.recipient.id==ringster.id" class="bubbledLeft">
+               <div id="chat.id" data-ng-click="deleteThisChat(chat.id)" data-ng-show="chat.owner.id==user.id && chat.recipient.id==ringster.id" class="bubbledLeft">
                    {{chat.message}}
                </div>
-               <div id="chat.id" data-ng-show="chat.owner.id==ringster.id" class="bubbledRight">
+               <div id="chat.id" data-ng-click="deleteThisChat(chat.id)" data-ng-show="chat.owner.id==ringster.id" class="bubbledRight">
                    {{chat.message}}
                </div>
+        </div>
+        <div data-role="popup" data-overlay-theme="a" class="ui-content" data-arrow="l,t" id="delete-Chat">
+            <br/>
+            <p>Are you sure want delete this message</p>
+            <br/>
+            <a href="#" data-rel="back" data-role="button" data-corners="false">No</a>
+            <a href="#" data-ng-click="deleteChat()" data-rel="back" data-role="button" data-corners="false">Yes</a>
         </div>
     </div>
     <div  data-id="footer" id="chat-footer" data-role="footer" class="ui-bar">

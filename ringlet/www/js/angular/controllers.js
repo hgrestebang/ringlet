@@ -23,6 +23,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     $scope.deleteImages = [];
     $scope.announcement = {location:[]};
     $scope.chat=[];
+    $scope.itemDelete="";
     $scope.searchRadius = [
         {miles:'5', radius:'5 miles'},
         {miles:'10', radius:'10 miles'},
@@ -129,6 +130,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                     announcementFunction = $timeout(serverAnnouncement, 4000);
                     invitationFunction = $timeout(serverInvitation, 6000);
                     $scope.getNearByRingsters();
+                    $scope.updateLocation();
                 }
             },
             function(error){
@@ -379,6 +381,9 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         for(var i=0; i<$scope.deleteImages.length; i++){
             $scope.images.push($scope.deleteImages[i]);
         }
+        if($scope.userLocation.lat){
+            $scope.user.userLocation = $scope.userLocation;
+        }
         DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'user', action:'update', user:$scope.user, images:$scope.images},
             function(result){
                 if(result.response == "user_updated"){
@@ -396,6 +401,21 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                 $scope.showErrors = true;
                 $scope.showServerError = true;
                 $.mobile.loading( 'hide', {textVisible: false});
+            });
+    }
+
+    $scope.updateLocation = function(){
+        if($scope.userLocation.lat){
+            $scope.user.userLocation = $scope.userLocation;
+        }
+        DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'user', action:'update', user:$scope.user},
+            function(result){
+                if(result.response == "user_updated"){
+
+                }
+
+            },
+            function(error){
             });
     }
 
@@ -485,6 +505,37 @@ function UserCtrl($scope, $compile, DAO, $timeout){
 
     $scope.filterChats = function(){
         return true;
+    }
+
+    $scope.deleteThisChat =function(item){
+        $scope.itemDelete=item;
+        $("#delete-Chat").popup( "open");
+    }
+
+    $scope.deleteChat = function(){
+        $.mobile.loading( 'show', {textVisible: false});
+        DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'chat', action:'delete',token: appConfig.token,id:$scope.itemDelete},
+            function(result){
+                if(result.response == "chat_deleted"){
+                    console.log("element deleted");
+                    $.mobile.loading( 'hide', {textVisible: false});
+                    DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'chat', action:'getAll'},
+                        function(result){
+                            $scope.chats = result;
+                        });
+                    $scope.scrollDiv();
+                }
+                else{
+                    $scope.showErrors = true;
+                    $scope.showServerError = true;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                }
+            },
+            function(error){
+                $scope.showErrors = true;
+                $scope.showServerError = true;
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
     }
 
 //---------------------------- Server Functions --------------------------------------------------
