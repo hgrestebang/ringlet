@@ -66,8 +66,14 @@ function carouselImageError(img){
 $(document).on("pageshow","#home",function(){
     $("#listing-lImages" ).listview( "refresh" );
 });
+
 $(document).on("pageshow","#chat",function(){
     var footer = document.getElementById("chat-footer").offsetHeight;
     $('#chat-content').css({'max-height': (screen.height-(100+footer)) + 'px'});
     $('#chat-content').animate({ scrollTop: (screen.height-(100+footer)) }, "slow");
+});
+
+$(document).on("pageshow","#home",function(){
+    var footer = document.getElementById("listing-footer").offsetHeight;
+    $('#listing-content').css({'max-height': (screen.height-(100+footer)) + 'px'});
 });

@@ -35,7 +35,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         {miles:'50', radius:'50 miles'}];
     $scope.announcement.radius = $scope.searchRadius[0];
 
-    var appConfig = {serverHost:'192.168.0.100', appName:'ringlet', token:''};
+    var appConfig = {serverHost:'192.168.0.104', appName:'ringlet', token:''};
     var owl = $("#listing-item-gallery");
     var carousel = $("#signup-carousel");
     var profileCarousel = $("#profile-carousel");
@@ -83,7 +83,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         $scope.chatUsers = [];
         $scope.chatsIndex = [];
         carouselLength = 0;
-        appConfig = {serverHost:'192.168.0.100', appName:'ringlet', token:''};
+        appConfig = {serverHost:'192.168.0.104', appName:'ringlet', token:''};
     }
 
     $scope.errorValidation = function(){
