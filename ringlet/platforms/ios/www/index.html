@@ -431,8 +431,8 @@
             <ul id="chat-list-view" data-role="listview">
                 <li data-ng-repeat="chat in chats | filter:filterChats">
                     <a href="#chat" data-ng-click="getRingsters(chat.recipient)">
-                        <h2 data-ng-bind="'Chat from '+chat.owner"></h2>
-
+                        <h2 data-ng-bind="'Chat from '+chat.owner.name"></h2>
+                        <h2 data-ng-bind="chat.message"></h2>
                     </a>
                 </li>
             </ul>
@@ -692,6 +692,13 @@
                    {{chat.message}}
                </div>
         </div>
+        <div data-role="popup" data-overlay-theme="a" id="delete-Chat">
+            <br/>
+            <p>Are you sure want delete this message</p>
+            <br/>
+            <a href="#" data-rel="back" data-role="button" data-corners="false">No</a>
+            <a href="#" data-ng-click="deleteAnnouncement()" data-rel="back" data-role="button" data-corners="false">Yes</a>
+        </div>
     </div>
     <div  data-id="footer" id="chat-footer" data-role="footer" class="ui-bar">
         <p>
@@ -709,9 +716,9 @@
         <li><a data-ng-click="currentUser()">My Profile</a></li>
         <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
         <li><a data-ng-click="getFriends()">Friends</a></li>
-        <li><a href="#chat-list" data-ng-show="chats[0].id!=undefined" data-transition="slide">Chats</a></li>
+        <li><a href="#chat-list" data-ng-show="chats[0].id!=undefined" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
         <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
-        <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length+1}}</span></a></li>
+        <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>
 
         <li><a data-ng-click="logout()">Log Out</a></li>
     </ul>
