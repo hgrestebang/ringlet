@@ -68,6 +68,17 @@
     // View defaults to full size.  If you want to customize the view's size, or its subviews (e.g. webView),
     // you can do so here.
 
+    NSArray *vComp = [[UIDevice currentDevice].systemVersion componentsSeparatedByString:@"."];
+    if ([[vComp objectAtIndex:0] intValue] >= 7) {
+        // iOS 7 or above
+        CGRect oldBounds = [self.view bounds];
+        CGRect newViewBounds = CGRectMake( 0, -10, oldBounds.size.width, oldBounds.size.height-20 );
+        CGRect newWebViewBounds = CGRectMake( 0, -20, oldBounds.size.width, oldBounds.size.height-40 );
+        
+        [self.view setBounds:newViewBounds];
+        [self.webView setBounds:newWebViewBounds];
+    }
+    
     [super viewWillAppear:animated];
 }
 

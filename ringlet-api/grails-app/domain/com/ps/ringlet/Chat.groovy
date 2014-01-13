@@ -20,7 +20,7 @@ class Chat {
 
     def beforeInsert(){
         ownerStatus = MessageStatus.SEEN
-        recipientStatus = MessageStatus.DELETED
+        recipientStatus = MessageStatus.UNSEEN
     }
 
     def toObject(){
@@ -39,7 +39,7 @@ class Chat {
                 dateCreated: this.dateCreated,
                 ownerStatus: this.ownerStatus?.toString(),
                 recipientStatus: this.recipientStatus?.toString(),
-                owner: this.owner?.id,
-                recipient: this.recipient?.id]
+                owner: this.owner?.showInformation(),
+                recipient: this.recipient?.showInformation()]
     }
 }
