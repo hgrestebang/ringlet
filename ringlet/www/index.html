@@ -430,7 +430,7 @@
         <div>
             <ul id="chat-list-view" data-role="listview">
                 <li data-ng-repeat="chat in chats | filter:filterChats">
-                    <a href="#chat" data-ng-click="getRingsters(chat.recipient)">
+                    <a href="#chat" data-ng-click="getRingsters(chat.owner)">
                         <h2 data-ng-bind="'Chat from '+chat.owner.name"></h2>
                         <h2 data-ng-bind="chat.message"></h2>
                     </a>
