@@ -32,7 +32,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         {miles:'50', radius:'50 miles'}];
     $scope.announcement.radius = $scope.searchRadius[0];
 
-    var appConfig = {serverHost:'192.168.0.6', appName:'ringlet', token:''};
+    var appConfig = {serverHost:'192.168.0.101', appName:'ringlet', token:''};
     var owl = $("#listing-item-gallery");
     var carousel = $("#signup-carousel");
     var profileCarousel = $("#profile-carousel");
@@ -78,7 +78,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         $scope.images = [];
         $scope.deleteImages = [];
         carouselLength = 0;
-        appConfig = {serverHost:'192.168.0.6', appName:'ringlet', token:''};
+        appConfig = {serverHost:'192.168.0.101', appName:'ringlet', token:''};
     }
 
     $scope.errorValidation = function(){
@@ -464,6 +464,11 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                 function(result){
                     $scope.chat.message=""
                     $.mobile.loading( 'hide', {textVisible: false});
+                    DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'chat', action:'getAll'},
+                        function(result){
+                            $scope.chats = result;
+                        });
+                    $scope.scrollDiv();
                 },
                 function(error){
                     $scope.showErrors = true;
@@ -471,6 +476,15 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                     $.mobile.loading( 'hide', {textVisible: false});
                 });
         }
+    }
+
+    $scope.scrollDiv = function(){
+        var footer = document.getElementById("chat-footer").offsetHeight;
+        $('#chat-content').animate({ scrollTop: (screen.height-(80+footer)) }, "slow");
+    }
+
+    $scope.filterChats = function(){
+        return true;
     }
 
 //---------------------------- Server Functions --------------------------------------------------
@@ -550,6 +564,19 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     $(document).on("pagehide","#announcement-List",function(){
         $scope.startInvitationFunction();
     });
+
+    $(document).on("pagebeforeshow","#chat-list",function(){
+        $scope.stopChatFunction();
+    });
+
+    $(document).on("pageshow","#chat-list",function(){
+        $("#chat-list-view" ).listview( "refresh" );
+    });
+
+    $(document).on("pagehide","#chat-list",function(){
+        $scope.startChatFunction();
+    });
+
 
 //---------------------------- Invitation Functions ----------------------------------------------
     $scope.getInvitations = function(){
