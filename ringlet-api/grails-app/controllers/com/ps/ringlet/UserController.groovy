@@ -23,7 +23,7 @@ class UserController {
                     if(params.phone != "")ilike('phone', "%${params.phone}%")
                 }
             }.each {
-                users.add(it.showInformation(user.location[0],user.location[1]))
+                if(it.id != user.id) users.add(it.showInformation(user.location[0],user.location[1]))
             }
         }
         else{
@@ -34,7 +34,7 @@ class UserController {
                     if(params.phone != "")ilike('phone', "%${params.phone}%")
                 }
             }.each {
-                users.add(it.showInformation(user.location[0],user.location[1]))
+                if(it.id != user.id) users.add(it.showInformation(user.location[0],user.location[1]))
             }
         }
         if(users.size() > 0){

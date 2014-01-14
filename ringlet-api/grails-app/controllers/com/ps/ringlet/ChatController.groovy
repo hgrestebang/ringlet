@@ -50,14 +50,12 @@ class ChatController {
     def update() {
         def message = [response:""]
         User user = User.findByToken(UserToken.findByToken(params.token as String))
-        Chat chat = Chat.findById(params.chat.id as Long)
-        if(chat.owner == user){
-            chat.setMessage(params.chat.message as String)
-        }
-        else if(chat.recipient == user){
+        Chat chat = Chat.findById(params.id as Long)
+        if(chat.recipient == user){
             chat.setRecipientStatus(MessageStatus.SEEN)
         }
         chat.save(flush: true)
+        println('Chat updated '+chat.id)
         message.response = "chat_updated"
         render message as JSON
     }
