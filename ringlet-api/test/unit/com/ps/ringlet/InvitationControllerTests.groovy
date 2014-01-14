@@ -55,9 +55,11 @@ class InvitationControllerTests {
     }
 
     void testGetByUser(){
-        params.token = 'token123'
+        params.token = 'token1234'
         controller.getByUser()
         assert response.getJson().size() > 0
+        assertEquals(response.json.id[0],1)
+        assertEquals(response.json.message[0],'Invitation Test 1')
     }
 
     void testCreate(){

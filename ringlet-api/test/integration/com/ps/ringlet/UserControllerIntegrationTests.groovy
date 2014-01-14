@@ -4,11 +4,12 @@ import static org.junit.Assert.*
 import org.junit.*
 
 class UserControllerIntegrationTests {
-    def contUser = new UserController()
+    def contUser
 
     @Before
     void setUp() {
         // Setup logic here
+        contUser = new UserController()
     }
 
     @After

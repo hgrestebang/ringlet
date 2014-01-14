@@ -61,6 +61,9 @@ class RingletControllerTests {
         params.token = 'token123'
         controller.getByUser()
         assert response.getJson().size() > 0
+        assert response.json.id.contains(1)
+        assertEquals(response.json.name[0],'Ringlet Test')
+        assert response.json.users.size() > 0
     }
 
     void testCreateFail(){

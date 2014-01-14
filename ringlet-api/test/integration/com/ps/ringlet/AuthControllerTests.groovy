@@ -3,31 +3,34 @@ package com.ps.ringlet
 import static org.junit.Assert.*
 import org.junit.*
 
-class AuthControllerIntegrationTests {
-    def contAuth = new AuthController()
+class AuthControllerTests {
+    def contAuth
 
     @Before
     void setUp() {
         // Setup logic here
+        contAuth = new AuthController()
     }
 
-    @After
+    /*@After
     void tearDown() {
         // Tear down logic here
-    }
+    }*/
 
     @Test
     void testLogin(){
+         //token=d8cf4380-395b-4cd7-8fd5-106a52f2ba89
+        //static transactional = 'mongo'
         contAuth.params.passwordHash = 'admin'
         contAuth.params.username = 'admin@ringlet.me'
         contAuth.login()
-        assert contAuth.response.json.response == 'bad_login'
-        println('TEST........................')
+        assert contAuth.response.json.username == 'admin@ringlet.me'
+        assert contAuth.response.json.id == 1
     }
 
     @Test
     void testLogout(){
-        contAuth.params.token = 'admin'
+        contAuth.params.token = 'd8cf4380-395b-4cd7-8fd5-106a52f2ba89'
         contAuth.logout()
         assert contAuth.response.json.response == 'logout_successfully'
     }

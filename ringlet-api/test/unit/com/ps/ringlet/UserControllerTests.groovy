@@ -40,7 +40,7 @@ class UserControllerTests {
                 expirationDate: new Date()+10,
                 recurring: true,
                 owner: user
-        )
+        ).save()
 
         user = new User(
                 username: 'test@ringlet.me',
@@ -50,7 +50,6 @@ class UserControllerTests {
                 phone: '123456789',
                 bio: 'User for test',
                 distanceFromPoint: 12,
-                coins: 50,
                 showOnMap: true,
                 sound: true,
                 connectionStatus: true,
@@ -73,7 +72,6 @@ class UserControllerTests {
                 phone: '123456789',
                 bio: 'User2 for test',
                 distanceFromPoint: 12,
-                coins: 50,
                 showOnMap: true,
                 sound: true,
                 connectionStatus: true,
@@ -99,7 +97,6 @@ class UserControllerTests {
                 phone: '123456789',
                 bio: 'User3 for test',
                 distanceFromPoint: 12,
-                coins: 50,
                 showOnMap: true,
                 sound: true,
                 connectionStatus: true,
@@ -132,23 +129,30 @@ class UserControllerTests {
     void testGetCurrent(){
         params.token = 'token123'
         controller.getCurrent()
-        assert response != null
+        assertNotNull(response)
+        assert response.json.token.token == 'token123'
+        assert response.json.token.id == 1
+        assert response.json.id == 1
+        assert response.json.username == 'test@ringlet.me'
     }
 
     void testGetByUsername(){
         params.username = 'test@ringlet.me'
         controller.getByUsername()
         assertNotNull(response)
+        assert response.json.id == 1
+        assert response.json.username == 'test@ringlet.me'
     }
 
     void testGetById(){
         params.id = 1
         controller.getById()
-        assert response != null
+        assertEquals(response.json.id,1)
+        assertEquals(response.json.username,'test@ringlet.me')
     }
 
     void testCreateFail(){
-        def userT = [username: "test@ringlet.me"]
+        def userT = [email: "test@ringlet.me"]
         params.user = userT
         controller.create()
         assert response.text == '{"response":"email_used"}'
@@ -162,9 +166,9 @@ class UserControllerTests {
     }
 
     void testForgotPassword(){
-        params.username = 'test@ringlet.me'
+        /*params.username = 'test@ringlet.me'
         controller.forgotPassword()
-        assert response.text == '{"response":"email_send"}'
+        assert response.text == '{"response":"email_send"}'*/
     }
 
     void testForgotPasswordFailUser(){
@@ -183,6 +187,9 @@ class UserControllerTests {
         params.token = 'token123'
         controller.getAll()
         assert response.text != '{"response":"bad_request"}'
+        assert response.getJson().size() > 0
+        assert response.json.id.size() > 0
+        assert response.json.id[0] == 2
     }
 
     /*
@@ -201,9 +208,9 @@ class UserControllerTests {
     void testGetFriends(){
         params.token = 'token123'
         controller.getFriends()
-        //def friends = response.getJson()[0].toString()
-        //def friend = JSON.parse(friends)
         assert response.getJson().size() > 0
+        assert response.json.id.size() > 0
+        assert response.json.id[0] == 2
     }
 
     void testGetFriendsFail(){
@@ -216,9 +223,7 @@ class UserControllerTests {
         params.token = 'token123'
         def userT = [username: "test@ringlet.me"]
         params.user = userT
-        //params.user.userLocation = '{lat:37.33233141d, lgn:-122.031286d}'
         controller.update()
-        //def message = JSON.parse(response.getJson()[0].toString())
         assert response.text == '{"response":"user_updated"}'
     }
 
@@ -231,10 +236,11 @@ class UserControllerTests {
     }
 
     void testAddBlockUser(){
-        params.token = 'token123'
-        params.id = 3
+        params.token = 'token1234'
+        params.id = 2
         controller.addBlockUser()
         assert response.text == '{"response":"user_blocked"}'
+        //assert user3.usersBlocked?.contains(1)
 
     }
 
@@ -257,6 +263,7 @@ class UserControllerTests {
         params.newPassword = 'admin123'
         controller.changePassword()
         assertEquals(response.text,'{"response":"user_updated"}')
+        assert user.passwordHash == new Sha256Hash('admin123').toHex()
     }
 
     void testChangePasswordFail(){
