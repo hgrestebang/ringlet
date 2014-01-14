@@ -20,7 +20,7 @@ class AuthControllerTests {
     @Test
     void testLogin(){
          //token=d8cf4380-395b-4cd7-8fd5-106a52f2ba89
-        //static transactional = 'mongo'
+
         contAuth.params.passwordHash = 'admin'
         contAuth.params.username = 'admin@ringlet.me'
         contAuth.login()
