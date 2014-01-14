@@ -145,12 +145,18 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     };
 
     $scope.logout = function(){
+        $.mobile.loading( 'show', {textVisible: false});
+        $scope.stopInvitationFunction();
+        $scope.stopAnnouncementFunction();
+        $scope.stopChatFunction();
         DAO.get({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'auth', action:'logout'},
             function(result){
-                if(result.response == "logout_successfully"){
-                    initializeVariables();
-                    window.location.href="#landing-screen";
-                }
+                initializeVariables();
+                $.mobile.loading( 'hide', {textVisible: false});
+                window.location.href="#landing";
+            },
+            function(error){
+                $.mobile.loading( 'hide', {textVisible: false});
             });
     };
     //-----------------------------Listings functions-------------------------------------------------
@@ -481,7 +487,6 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     $scope.sendMessage =function(){
         if(  $scope.chat.message!=""){
             $.mobile.loading( 'show', {textVisible: false});
-
             DAO.save({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'chat', action:'create',token:appConfig.token,recipient:$scope.ringster.id,chat:$scope.chat.message },
                 function(result){
                     $scope.chat.message=""
@@ -500,6 +505,15 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                     $.mobile.loading( 'hide', {textVisible: false});
                 });
         }
+    }
+
+    $scope.updateChats = function(chat){
+        if(chat.recipient.id == $scope.user.id && chat.owner.id == $scope.ringster.id && chat.recipientStatus == "UNSEEN" && $.mobile.activePage[0].id == "chat"){
+            chat.recipientStatus = "SEEN";
+            DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'chat', action:'update', id:chat.id},
+                function(result){});
+        }
+        return true;
     }
 
     $scope.scrollDiv = function(){
@@ -1065,7 +1079,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
 
     //----------------------------------Map Functions--------------------------------------------------------------
     $scope.initMap = function(){
-//        clearMap();
+        clearMap();
         var sHeight = screen.height;
         var sWidth = screen.width;
 

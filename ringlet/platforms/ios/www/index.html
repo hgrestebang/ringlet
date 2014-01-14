@@ -151,8 +151,8 @@
             <ul id="listing-lImages" data-role="listview">
               <li data-ng-repeat="ringster in ringsters">
                   <a href="#listing-item" data-ng-click="getRingsters(ringster)">
-
-                      <img id="imgList-{{ringster.id}}" src="{{ringster.photos[0].path}}" onload="changeSizeImgList(this)" onerror="imgError(this)" />
+                      <img id="imgList-{{ringster.id}}" data-ng-show="ringster.photos.length > 0" data-ng-src="{{ringster.photos[0].path}}" onload="changeSizeImgList(this)" onerror="imgError(this)" />
+                      <img id="noImgList-{{ringster.id}}" data-ng-hide="ringster.photos.length > 0" src="img/house.png" onload="changeSizeImgList(this)"/>
                       <h2 data-ng-bind="ringster.name"></h2>
                       <span class="textFont8" data-ng-bind="ringster.distanceFromPoint+' miles away'"></span>
                   </a>
@@ -371,8 +371,6 @@
             </div>
             <a href="#chat" data-role="button" data-corners="false" data-ng-show="isFriend()" data-ng-click="errorValidation()">Let's chat</a>
             <a href="#invitation" data-role="button" data-corners="false" data-ng-hide="isFriend()" data-ng-click="errorValidation()">Send Friend Request</a>
-
-
         </form>
     </div>
     <div data-role="popup" data-overlay-theme="b" class="ui-content" id="imagePopUpDiv">
@@ -684,7 +682,7 @@
             <p data-ng-show="showFunctionError">"You have not added the message"</p>
             <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
         </div>
-        <div data-ng-repeat="chat in chats">
+        <div data-ng-repeat="chat in chats | filter:updateChats">
                <div id="chat.id" data-ng-click="deleteThisChat(chat.id)" data-ng-show="chat.owner.id==user.id && chat.recipient.id==ringster.id" class="bubbledLeft">
                    {{chat.message}}
                </div>
@@ -719,7 +717,6 @@
         <li><a href="#chat-list" data-ng-show="chats[0].id!=undefined" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
         <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
         <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>
-
         <li><a data-ng-click="logout()">Log Out</a></li>
     </ul>
 </div>
