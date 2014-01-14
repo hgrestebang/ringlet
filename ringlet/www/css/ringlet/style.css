@@ -34,6 +34,15 @@ h1, h2, h3, h4, h5, h6{
     margin-top: 15px;
 }
 
+#listing-footer{
+    position: absolute;
+    bottom: 0;
+    left:0;
+    margin: 0;
+    width: 93%;
+    z-index: 99999;
+}
+
 /**----------------------------- Lists Style -------------------------------------**/
 form ul{
     margin: 0 0 0 0;
@@ -209,16 +218,17 @@ div#imagePopUpDiv-popup.ui-popup-container.ui-popup-active{
 }
 
 #button-Chat{
-    position: fixed;
-    right: 0;
+    position: absolute;
+    right: 8%;
     bottom: 14px
 }
 #chat-footer{
-    position: fixed;
+    position: absolute;
     bottom: 0;
     left:0;
     margin: 0;
     width: 100%;
+    z-index: 99999;
 }
 
 

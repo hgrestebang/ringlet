@@ -13,7 +13,7 @@ class ChatController {
             chats.add(it.showInformation())
         }
 
-        Chat.findAllByownerAndOwnerStatusNotEqual(user, MessageStatus.DELETED).each {
+        Chat.findAllByOwnerAndOwnerStatusNotEqual(user, MessageStatus.DELETED).each {
             chats.add(it.showInformation())
         }
         chats.sort{it.dateCreated}

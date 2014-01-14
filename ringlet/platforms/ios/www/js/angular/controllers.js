@@ -23,6 +23,9 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     $scope.deleteImages = [];
     $scope.announcement = {location:[]};
     $scope.chat=[];
+    $scope.itemDelete="";
+    $scope.chatUsers = [];
+    $scope.chatsIndex = [];
     $scope.searchRadius = [
         {miles:'5', radius:'5 miles'},
         {miles:'10', radius:'10 miles'},
@@ -32,7 +35,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         {miles:'50', radius:'50 miles'}];
     $scope.announcement.radius = $scope.searchRadius[0];
 
-    var appConfig = {serverHost:'192.168.0.6', appName:'ringlet', token:''};
+    var appConfig = {serverHost:'192.168.0.104', appName:'ringlet', token:''};
     var owl = $("#listing-item-gallery");
     var carousel = $("#signup-carousel");
     var profileCarousel = $("#profile-carousel");
@@ -77,8 +80,10 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         $scope.emailForgot = '';
         $scope.images = [];
         $scope.deleteImages = [];
+        $scope.chatUsers = [];
+        $scope.chatsIndex = [];
         carouselLength = 0;
-        appConfig = {serverHost:'192.168.0.6', appName:'ringlet', token:''};
+        appConfig = {serverHost:'192.168.0.104', appName:'ringlet', token:''};
     }
 
     $scope.errorValidation = function(){
@@ -129,6 +134,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                     announcementFunction = $timeout(serverAnnouncement, 4000);
                     invitationFunction = $timeout(serverInvitation, 6000);
                     $scope.getNearByRingsters();
+                    $scope.updateLocation();
                 }
             },
             function(error){
@@ -379,6 +385,9 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         for(var i=0; i<$scope.deleteImages.length; i++){
             $scope.images.push($scope.deleteImages[i]);
         }
+        if($scope.userLocation.lat){
+            $scope.user.userLocation = $scope.userLocation;
+        }
         DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'user', action:'update', user:$scope.user, images:$scope.images},
             function(result){
                 if(result.response == "user_updated"){
@@ -396,6 +405,19 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                 $scope.showErrors = true;
                 $scope.showServerError = true;
                 $.mobile.loading( 'hide', {textVisible: false});
+            });
+    }
+
+    $scope.updateLocation = function(){
+        if($scope.userLocation.lat){
+            $scope.user.userLocation = $scope.userLocation;
+        }
+        DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'user', action:'update', user:$scope.user},
+            function(result){
+                if(result.response == "user_updated"){
+                }
+            },
+            function(error){
             });
     }
 
@@ -464,6 +486,13 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                 function(result){
                     $scope.chat.message=""
                     $.mobile.loading( 'hide', {textVisible: false});
+                    DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'chat', action:'getAll'},
+                        function(result){
+                            $scope.chatUsers = [];
+                            $scope.chatsIndex = [];
+                            $scope.chats = result;
+                        });
+                    $scope.scrollDiv();
                 },
                 function(error){
                     $scope.showErrors = true;
@@ -471,6 +500,54 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                     $.mobile.loading( 'hide', {textVisible: false});
                 });
         }
+    }
+
+    $scope.scrollDiv = function(){
+        var footer = document.getElementById("chat-footer").offsetHeight;
+        $('#chat-content').animate({ scrollTop: (screen.height-(80+footer)) }, "slow");
+    }
+
+    $scope.filterChats = function(chat){
+        if(chat.owner.id != $scope.user.id && $scope.chatUsers.indexOf(chat.owner.id) == -1 && chat.recipientStatus == "UNSEEN"){
+            $scope.chatUsers.push(chat.owner.id);
+            $scope.chatsIndex.push(chat.id);
+            return true;
+        }
+        else if($scope.chatsIndex.indexOf(chat.id) > -1){
+            return true;
+        }
+        else return false;
+    }
+    
+    $scope.deleteThisChat =function(item){
+        $scope.itemDelete=item;
+        $("#delete-Chat").popup( "open");
+    }
+
+    $scope.deleteChat = function(){
+        $.mobile.loading( 'show', {textVisible: false});
+        DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'chat', action:'delete',token: appConfig.token,id:$scope.itemDelete},
+            function(result){
+                if(result.response == "chat_deleted"){
+                    console.log("element deleted");
+                    $.mobile.loading( 'hide', {textVisible: false});
+                    DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'chat', action:'getAll'},
+                        function(result){
+                            $scope.chats = result;
+                        });
+                    $scope.scrollDiv();
+                }
+                else{
+                    $scope.showErrors = true;
+                    $scope.showServerError = true;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                }
+            },
+            function(error){
+                $scope.showErrors = true;
+                $scope.showServerError = true;
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
     }
 
 //---------------------------- Server Functions --------------------------------------------------
@@ -498,6 +575,8 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     var serverChat = function(){
         DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'chat', action:'getAll'},
             function(result){
+                $scope.chatUsers = [];
+                $scope.chatsIndex = [];
                 $scope.chats = result;
                 chatFunction = $timeout(serverChat, 4000);
             });
@@ -550,6 +629,19 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     $(document).on("pagehide","#announcement-List",function(){
         $scope.startInvitationFunction();
     });
+
+    $(document).on("pagebeforeshow","#chat-list",function(){
+        $scope.stopChatFunction();
+    });
+
+    $(document).on("pageshow","#chat-list",function(){
+        $("#chat-list-view" ).listview( "refresh" );
+    });
+
+    $(document).on("pagehide","#chat-list",function(){
+        $scope.startChatFunction();
+    });
+
 
 //---------------------------- Invitation Functions ----------------------------------------------
     $scope.getInvitations = function(){
