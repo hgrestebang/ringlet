@@ -35,7 +35,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         {miles:'50', radius:'50 miles'}];
     $scope.announcement.radius = $scope.searchRadius[0];
 
-    var appConfig = {serverHost:'192.168.0.104', appName:'ringlet', token:''};
+    var appConfig = {serverHost:'50.56.244.180', appName:'ringlet', token:''};
     var owl = $("#listing-item-gallery");
     var carousel = $("#signup-carousel");
     var profileCarousel = $("#profile-carousel");
@@ -83,7 +83,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         $scope.chatUsers = [];
         $scope.chatsIndex = [];
         carouselLength = 0;
-        appConfig = {serverHost:'192.168.0.104', appName:'ringlet', token:''};
+        appConfig = {serverHost:'50.56.244.180', appName:'ringlet', token:''};
     }
 
     $scope.errorValidation = function(){
@@ -217,10 +217,61 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     }
 
 //---------------------------- User Functions ----------------------------------------------------
+    $('#profile').bind('pageshow', function() {
+        if($scope.user.showOnMap) $('#showOnMap').val("true");
+        else $('#showOnMap').val("false");
+        $('#showOnMap').slider("refresh");
+    });
+
+    $scope.getRinglet = function(ringlet){
+        $.mobile.loading( 'show', {textVisible: false});
+        $scope.currentRinglet = ringlet;
+        if($scope.currentRinglet.users == null) $scope.currentRinglet.users = [];
+        DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'user', action:'getFriends'},
+            function(result){
+                $scope.ringsters = result;
+                $.mobile.loading( 'hide', {textVisible: false});
+                window.location.href="#ringlet";
+            },
+            function(error){
+                console.log(error);
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+
+    };
+
+    $scope.addToRinglet = function(ringster){
+        $.mobile.loading( 'show', {textVisible: false});
+        DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'ringlet', action:'addUser', ringletId:$scope.currentRinglet.id, userId:ringster.id},
+            function(result){
+                $scope.currentRinglet.users.push(ringster.id);
+                $.mobile.loading( 'hide', {textVisible: false});
+            },
+            function(error){
+                console.log(error);
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+
+    };
+
+    $scope.removeFromRinglet = function(ringster){
+        $.mobile.loading( 'show', {textVisible: false});
+        DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'ringlet', action:'removeUser', ringletId:$scope.currentRinglet.id, userId:ringster.id},
+            function(result){
+                $scope.currentRinglet.users.splice($scope.currentRinglet.users.indexOf(ringster.id),1);
+                $.mobile.loading( 'hide', {textVisible: false});
+            },
+            function(error){
+                console.log(error);
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+
+    };
+
     $scope.isFriend = function(){
         if($scope.user.friends != null) return ($scope.user.friends.indexOf($scope.ringster.id) > -1);
         else return false;
-    }
+    };
 
     $scope.currentUser = function(){
         $.mobile.loading( 'show', {textVisible: false});
@@ -252,6 +303,21 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                 $scope.ringsters = result;
                 $.mobile.loading( 'hide', {textVisible: false});
                 window.location.href="#home";
+            },
+            function(error){
+                console.log(error);
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+    }
+
+    $scope.getRinglets = function(){
+        $.mobile.loading( 'show', {textVisible: false});
+        $scope.errorValidation();
+        DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'ringlet', action:'getByUser'},
+            function(result){
+                $scope.ringlets = result;
+                $.mobile.loading( 'hide', {textVisible: false});
+                window.location.href="#ringlet-list";
             },
             function(error){
                 console.log(error);
@@ -414,6 +480,38 @@ function UserCtrl($scope, $compile, DAO, $timeout){
             });
     }
 
+    $scope.validateRinglet = function(notValid){
+        if(notValid){
+            $scope.showErrors = true;
+        }
+        else{
+            $scope.errorValidation();
+            $scope.updateRinglet();
+        }
+    }
+
+    $scope.updateRinglet = function(){
+        $.mobile.loading( 'show', {textVisible: false});
+        DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'ringlet', action:'update', ringlet:$scope.currentRinglet},
+            function(result){
+                if(result.response == "ringlet_updated"){
+                    $scope.showErrors = true;
+                    $scope.showMessage = true;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                }
+                else if(result.response == "ringlet_name_used"){
+                    $scope.showErrors = true;
+                    $scope.showFunctionError = true;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                }
+            },
+            function(error){
+                $scope.showErrors = true;
+                $scope.showServerError = true;
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+    }
+
     $scope.updateLocation = function(){
         if($scope.userLocation.lat){
             $scope.user.userLocation = $scope.userLocation;
@@ -517,8 +615,8 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     }
 
     $scope.scrollDiv = function(){
-        var footer = document.getElementById("chat-footer").offsetHeight;
-        $('#chat-content').animate({ scrollTop: (screen.height-(80+footer)) }, "slow");
+        var content = document.getElementById("chat-content").scrollHeight
+        $('#chat-content').animate({ scrollTop: (content) }, "slow");
     }
 
     $scope.filterChats = function(chat){
@@ -543,7 +641,6 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'chat', action:'delete',token: appConfig.token,id:$scope.itemDelete},
             function(result){
                 if(result.response == "chat_deleted"){
-                    console.log("element deleted");
                     $.mobile.loading( 'hide', {textVisible: false});
                     DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'chat', action:'getAll'},
                         function(result){
@@ -974,6 +1071,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         else {
             console.log("In-App Purchases not available.");
         }
+        register();
     };
     //----------------------------------Announcement Functions--------------------------------------------------------------
     $scope.saveAnnouncement = function(){
@@ -1075,6 +1173,95 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                 $scope.showServerError = true;
                 $.mobile.loading( 'hide', {textVisible: false});
             });
+    }
+
+    //--------------------------------- APNS Funtions -------------------------------------------------------------
+
+    function register() {
+        PushNotification.prototype.register(successHandler, errorHandler,{"senderID":"694866510","ecb":"com.ps.mconn.ringlet"});
+
+        PushNotification.prototype.registerDevice({alert:true, badge:true, sound:true}, function(status) {
+            console.log("PushNotifications Token:    ",status.deviceToken);
+            $scope.updateDeviceToken(status.deviceToken);
+        });
+    }
+
+    function successHandler(result) {
+        console.log("PushNotifications Token:    ",result);
+    }
+
+    function errorHandler(error) {
+        console.log(error);
+    }
+
+    function onNotificationGCM(e) {
+        switch( e.event )
+        {
+            case 'registered':
+                if ( e.regid.length > 0 )
+                {
+                    console.log("Regid " + e.regid);
+                    alert('registration id = '+e.regid);
+                }
+                break;
+
+            case 'message':
+                // this is the actual push notification. its format depends on the data model from the push server
+                alert('message = '+e.message+' msgcnt = '+e.msgcnt);
+                break;
+
+            case 'error':
+                alert('GCM error = '+e.msg);
+                break;
+
+            default:
+                alert('An unknown GCM event has occurred');
+                break;
+        }
+    }
+
+    function storeToken(token) {
+        console.log("Token is " + token);
+        var xmlhttp=new XMLHttpRequest();
+        xmlhttp.open("POST","http://127.0.0.1:8888",true);
+        xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+        xmlhttp.send("token="+token+"&message=pushnotificationtester");
+        xmlhttp.onreadystatechange=function() {
+            if (xmlhttp.readyState==4) {
+                //a response now exists in the responseTest property.
+                console.log("Registration response: " + xmlhttp.responseText);
+            }
+        }
+    }
+
+    function setBadge(num) {
+        console.log("Clear badge...")
+        PushNotification.prototype.setApplicationIconBadgeNumber(num);
+    }
+    function receiveStatus() {
+        PushNotification.prototype.getRemoteNotificationStatus(function(status) {
+            console.log(JSON.stringify(['Registration check - getRemoteNotificationStatus', status]))
+        });
+    }
+    function getPending() {
+        PushNotification.prototype.getPendingNotifications(function(notifications) {
+            console.log(JSON.stringify(['getPendingNotifications', notifications]));
+        });
+    }
+
+    $scope.updateDeviceToken=function(devicetoken) {
+        console.log(devicetoken)
+        DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName,controller:'user', action:'updateDeviceToken', devicetoken:devicetoken, token:appConfig.token}, function(result){
+            if(result.response == "user_updated"){
+                console.log("Update divece token")
+            }
+            else if(result.response == "email_used"){
+                console.log("Error divece token")
+            }
+        }, function(error){
+            $scope.wrong=true
+            console.log("error update device token")
+        });
     }
 
     //----------------------------------Map Functions--------------------------------------------------------------

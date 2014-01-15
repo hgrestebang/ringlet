@@ -7,7 +7,7 @@ import org.apache.shiro.crypto.hash.Sha256Hash
 
 class BootStrap {
 
-    def rackSpaceService
+    def rackSpaceService, userService
 
     def init = { servletContext ->
         if(User.count()==0){

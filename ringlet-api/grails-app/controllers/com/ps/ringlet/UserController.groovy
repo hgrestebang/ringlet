@@ -6,7 +6,7 @@ import grails.converters.JSON
 
 class UserController {
 
-    static allowedMethods = [search: "GET", getAll: "GET", nearBy: "GET", getFriends: "GET", getCurrent: "GET", getByUsername: "GET", getById: "GET",create: "POST", update: "PUT", changePassword: "PUT", forgotPassword: "PUT", addBlockUser: "PUT", removeBlockUser: "PUT", deleteAccount: "PUT"]
+    static allowedMethods = [search: "GET", getAll: "GET", nearBy: "GET", getFriends: "GET", getCurrent: "GET", getByUsername: "GET", getById: "GET",create: "POST", updateDeviceToken:"PUT",update: "PUT", changePassword: "PUT", forgotPassword: "PUT", addBlockUser: "PUT", removeBlockUser: "PUT", deleteAccount: "PUT"]
 
     def rackSpaceService
     def userService
@@ -23,7 +23,7 @@ class UserController {
                     if(params.phone != "")ilike('phone', "%${params.phone}%")
                 }
             }.each {
-                if(it.id != user.id) users.add(it.showInformation(user.location[0],user.location[1]))
+                if(it.id != user.id && it.showOnMap) users.add(it.showInformation(user.location[0],user.location[1]))
             }
         }
         else{
@@ -34,7 +34,7 @@ class UserController {
                     if(params.phone != "")ilike('phone', "%${params.phone}%")
                 }
             }.each {
-                if(it.id != user.id) users.add(it.showInformation(user.location[0],user.location[1]))
+                if(it.id != user.id && it.showOnMap) users.add(it.showInformation(user.location[0],user.location[1]))
             }
         }
         if(users.size() > 0){
@@ -218,6 +218,17 @@ class UserController {
         render message as JSON
     }
 
+    def updateDeviceToken(){
+        def message = [response:""]
+        User user = User.findByToken(UserToken.findByToken(params.token as String))
+        if(user){
+            user.deviceToken=params.devicetoken;
+            user.save(flush: true)
+            message.response = "user_updated"
+        }
+        render "ok"
+    }
+
     def changePassword(){
         def message = [response:""]
         User user = User.findByToken(UserToken.findByToken(params.token as String))
@@ -315,10 +326,10 @@ class UserController {
             Picture picture = Picture.findById(it)
             picture.delete(flush: true)
         }
-        user.friends.clear()
-        user.usersBlocked.clear()
-        user.ringlets.clear()
-        user.photos.clear()
+        user.friends?.clear()
+        user.usersBlocked?.clear()
+        user.ringlets?.clear()
+        user.photos?.clear()
         user.setFacebookId("")
         user.setStatus(UserStatus.REMOVED)
         user.save(flush: true)

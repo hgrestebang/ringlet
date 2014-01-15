@@ -21,6 +21,7 @@ grails.project.dependency.resolution = {
     }
 
     dependencies {
+        runtime ":JavaPNS:2.2"
     }
 
     plugins {
