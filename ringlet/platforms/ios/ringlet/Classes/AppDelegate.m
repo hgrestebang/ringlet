@@ -27,6 +27,8 @@
 
 #import "AppDelegate.h"
 #import "MainViewController.h"
+#import "PushNotification.h"
+#import "AppDelegate+Notification.h"
 
 #import <Cordova/CDVPlugin.h>
 
@@ -64,33 +66,84 @@
 - (BOOL)application:(UIApplication*)application didFinishLaunchingWithOptions:(NSDictionary*)launchOptions
 {
     CGRect screenBounds = [[UIScreen mainScreen] bounds];
-
+    
 #if __has_feature(objc_arc)
-        self.window = [[UIWindow alloc] initWithFrame:screenBounds];
+    self.window = [[UIWindow alloc] initWithFrame:screenBounds];
 #else
-        self.window = [[[UIWindow alloc] initWithFrame:screenBounds] autorelease];
+    self.window = [[[UIWindow alloc] initWithFrame:screenBounds] autorelease];
 #endif
     self.window.autoresizesSubviews = YES;
-
+    
 #if __has_feature(objc_arc)
-        self.viewController = [[MainViewController alloc] init];
+    self.viewController = [[MainViewController alloc] init];
 #else
-        self.viewController = [[[MainViewController alloc] init] autorelease];
+    self.viewController = [[[MainViewController alloc] init] autorelease];
 #endif
-
+    
     // Set your app's start page by setting the <content src='foo.html' /> tag in config.xml.
     // If necessary, uncomment the line below to override it.
     // self.viewController.startPage = @"index.html";
-
+    
     // NOTE: To customize the view's frame size (which defaults to full screen), override
     // [self.viewController viewWillAppear:] in your view controller.
-
+    
     self.window.rootViewController = self.viewController;
     [self.window makeKeyAndVisible];
-
+    
+    /* CORDOVA PUSH NOTIFICATION NOTES - START BLOCK */
+    // Handler for when this app is launched from a push notification... Add the notification to the pending
+    // list so we can retrieve the values with a call to getPendingNotifications upon re-launch in the JS.
+    NSDictionary* userInfo = [launchOptions objectForKey:UIApplicationLaunchOptionsRemoteNotificationKey];
+    if (userInfo) {
+        NSLog(@"AppDelegate is handling launch from notification");
+        PushNotification *pushHandler = [self.viewController getCommandInstance:@"PushNotification"];
+        NSMutableDictionary* mutableUserInfo = [userInfo mutableCopy];
+        [mutableUserInfo setValue:@"1" forKey:@"applicationLaunchNotification"];
+        [mutableUserInfo setValue:@"0" forKey:@"applicationStateActive"];
+        [pushHandler.pendingNotifications addObject:mutableUserInfo];
+    }
+    /* STOP PUSH NOTIFICATION BLOCK */
+    
     return YES;
 }
 
+- (void)application:(UIApplication*)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData*)deviceToken
+{
+	NSLog(@"Calling push notification next, my registered token is: %@", deviceToken);
+    // Code for phonegap communication - calls this method in PushNotification.m
+    PushNotification* pushHandler = [self.viewController getCommandInstance:@"PushNotification"];
+    [pushHandler didRegisterForRemoteNotificationsWithDeviceToken:deviceToken];
+}
+
+- (void)application:(UIApplication*)application didFailToRegisterForRemoteNotificationsWithError:(NSError*)error
+{
+    // Code for phonegap communication
+    PushNotification* pushHandler = [self.viewController getCommandInstance:@"PushNotification"];
+    [pushHandler didFailToRegisterForRemoteNotificationsWithError:error];
+	NSLog(@"Failed to get token, error: %@", error);
+}
+- (void)application:(UIApplication*)application didReceiveRemoteNotification:(NSDictionary*)userInfo
+{
+    PushNotification* pushHandler = [self.viewController getCommandInstance:@"PushNotification"];
+    NSMutableDictionary* mutableUserInfo = [userInfo mutableCopy];
+    
+    // Get application state for iOS4.x+ devices, otherwise assume active
+    UIApplicationState appState = UIApplicationStateActive;
+    if ([application respondsToSelector:@selector(applicationState)]) {
+        appState = application.applicationState;
+    }
+    
+    [mutableUserInfo setValue:@"0" forKey:@"applicationLaunchNotification"];
+    if (appState == UIApplicationStateActive) {
+        [mutableUserInfo setValue:@"1" forKey:@"applicationStateActive"];
+        [pushHandler didReceiveRemoteNotification:mutableUserInfo];
+    } else {
+        // If it's not active, add it to pending and will get it when they do a receive again?
+        [mutableUserInfo setValue:@"0" forKey:@"applicationStateActive"];
+        [mutableUserInfo setValue:[NSNumber numberWithDouble: [[NSDate date] timeIntervalSince1970]] forKey:@"timestamp"];
+        [pushHandler.pendingNotifications addObject:mutableUserInfo];
+    }
+}
 // this happens while we are running ( in the background, or from within our own app )
 // only valid if ringlet-Info.plist specifies a protocol to handle
 - (BOOL)application:(UIApplication*)application handleOpenURL:(NSURL*)url
