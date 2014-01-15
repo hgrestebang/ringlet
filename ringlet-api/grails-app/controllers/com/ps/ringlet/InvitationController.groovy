@@ -6,6 +6,8 @@ class InvitationController {
 
     static allowedMethods = [getByUser: "GET", create: "POST", acceptInvitation: "PUT", declineInvitation: "PUT", delete: "PUT"]
 
+    def apnService
+
     def getByUser(){
         User user = User.findByToken(UserToken.findByToken(params.token as String))
         def invitations = []
@@ -24,6 +26,8 @@ class InvitationController {
         }
         else{
             new Invitation(message: params.invitation.message, dateCreated: new Date(), owner: owner, recipient: recipient).save(flush: true)
+            def messages = "You have received an invitation from: "+owner.name
+            apnService.pushNotifications(recipient.id.toString(), messages.toString() )
             message.response = "invitation_created"
         }
         render message as JSON

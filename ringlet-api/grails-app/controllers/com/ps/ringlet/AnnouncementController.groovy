@@ -8,6 +8,8 @@ class AnnouncementController {
 
     static allowedMethods = [getByUser: "GET", create: "POST", delete: "PUT"]
 
+    def apnService
+
     def getByUser(){
         User user = User.findByToken(UserToken.findByToken(params.token as String))
         def announcements = []
@@ -38,6 +40,8 @@ class AnnouncementController {
         User.findAllByLocationWithinCircle([[user.location[0] as Double, user.location[1] as Double], (params.announcement.radius.miles as Double) / 69]).each {
             if(user.id != it.id && !it.usersBlocked?.contains(user.id) && !user.usersBlocked?.contains(it.id) && it.status != UserStatus.REMOVED){
                 new Announcement(message: params.announcement.body as String, groupCode: code, dateCreated: new Date(), owner: user, recipient: it, location: [user.location[0] as Double, user.location[1] as Double], radius: params.announcement.radius.miles as Double).save(flush: true)
+                def messages = "You have received a new announcement from: "+user.name
+                apnService.pushNotifications(it.id.toString(), messages.toString() )
                 totalSend++;
             }
         }

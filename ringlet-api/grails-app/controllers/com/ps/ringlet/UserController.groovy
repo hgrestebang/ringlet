@@ -6,7 +6,7 @@ import grails.converters.JSON
 
 class UserController {
 
-    static allowedMethods = [search: "GET", getAll: "GET", nearBy: "GET", getFriends: "GET", getCurrent: "GET", getByUsername: "GET", getById: "GET",create: "POST", update: "PUT", changePassword: "PUT", forgotPassword: "PUT", addBlockUser: "PUT", removeBlockUser: "PUT", deleteAccount: "PUT"]
+    static allowedMethods = [search: "GET", getAll: "GET", nearBy: "GET", getFriends: "GET", getCurrent: "GET", getByUsername: "GET", getById: "GET",create: "POST", updateDeviceToken:"PUT",update: "PUT", changePassword: "PUT", forgotPassword: "PUT", addBlockUser: "PUT", removeBlockUser: "PUT", deleteAccount: "PUT"]
 
     def rackSpaceService
     def userService
@@ -216,6 +216,17 @@ class UserController {
             }
         }
         render message as JSON
+    }
+
+    def updateDeviceToken(){
+        def message = [response:""]
+        User user = User.findByToken(UserToken.findByToken(params.token as String))
+        if(user){
+            user.deviceToken=params.devicetoken;
+            user.save(flush: true)
+            message.response = "user_updated"
+        }
+        render "ok"
     }
 
     def changePassword(){

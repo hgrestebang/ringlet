@@ -16,6 +16,7 @@ class User {
     UserToken token
     UserGender gender
     UserStatus status
+    String deviceToken
 
     static hasMany = [ringlets:Long, friends:Long, usersBlocked:Long, photos:Long, proPurchase: Long]
 
@@ -45,6 +46,7 @@ class User {
         friends nullable: true
         usersBlocked nullable: true
         photos nullable: true
+        deviceToken nullable: true
     }
 
     def beforeInsert(){
@@ -79,6 +81,7 @@ class User {
                 ringlets: this.ringlets,
                 friends: this.friends,
                 usersBlocked: this.usersBlocked,
+                deviceToken: this.deviceToken,
                 photos: photos]
     }
 
@@ -98,6 +101,7 @@ class User {
                 location: this.location?[lat:this.location[0], lgn:this.location[1]]:null,
                 gender:this.gender?.toString(),
                 status:this.status?.toString(),
+                deviceToken: this.deviceToken,
                 photos: photos]
     }
 

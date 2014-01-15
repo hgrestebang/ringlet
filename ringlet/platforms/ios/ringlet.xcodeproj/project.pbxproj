@@ -47,6 +47,9 @@
 		848BB2D1187DEA1500B13F6C /* InAppPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = 848BB2CE187DEA1500B13F6C /* InAppPurchase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		848BB2D2187DEA1500B13F6C /* SKProduct+LocalizedPrice.m in Sources */ = {isa = PBXBuildFile; fileRef = 848BB2D0187DEA1500B13F6C /* SKProduct+LocalizedPrice.m */; };
 		848BB2D5187DEA3600B13F6C /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 848BB2D4187DEA3600B13F6C /* StoreKit.framework */; };
+		84CE22A31886D5C900CC2984 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 84CE22A21886D5C900CC2984 /* Images.xcassets */; };
+		84CE22AA1886DBDA00CC2984 /* AppDelegate+notification.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CE22A71886DBDA00CC2984 /* AppDelegate+notification.m */; };
+		84CE22AE1886DC8200CC2984 /* PushNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 84CE22AD1886DC8200CC2984 /* PushNotification.m */; };
 		89E148445ACE45E3897BE875 /* CDVCamera.m in Sources */ = {isa = PBXBuildFile; fileRef = A539D2735945406AB36FF023 /* CDVCamera.m */; };
 		9219841F0A8442389B60BB12 /* CDVDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = B6E209F29D234DE69DE6AF56 /* CDVDevice.m */; };
 		AD3B32A159074B898F94DF34 /* CDVJpegHeaderWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 1BDEBE39132A4C938A33C15A /* CDVJpegHeaderWriter.m */; };
@@ -126,6 +129,11 @@
 		848BB2CF187DEA1500B13F6C /* SKProduct+LocalizedPrice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKProduct+LocalizedPrice.h"; sourceTree = "<group>"; };
 		848BB2D0187DEA1500B13F6C /* SKProduct+LocalizedPrice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SKProduct+LocalizedPrice.m"; sourceTree = "<group>"; };
 		848BB2D4187DEA3600B13F6C /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		84CE22A21886D5C900CC2984 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = ringlet/Images.xcassets; sourceTree = SOURCE_ROOT; };
+		84CE22A61886DBDA00CC2984 /* AppDelegate+notification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AppDelegate+notification.h"; sourceTree = "<group>"; };
+		84CE22A71886DBDA00CC2984 /* AppDelegate+notification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AppDelegate+notification.m"; sourceTree = "<group>"; };
+		84CE22AC1886DC8200CC2984 /* PushNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PushNotification.h; sourceTree = "<group>"; };
+		84CE22AD1886DC8200CC2984 /* PushNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PushNotification.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* ringlet-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "ringlet-Info.plist"; path = "../ringlet-Info.plist"; plistStructureDefinitionIdentifier = "com.apple.xcode.plist.structure-definition.iphone.info-plist"; sourceTree = "<group>"; };
 		A539D2735945406AB36FF023 /* CDVCamera.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVCamera.m; path = org.apache.cordova.camera/CDVCamera.m; sourceTree = "<group>"; };
 		B6E209F29D234DE69DE6AF56 /* CDVDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CDVDevice.m; path = org.apache.cordova.device/CDVDevice.m; sourceTree = "<group>"; };
@@ -224,6 +232,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				84CE22A21886D5C900CC2984 /* Images.xcassets */,
 				30A0434214DC770100060A13 /* de.lproj */,
 				30A0434514DC770100060A13 /* se.lproj */,
 				1F766FDB13BBADB100FB74C0 /* en.lproj */,
@@ -264,6 +273,10 @@
 		307C750510C5A3420062BCA9 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
+				84CE22AC1886DC8200CC2984 /* PushNotification.h */,
+				84CE22AD1886DC8200CC2984 /* PushNotification.m */,
+				84CE22A61886DBDA00CC2984 /* AppDelegate+notification.h */,
+				84CE22A71886DBDA00CC2984 /* AppDelegate+notification.m */,
 				848BB2CD187DEA1500B13F6C /* InAppPurchase.h */,
 				848BB2CE187DEA1500B13F6C /* InAppPurchase.m */,
 				848BB2CF187DEA1500B13F6C /* SKProduct+LocalizedPrice.h */,
@@ -430,6 +443,7 @@
 				F840E1F1165FE0F500CFE078 /* config.xml in Resources */,
 				7E7966E41810823500FA85AD /* icon-76.png in Resources */,
 				7E7966DF1810823500FA85AD /* icon-40@2x.png in Resources */,
+				84CE22A31886D5C900CC2984 /* Images.xcassets in Resources */,
 				308D05371370CCF300D202BF /* icon-72.png in Resources */,
 				308D05381370CCF300D202BF /* icon.png in Resources */,
 				308D05391370CCF300D202BF /* icon@2x.png in Resources */,
@@ -486,7 +500,9 @@
 				AD3B32A159074B898F94DF34 /* CDVJpegHeaderWriter.m in Sources */,
 				42B3F56A187B262A00A5065E /* FacebookConnectPlugin.m in Sources */,
 				848BB2D1187DEA1500B13F6C /* InAppPurchase.m in Sources */,
+				84CE22AA1886DBDA00CC2984 /* AppDelegate+notification.m in Sources */,
 				848BB2D2187DEA1500B13F6C /* SKProduct+LocalizedPrice.m in Sources */,
+				84CE22AE1886DC8200CC2984 /* PushNotification.m in Sources */,
 				9219841F0A8442389B60BB12 /* CDVDevice.m in Sources */,
 				46C03EDCDC2246A4828F3D69 /* CDVLocation.m in Sources */,
 			);
@@ -542,6 +558,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -584,6 +602,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_OBJC_ARC = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";

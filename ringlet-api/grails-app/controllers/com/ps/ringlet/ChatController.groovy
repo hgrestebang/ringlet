@@ -6,6 +6,8 @@ class ChatController {
 
     static allowedMethods = [getAll: "GET", getByUser: "GET", create: "POST", update: "PUT", delete: "PUT"]
 
+    def apnService
+
     def getAll(){
         User user = User.findByToken(UserToken.findByToken(params.token as String))
         def chats = []
@@ -39,6 +41,8 @@ class ChatController {
         User recipient = User.findById(params.recipient as Long)
         if(recipient){
             new Chat(message: params.chat, dateCreated: new Date(), owner: owner, recipient: recipient).save(flush: true)
+            def messages = "You have received a new chat from: "+owner.name
+            apnService.pushNotifications(recipient.id.toString() as String, messages.toString() as String)
             message.response = "chat_created"
         }
         else{
@@ -55,7 +59,6 @@ class ChatController {
             chat.setRecipientStatus(MessageStatus.SEEN)
         }
         chat.save(flush: true)
-        println('Chat updated '+chat.id)
         message.response = "chat_updated"
         render message as JSON
     }

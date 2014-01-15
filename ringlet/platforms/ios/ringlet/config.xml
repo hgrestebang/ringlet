@@ -42,6 +42,9 @@
     <feature name="Camera">
         <param name="ios-package" value="CDVCamera" />
     </feature>
+    <feature name="PushNotification">
+        <param name="ios-package" value="PushNotification" />
+    </feature>
     <preference name="fullscreen" value="true" />
     <preference name="webviewbounce" value="true" />
     <content src="index.html" />

@@ -31,9 +31,19 @@ grails.exceptionresolver.params.exclude = ['password']
 environments {
     development {
         grails.logging.jul.usebridge = true
+        apns {
+            pathToCertificate = this.class.classLoader.getResourceAsStream("ck.p12")
+            password = "Puresrc2013"
+            environment = "sandbox"
+        }
     }
     production {
         grails.logging.jul.usebridge = false
+        apns {
+            pathToCertificate = this.class.classLoader.getResourceAsStream("ck.p12")
+            password = "Puresrc2013"
+            environment = "production"
+        }
     }
 }
 
