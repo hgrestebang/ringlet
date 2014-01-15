@@ -55,8 +55,9 @@ class RingletController {
         def message = [response:""]
         User owner = User.findByToken(UserToken.findByToken(params.token as String))
         Ringlet ringlet = Ringlet.findByOwnerAndId(owner, params.ringletId as Long)
-        if(!ringlet.users.contains(params.userId as Long)){
+        if(!ringlet.users?.contains(params.userId as Long)){
             ringlet.addToUsers(params.userId as Long)
+            ringlet.save(flush: true)
             message.response = "user_added"
         }
         render message as JSON
@@ -66,8 +67,9 @@ class RingletController {
         def message = [response:""]
         User owner = User.findByToken(UserToken.findByToken(params.token as String))
         Ringlet ringlet = Ringlet.findByOwnerAndId(owner, params.ringletId as Long)
-        if(ringlet.users.contains(params.userId as Long)){
-            ringlet.users.remove(params.userId as Long)
+        if(ringlet.users?.contains(params.userId as Long)){
+            ringlet.users?.remove(params.userId as Long)
+            ringlet.save(flush: true)
             message.response = "user_removed"
         }
         render message as JSON

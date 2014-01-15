@@ -152,7 +152,7 @@
               <li data-ng-repeat="ringster in ringsters">
                   <a href="#listing-item" data-ng-click="getRingsters(ringster)">
                       <img id="imgList-{{ringster.id}}" data-ng-show="ringster.photos.length > 0" data-ng-src="{{ringster.photos[0].path}}" onload="changeSizeImgList(this)" onerror="imgError(this)" />
-                      <img id="noImgList-{{ringster.id}}" data-ng-hide="ringster.photos.length > 0" src="img/house.png" onload="changeSizeImgList(this)"/>
+                      <img id="noImgList-{{ringster.id}}" class="list-image" data-ng-hide="ringster.photos.length > 0" src="img/house.png" onload="changeSizeImgList(this)"/>
                       <h2 data-ng-bind="ringster.name"></h2>
                       <span class="textFont8" data-ng-bind="ringster.distanceFromPoint+' miles away'"></span>
                   </a>
@@ -203,7 +203,11 @@
                 <li><input data-role="none" name="email" type="email" placeholder="Email Address" data-ng-model="user.username" data-ng-change="showFunctionError=false; showServerError=false" required></li>
                 <li><input data-role="none" name="phone" type="tel" placeholder="Phone Number" data-ng-model="user.phone" data-ng-change="showFunctionError=false; showServerError=false"></li>
                 <li><select data-role="none" name="gender" data-ng-model="user.gender" data-ng-change="showFunctionError=false; showServerError=false"><option value="MALE">Male</option><option value="FEMALE">Female</option></select></li>
-                <li><textarea data-role="none" name="bio" placeholder="Biography" rows="5" data-ng-model="user.bio" data-ng-change="showFunctionError=false; showServerError=false"></textarea></li>
+                <li><textarea data-role="none" name="bio" placeholder="Biography" rows="3" data-ng-model="user.bio" data-ng-change="showFunctionError=false; showServerError=false"></textarea></li>
+                <li class="showOnMap" data-ng-show="user.isPro">
+                    <div class="showOnMap-label">Show me in public map</div>
+                    <select data-mini="true" name="showOnMap" id="showOnMap" data-role="slider" data-ng-model="user.showOnMap" data-ng-change="showFunctionError=false; showServerError=false"><option value=false></option><option value=true></option></select>
+                </li>
             </ul>
             <a href="#change-password" data-role="button" data-corners="false" data-ng-click="errorValidation()">Change Password</a>
         </form>
@@ -400,8 +404,7 @@
 <!------------------------Invitation List View---------------------------------------------------->
 <div data-role="page" id="invitation-list" data-theme="a">
     <div data-role="header">
-        <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
-        </a>
+        <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext"></a>
         <h4>Invitations</h4>
     </div>
     <div data-role="content">
@@ -431,6 +434,74 @@
                     <a href="#chat" data-ng-click="getRingsters(chat.owner)">
                         <h2 data-ng-bind="'Chat from '+chat.owner.name"></h2>
                         <h2 data-ng-bind="chat.message"></h2>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!------------------------Ringlet List View---------------------------------------------------->
+<div data-role="page" id="ringlet-list" data-theme="a">
+    <div data-role="header">
+        <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
+        </a>
+        <h4>Ringlets</h4>
+    </div>
+    <div data-role="content">
+        <div>
+            <ul id="ringlet-list-view" data-role="listview">
+                <li data-ng-repeat="ringlet in ringlets">
+                    <a data-ng-click="getRinglet(ringlet)">
+                        <h2 data-ng-bind="ringlet.name"></h2>
+                        <h2 data-ng-show="ringlet.users.length!=null" data-ng-bind="ringlet.users.length+' user(s) in this ringlet'"></h2>
+                        <h2 data-ng-show="ringlet.users.length==null" data-ng-bind="'Click to add users'"></h2>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+<!------------------------Ringlet View---------------------------------------------------->
+<div data-role="page" id="ringlet" data-theme="a">
+    <div data-role="header">
+        <a data-role="button" data-icon="arrow-l" data-iconpos="notext" data-ng-click="getRinglets()">Ringlets</a>
+        <h4>Ringlets</h4>
+        <a data-role="button" data-mini="true" data-inline="true" data-corners="false" data-ng-click="validateRinglet(formRinglet.$invalid)">Save</a>
+    </div>
+    <div data-role="content">
+        <form name="formRinglet">
+            <div data-ng-show="showErrors" class="center red">
+                <p data-ng-show="formRinglet.name.$error.required">"Name required"</p>
+                <p data-ng-show="showFunctionError">"The name is already used"</p>
+                <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
+                <p data-ng-show="showMessage">"Information updated"</p>
+            </div>
+            <ul>
+                <li><input data-role="none" name="name" type="text" placeholder="Name" data-ng-model="currentRinglet.name" data-ng-change="showFunctionError=false; showServerError=false" required></li>
+            </ul>
+        </form>
+        <br/><br/>
+        <div>
+            <ul id="friendRem-images" data-role="listview">
+                <li data-ng-repeat="ringster in ringsters">
+                    <a data-ng-show="currentRinglet.users.indexOf(ringster.id)!=-1" data-ng-click="removeFromRinglet(ringster)">
+                        <img id="imgRemRinglet-{{ringster.id}}" data-ng-show="ringster.photos.length > 0" data-ng-src="{{ringster.photos[0].path}}" onload="changeSizeImgList(this)" onerror="imgError(this)" />
+                        <img id="noImgRemRinglet-{{ringster.id}}" class="list-image" data-ng-hide="ringster.photos.length > 0" src="img/house.png" onload="changeSizeImgList(this)"/>
+                        <h2 data-ng-bind="ringster.name"></h2>
+                        <span class="textFont8" data-ng-bind="'Remove from this ringlet'"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <br/><br/>
+        <div>
+            <ul id="friendAd-images" data-role="listview">
+                <li data-ng-repeat="ringster in ringsters">
+                    <a data-ng-show="currentRinglet.users.indexOf(ringster.id)==-1" data-ng-click="addToRinglet(ringster)">
+                        <img id="imgAddRinglet-{{ringster.id}}" data-ng-show="ringster.photos.length > 0" data-ng-src="{{ringster.photos[0].path}}" onload="changeSizeImgList(this)" onerror="imgError(this)" />
+                        <img id="noImgAddRinglet-{{ringster.id}}" class="list-image" data-ng-hide="ringster.photos.length > 0" src="img/house.png" onload="changeSizeImgList(this)"/>
+                        <h2 data-ng-bind="ringster.name"></h2>
+                        <span class="textFont8" data-ng-bind="'Add to this ringlet'"></span>
                     </a>
                 </li>
             </ul>
@@ -714,6 +785,7 @@
         <li><a data-ng-click="currentUser()">My Profile</a></li>
         <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
         <li><a data-ng-click="getFriends()">Friends</a></li>
+        <li><a data-ng-click="getRinglets()">Ringlets</a></li>
         <li><a href="#chat-list" data-ng-show="chats[0].id!=undefined" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
         <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
         <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>

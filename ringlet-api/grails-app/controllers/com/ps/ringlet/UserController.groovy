@@ -23,7 +23,7 @@ class UserController {
                     if(params.phone != "")ilike('phone', "%${params.phone}%")
                 }
             }.each {
-                if(it.id != user.id) users.add(it.showInformation(user.location[0],user.location[1]))
+                if(it.id != user.id && it.showOnMap) users.add(it.showInformation(user.location[0],user.location[1]))
             }
         }
         else{
@@ -34,7 +34,7 @@ class UserController {
                     if(params.phone != "")ilike('phone', "%${params.phone}%")
                 }
             }.each {
-                if(it.id != user.id) users.add(it.showInformation(user.location[0],user.location[1]))
+                if(it.id != user.id && it.showOnMap) users.add(it.showInformation(user.location[0],user.location[1]))
             }
         }
         if(users.size() > 0){
@@ -315,10 +315,10 @@ class UserController {
             Picture picture = Picture.findById(it)
             picture.delete(flush: true)
         }
-        user.friends.clear()
-        user.usersBlocked.clear()
-        user.ringlets.clear()
-        user.photos.clear()
+        user.friends?.clear()
+        user.usersBlocked?.clear()
+        user.ringlets?.clear()
+        user.photos?.clear()
         user.setFacebookId("")
         user.setStatus(UserStatus.REMOVED)
         user.save(flush: true)

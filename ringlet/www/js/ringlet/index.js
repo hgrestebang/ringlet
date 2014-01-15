@@ -15,7 +15,6 @@ var app = {
         } catch (error) {
             console.log(error);
         }
-
         $( document ).on( "click", ".icon-arrow-left", function() {
             $.mobile.loading('hide');
         });
@@ -65,6 +64,15 @@ function carouselImageError(img){
 
 $(document).on("pageshow","#home",function(){
     $("#listing-lImages" ).listview( "refresh" );
+});
+
+$(document).on("pageshow","#ringlet",function(){
+    $("#friendRem-images" ).listview( "refresh" );
+    $("#friendAd-images" ).listview( "refresh" );
+});
+
+$(document).on("pageshow","#ringlet-list",function(){
+    $("#ringlet-list-view" ).listview( "refresh" );
 });
 
 $(document).on("pageshow","#chat",function(){

@@ -35,7 +35,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         {miles:'50', radius:'50 miles'}];
     $scope.announcement.radius = $scope.searchRadius[0];
 
-    var appConfig = {serverHost:'192.168.0.104', appName:'ringlet', token:''};
+    var appConfig = {serverHost:'192.168.0.103', appName:'ringlet', token:''};
     var owl = $("#listing-item-gallery");
     var carousel = $("#signup-carousel");
     var profileCarousel = $("#profile-carousel");
@@ -83,7 +83,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         $scope.chatUsers = [];
         $scope.chatsIndex = [];
         carouselLength = 0;
-        appConfig = {serverHost:'192.168.0.104', appName:'ringlet', token:''};
+        appConfig = {serverHost:'192.168.0.103', appName:'ringlet', token:''};
     }
 
     $scope.errorValidation = function(){
@@ -217,10 +217,61 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     }
 
 //---------------------------- User Functions ----------------------------------------------------
+    $('#profile').bind('pageshow', function() {
+        if($scope.user.showOnMap) $('#showOnMap').val("true");
+        else $('#showOnMap').val("false");
+        $('#showOnMap').slider("refresh");
+    });
+
+    $scope.getRinglet = function(ringlet){
+        $.mobile.loading( 'show', {textVisible: false});
+        $scope.currentRinglet = ringlet;
+        if($scope.currentRinglet.users == null) $scope.currentRinglet.users = [];
+        DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'user', action:'getFriends'},
+            function(result){
+                $scope.ringsters = result;
+                $.mobile.loading( 'hide', {textVisible: false});
+                window.location.href="#ringlet";
+            },
+            function(error){
+                console.log(error);
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+
+    };
+
+    $scope.addToRinglet = function(ringster){
+        $.mobile.loading( 'show', {textVisible: false});
+        DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'ringlet', action:'addUser', ringletId:$scope.currentRinglet.id, userId:ringster.id},
+            function(result){
+                $scope.currentRinglet.users.push(ringster.id);
+                $.mobile.loading( 'hide', {textVisible: false});
+            },
+            function(error){
+                console.log(error);
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+
+    };
+
+    $scope.removeFromRinglet = function(ringster){
+        $.mobile.loading( 'show', {textVisible: false});
+        DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'ringlet', action:'removeUser', ringletId:$scope.currentRinglet.id, userId:ringster.id},
+            function(result){
+                $scope.currentRinglet.users.splice($scope.currentRinglet.users.indexOf(ringster.id),1);
+                $.mobile.loading( 'hide', {textVisible: false});
+            },
+            function(error){
+                console.log(error);
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+
+    };
+
     $scope.isFriend = function(){
         if($scope.user.friends != null) return ($scope.user.friends.indexOf($scope.ringster.id) > -1);
         else return false;
-    }
+    };
 
     $scope.currentUser = function(){
         $.mobile.loading( 'show', {textVisible: false});
@@ -252,6 +303,21 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                 $scope.ringsters = result;
                 $.mobile.loading( 'hide', {textVisible: false});
                 window.location.href="#home";
+            },
+            function(error){
+                console.log(error);
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+    }
+
+    $scope.getRinglets = function(){
+        $.mobile.loading( 'show', {textVisible: false});
+        $scope.errorValidation();
+        DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'ringlet', action:'getByUser'},
+            function(result){
+                $scope.ringlets = result;
+                $.mobile.loading( 'hide', {textVisible: false});
+                window.location.href="#ringlet-list";
             },
             function(error){
                 console.log(error);
@@ -414,6 +480,38 @@ function UserCtrl($scope, $compile, DAO, $timeout){
             });
     }
 
+    $scope.validateRinglet = function(notValid){
+        if(notValid){
+            $scope.showErrors = true;
+        }
+        else{
+            $scope.errorValidation();
+            $scope.updateRinglet();
+        }
+    }
+
+    $scope.updateRinglet = function(){
+        $.mobile.loading( 'show', {textVisible: false});
+        DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'ringlet', action:'update', ringlet:$scope.currentRinglet},
+            function(result){
+                if(result.response == "ringlet_updated"){
+                    $scope.showErrors = true;
+                    $scope.showMessage = true;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                }
+                else if(result.response == "ringlet_name_used"){
+                    $scope.showErrors = true;
+                    $scope.showFunctionError = true;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                }
+            },
+            function(error){
+                $scope.showErrors = true;
+                $scope.showServerError = true;
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+    }
+
     $scope.updateLocation = function(){
         if($scope.userLocation.lat){
             $scope.user.userLocation = $scope.userLocation;
@@ -543,7 +641,6 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'chat', action:'delete',token: appConfig.token,id:$scope.itemDelete},
             function(result){
                 if(result.response == "chat_deleted"){
-                    console.log("element deleted");
                     $.mobile.loading( 'hide', {textVisible: false});
                     DAO.query({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'chat', action:'getAll'},
                         function(result){

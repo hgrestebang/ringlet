@@ -83,6 +83,20 @@ form ul li textarea{
     margin: 12px 0 12px 10px;
 }
 
+form ul li .ui-slider-switch{
+    width: 60px !important;
+    float: right !important;
+    margin: -8px 5px 0 0 !important;
+}
+
+.showOnMap{
+    padding: 12px 0 12px 13px;
+}
+
+.showOnMap-label{
+    display: inline;
+}
+
 /**----------------------------- Colors Style ------------------------------------**/
 .red{
     color: #FF0000;
@@ -285,4 +299,13 @@ div#imagePopUpDiv-popup.ui-popup-container.ui-popup-active{
     -webkit-border-image: url(images/speech_bubble_right_2.png) 8 17 8 10 stretch stretch ;
     -moz-border-image: url(images/speech_bubble_right_2.png) 8 17 8 10 stretch stretch ;
     -o-border-image: url(images/speech_bubble_right_2.png) 8 17 8 10 stretch stretch ;
+}
+
+/**----------------------------- Images Style -----------------------------**/
+.list-image{
+    position: absolute;
+    left: 0;
+    top: 0;
+    max-height: 5em;
+    max-width: 5em;
 }
