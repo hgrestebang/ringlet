@@ -10,9 +10,9 @@ class UserControllerIntegrationTests {
 
     @Before
     void setUp() {
-        // Setup logic here
+        //Setup logic here
         contUser = new UserController()
-        token = '10dfc7e8-8cb9-45c2-9b11-ce0fed8846c4'
+        token = '3d231daf-1d95-4991-a2df-b390e1deb75e'
     }
 
     @After
@@ -22,18 +22,19 @@ class UserControllerIntegrationTests {
 
     @Test
     void testSearch(){
-        contUser.params.token = 'd8cf4380-395b-4cd7-8fd5-106a52f2ba89'
+        contUser.params.token = token
         contUser.params.username = 'ringlet'
 //        contUser.params.name = 'Administrator'
-//        contUser.params.phone = '123456789'
         contUser.search()
+        assert contUser.response.text != '[{"response":"not_found"}]'
+        assert contUser.response.json.id.size() > 0
         assert contUser.response.getJson().size() > 0
         //assert contUser.response.json.response == 'not_found'
     }
 
     @Test
     void testSearchFail(){
-        contUser.params.token = 'd8cf4380-395b-4cd7-8fd5-106a52f2ba89'
+        contUser.params.token = token
         //contUser.params.name = 'Administrator'
         contUser.params.username = 'ringlett'
         //assert contUser.response.getJson().size() > 0
@@ -42,7 +43,7 @@ class UserControllerIntegrationTests {
 
     @Test
     void testGetAll(){
-        contUser.params.token = 'd8cf4380-395b-4cd7-8fd5-106a52f2ba89'
+        contUser.params.token = token
         contUser.getAll()
         assert contUser.response.text != '{"response":"bad_request"}'
         assert contUser.response.getJson().size() > 0
@@ -53,7 +54,7 @@ class UserControllerIntegrationTests {
 
     @Test
     void testNearBy(){
-        contUser.params.token = 'd8cf4380-395b-4cd7-8fd5-106a52f2ba89'
+        contUser.params.token = token
         contUser.nearBy()
         assertNotNull(contUser.response)
         assert contUser.response.json.size() > 0
@@ -69,11 +70,18 @@ class UserControllerIntegrationTests {
     }
 
     @Test
+    void testGetFriendsFail(){
+        contUser.params.token = token
+        contUser.getFriends()
+        assert contUser.response.json.id.size() == 0
+    }
+
+    @Test
     void testGetCurrent(){
-        contUser.params.token = 'd8cf4380-395b-4cd7-8fd5-106a52f2ba89'
+        contUser.params.token = token
         contUser.getCurrent()
         assertNotNull(contUser.response)
-        assert contUser.response.json.token.token == 'd8cf4380-395b-4cd7-8fd5-106a52f2ba89'
+        assert contUser.response.json.token.token == token
         assert contUser.response.json.id == 1
         assertEquals(contUser.response.json.username,'admin@ringlet.me')
     }
@@ -97,11 +105,11 @@ class UserControllerIntegrationTests {
 
     @Test
     void testCreate(){
-        def userT = [email: "test@ringlet.me", password:'admin']
+        def userT = [email: "test@ringlet.me", password:'admin', name:'Create Test',]
         contUser.params.user = userT
         contUser.create()
         assert contUser.response.text == '{"response":"user_created"}'
-        //assert User.findByUsername('test@ringlet.me')
+        assert User.findByUsername('test@ringlet.me')
 
     }
 
@@ -170,8 +178,23 @@ class UserControllerIntegrationTests {
         contUser.params.id = 8
         contUser.addBlockUser()
         assert contUser.response.text == '{"response":"user_blocked"}'
-        assert User.findByToken(token).usersBlocked.contains(8)
-        //assert user3.usersBlocked?.contains(1)
+        assert User.findByToken(UserToken.findByToken(token)).usersBlocked?.contains(8L)
+    }
+
+    @Test
+    void testRemoveBlockUser(){
+        contUser.params.token = token
+        contUser.params.id = 8
+        contUser.removeBlockUser()
+        assert contUser.response.text == '{"response":"user_unblocked"}'
+        assert User.findByToken(UserToken.findByToken(token)).usersBlocked?.contains(8L) == false
+    }
+
+    @Test
+    void testDeleteAccount(){
+        contUser.params.token = '9cde5677-6f91-400f-ac9d-19817c4e62ec'// Token of new user
+        contUser.deleteAccount()
+        assert contUser.response.text == '{"response":"user_deleted"}'
     }
 
 

@@ -10,8 +10,8 @@ class ApnService {
 
     static transactional = false
 
-        def certification = "grails-app/conf/ck.p12"
-//    def certification= "ck.p12"
+//        def certification = "grails-app/conf/ck.p12"
+    def certification= "ck.p12"
 
     def pushNotifications(String userID, String message){
 
