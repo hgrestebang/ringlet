@@ -145,7 +145,7 @@
     <div data-role="header" id="listing-header"  >
         <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
         </a>
-        <h4>Home</h4>
+        <h4 data-ng-bind="homeHeader"></h4>
     </div>
     <div data-role="content" id="listing-content">
         <div id="listing-information">
@@ -447,6 +447,7 @@
         <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
         </a>
         <h4>Ringlets</h4>
+        <a href="#new-ringlet" data-role="button" data-transition="slide" data-mini="true" data-inline="true" data-corners="false" data-ng-click="newRinglet.name=''">New</a>
     </div>
     <div data-role="content">
         <div>
@@ -460,6 +461,26 @@
                 </li>
             </ul>
         </div>
+    </div>
+</div>
+<!------------------------New Ringlet View---------------------------------------------------->
+<div data-role="page" id="new-ringlet" data-theme="a">
+    <div data-role="header">
+        <a data-role="button" data-icon="arrow-l" data-iconpos="notext" data-ng-click="getRinglets()">Ringlets</a>
+        <h4>New Ringlet</h4>
+        <a data-role="button" data-mini="true" data-inline="true" data-corners="false" data-ng-click="validateNewRinglet(formNewRinglet.$invalid)">Save</a>
+    </div>
+    <div data-role="content">
+        <form name="formNewRinglet">
+            <div data-ng-show="showErrors" class="center red">
+                <p data-ng-show="formNewRinglet.name.$error.required">"Name required"</p>
+                <p data-ng-show="showFunctionError">"The name is already used"</p>
+                <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
+            </div>
+            <ul>
+                <li><input data-role="none" name="name" type="text" placeholder="Name" data-ng-model="newRinglet.name" data-ng-change="showFunctionError=false; showServerError=false" required></li>
+            </ul>
+        </form>
     </div>
 </div>
 <!------------------------Ringlet View---------------------------------------------------->
@@ -481,7 +502,8 @@
                 <li><input data-role="none" name="name" type="text" placeholder="Name" data-ng-model="currentRinglet.name" data-ng-change="showFunctionError=false; showServerError=false" required></li>
             </ul>
         </form>
-        <br/><br/>
+        <a data-role="button" data-corners="false" data-ng-click="deleteRinglet(currentRinglet.id)">Delete</a>
+        <br/>
         <div>
             <ul id="friendRem-images" data-role="listview">
                 <li data-ng-repeat="ringster in ringsters">
@@ -782,10 +804,10 @@
     </br>
     <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
         <li data-role="list-divider" class="center">Menu</li>
-        <li><a data-ng-click="getNearByRingsters()">Home</a></li>
+        <li><a data-ng-click="getNearByRingsters(); homeHeader='Home'">Home</a></li>
         <li><a data-ng-click="currentUser()">My Profile</a></li>
         <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
-        <li><a data-ng-click="getFriends()">Friends</a></li>
+        <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()">Friends</a></li>
         <li><a data-ng-click="getRinglets()">Ringlets</a></li>
         <li><a href="#chat-list" data-ng-show="chats[0].id!=undefined" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
         <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>

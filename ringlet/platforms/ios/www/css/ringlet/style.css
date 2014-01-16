@@ -97,6 +97,11 @@ form ul li .ui-slider-switch{
     display: inline;
 }
 
+#panel-menu ul li a{
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
+}
+
 /**----------------------------- Colors Style ------------------------------------**/
 .red{
     color: #FF0000;

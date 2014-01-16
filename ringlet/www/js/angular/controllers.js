@@ -4,6 +4,8 @@ var ringlet = angular.module('ringlet',['services']);
 function UserCtrl($scope, $compile, DAO, $timeout){
 
 //---------------------------- Variables Initialization ------------------------------------------
+    $scope.homeHeader = "Home";
+    $scope.newRinglet = {name:''};
     $scope.user = {email:'', password:'', gender:'MALE'};
     $scope.userSearch = {name:'', username:'', phone:''};
     $scope.invitation = {message:'I want to add you to my friends', recipientId:''};
@@ -35,7 +37,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         {miles:'50', radius:'50 miles'}];
     $scope.announcement.radius = $scope.searchRadius[0];
 
-    var appConfig = {serverHost:'50.56.244.180', appName:'ringlet', token:''};
+    var appConfig = {serverHost:'192.168.1.5', appName:'ringlet', token:''};
     var owl = $("#listing-item-gallery");
     var carousel = $("#signup-carousel");
     var profileCarousel = $("#profile-carousel");
@@ -83,7 +85,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         $scope.chatUsers = [];
         $scope.chatsIndex = [];
         carouselLength = 0;
-        appConfig = {serverHost:'50.56.244.180', appName:'ringlet', token:''};
+        appConfig = {serverHost:'192.168.1.5', appName:'ringlet', token:''};
     }
 
     $scope.errorValidation = function(){
@@ -217,7 +219,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     }
 
 //---------------------------- User Functions ----------------------------------------------------
-    $('#profile').bind('pageshow', function() {
+    $('#profile').bind('pagebeforeshow', function() {
         if($scope.user.showOnMap) $('#showOnMap').val("true");
         else $('#showOnMap').val("false");
         $('#showOnMap').slider("refresh");
@@ -282,6 +284,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         DAO.get({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'user', action:'getCurrent'},
             function(result){
                 $scope.user = result;
+                if($scope.user.friends == null) $scope.user.friends = [];
                 for(var i=0; i<$scope.user.photos.length; i++){
                     $scope.images.push({id:$scope.user.photos[i].id, path:$scope.user.photos[i].path, delete:false, data:''});
                     addPhotoProfile($scope.user.photos[i].path, 'profile'+$scope.images.length, true);
@@ -302,6 +305,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
             function(result){
                 $scope.ringsters = result;
                 $.mobile.loading( 'hide', {textVisible: false});
+                $scope.homeHeader = "Friends";
                 window.location.href="#home";
             },
             function(error){
@@ -351,6 +355,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                 else{
                     $scope.ringsters = result;
                     $.mobile.loading( 'hide', {textVisible: false});
+                    $scope.homeHeader = "Result";
                     $.mobile.changePage("#home");
                 }
             },
@@ -480,6 +485,38 @@ function UserCtrl($scope, $compile, DAO, $timeout){
             });
     }
 
+    $scope.validateNewRinglet = function(notValid){
+        if(notValid){
+            $scope.showErrors = true;
+        }
+        else{
+            $scope.errorValidation();
+            $scope.createRinglet();
+        }
+    }
+
+    $scope.createRinglet = function(){
+        $.mobile.loading( 'show', {textVisible: false});
+        DAO.save({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'ringlet', action:'create', name:$scope.newRinglet.name},
+            function(result){
+                if(result.response == "ringlet_created"){
+                    $.mobile.loading( 'hide', {textVisible: false});
+                    $scope.getRinglets();
+                }
+                else if(result.response == "ringlet_name_used"){
+                    $scope.showErrors = true;
+                    $scope.showFunctionError = true;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                }
+            },
+            function(error){
+                console.log(error)
+                $scope.showErrors = true;
+                $scope.showServerError = true;
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+    }
+
     $scope.validateRinglet = function(notValid){
         if(notValid){
             $scope.showErrors = true;
@@ -502,6 +539,26 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                 else if(result.response == "ringlet_name_used"){
                     $scope.showErrors = true;
                     $scope.showFunctionError = true;
+                    $.mobile.loading( 'hide', {textVisible: false});
+                }
+            },
+            function(error){
+                $scope.showErrors = true;
+                $scope.showServerError = true;
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+    }
+
+    $scope.deleteRinglet = function(id){
+        DAO.delete({serverHost:appConfig.serverHost, appName:appConfig.appName, token: appConfig.token, controller:'ringlet', action:'delete', id:id},
+            function(result){
+                if(result.response == "ringlet_deleted"){
+                    $.mobile.loading( 'hide', {textVisible: false});
+                    $scope.getRinglets();
+                }
+                else{
+                    $scope.showErrors = true;
+                    $scope.showServerError = true;
                     $.mobile.loading( 'hide', {textVisible: false});
                 }
             },
@@ -719,9 +776,6 @@ function UserCtrl($scope, $compile, DAO, $timeout){
 
     $(document).on("pagebeforeshow","#invitation-list",function(){
         $scope.stopInvitationFunction();
-    });
-
-    $(document).on("pageshow","#invitation-list",function(){
         $("#invitation-list-view" ).listview( "refresh" );
     });
 
@@ -731,9 +785,6 @@ function UserCtrl($scope, $compile, DAO, $timeout){
 
     $(document).on("pagebeforeshow","#announcement-List",function(){
         $scope.stopInvitationFunction();
-    });
-
-    $(document).on("pageshow","#announcement-List",function(){
         $("#listing-Announcement" ).listview( "refresh" );
     });
 
@@ -743,9 +794,6 @@ function UserCtrl($scope, $compile, DAO, $timeout){
 
     $(document).on("pagebeforeshow","#chat-list",function(){
         $scope.stopChatFunction();
-    });
-
-    $(document).on("pageshow","#chat-list",function(){
         $("#chat-list-view" ).listview( "refresh" );
     });
 
