@@ -62,27 +62,28 @@ function carouselImageError(img){
     document.getElementById(img.id).height = (screen.height*0.3);
 }
 
-$(document).on("pageshow","#home",function(){
+$(document).on("pagebeforeshow","#home",function(){
     $("#listing-lImages" ).listview( "refresh" );
+    var footer = document.getElementById("listing-footer").offsetHeight;
+    $('#listing-content').css({'max-height': (screen.height-(100+footer)) + 'px'});
 });
 
-$(document).on("pageshow","#ringlet",function(){
+$(document).on("pagebeforeshow","#ringlet",function(){
     $("#friendRem-images" ).listview( "refresh" );
     $("#friendAd-images" ).listview( "refresh" );
 });
 
-$(document).on("pageshow","#ringlet-list",function(){
+$(document).on("pagebeforeshow","#ringlet-list",function(){
     $("#ringlet-list-view" ).listview( "refresh" );
 });
 
-$(document).on("pageshow","#chat",function(){
+$(document).on("pagebeforeshow","#pro",function(){
+    $("#pro-ulPackages" ).listview( "refresh" );
+});
+
+$(document).on("pagebeforeshow","#chat",function(){
     var footer = document.getElementById("chat-footer").offsetHeight;
     $('#chat-content').css({'max-height': (screen.height-(100+footer)) + 'px'});
     var content = document.getElementById("chat-content").scrollHeight
     $('#chat-content').animate({ scrollTop: (content) }, "slow");
-});
-
-$(document).on("pageshow","#home",function(){
-    var footer = document.getElementById("listing-footer").offsetHeight;
-    $('#listing-content').css({'max-height': (screen.height-(100+footer)) + 'px'});
 });

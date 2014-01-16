@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:og="http://ogp.me/ns" xmlns:fb="http://www.facebook.com/2008/fbml" lang="en" data-ng-app="ringlet">
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <!------------------------CSS files------------------------------------------------------>
     <link rel="stylesheet" type="text/css" href="css/ringlet/jquery.mobile-1.4.0.min.css" />
@@ -145,7 +146,7 @@
     <div data-role="header" id="listing-header"  >
         <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
         </a>
-        <h4>Home</h4>
+        <h4 data-ng-bind="homeHeader"></h4>
     </div>
     <div data-role="content" id="listing-content">
         <div id="listing-information">
@@ -162,7 +163,6 @@
         </div>
     </div>
     <div  data-id="footer" id="listing-footer" data-role="footer" class="ui-bar">
-        <p>
             <a href="#search"  data-role="button" data-transition="slide" data-direction="reverse" data-icon="search" data-iconpos="notext"></a>
             <a href="#map" data-ng-show="user.isPro" data-ng-click="initMap()" class="centerFloat" data-role="button" data-transition="slide" data-direction="reverse" data-icon="location" data-iconpos="notext"></a>
             <a href="#announcement" data-ng-show="user.isPro" data-ng-click="announcementForm()" class="right" data-role="button" data-transition="slide" data-direction="reverse" data-icon="tag" data-iconpos="notext"></a>
@@ -170,7 +170,6 @@
             <!--no Pro-->
             <a href="#pro" data-ng-show="!user.isPro" class="centerFloat" data-role="button" data-transition="slide" data-direction="reverse" data-icon="location" data-iconpos="notext"></a>
             <a href="#pro" data-ng-show="!user.isPro" class="right"  data-role="button" data-transition="slide" data-direction="reverse" data-icon="tag" data-iconpos="notext"></a>
-        </p>
     </div>
 </div>
 <!----------------------------------Profile View---------------------------------------------------->
@@ -271,8 +270,6 @@
         <a data-role="button" data-mini="true" data-inline="true" data-corners="false" data-ng-click="saveAnnouncement()">Save</a>
     </div>
     <div data-role="content" id="announcement-content">
-        <br/>
-        <br/>
         <div id="info-box" class="info-box-announcement">
             <span class="dark-text info-text">It's easy to do! Just type your message, choose the radius you want to cover.</span>
         </div>
@@ -362,6 +359,9 @@
     </div>
     <div data-role="content" id="listing-item-content">
         <div id="listing-item-gallery">    </div>
+        <div data-ng-show="showMessage" class="center darkGreen">
+            <p data-ng-show="showMessage">"Invitation sent correctly"</p>
+        </div>
         <form id="listing-item-form">
             <p data-ng-show="ringster.bio" class="ui-btn ui-icon-comment ui-btn-icon-left" data-ng-bind="ringster.bio"></p>
             <p data-ng-show="ringster.gender"   class="ui-btn ui-icon-user ui-btn-icon-left" data-ng-bind="ringster.gender"></p>
@@ -447,6 +447,7 @@
         <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
         </a>
         <h4>Ringlets</h4>
+        <a href="#new-ringlet" data-role="button" data-transition="slide" data-mini="true" data-inline="true" data-corners="false" data-ng-click="newRinglet.name=''">New</a>
     </div>
     <div data-role="content">
         <div>
@@ -460,6 +461,26 @@
                 </li>
             </ul>
         </div>
+    </div>
+</div>
+<!------------------------New Ringlet View---------------------------------------------------->
+<div data-role="page" id="new-ringlet" data-theme="a">
+    <div data-role="header">
+        <a data-role="button" data-icon="arrow-l" data-iconpos="notext" data-ng-click="getRinglets()">Ringlets</a>
+        <h4>New Ringlet</h4>
+        <a data-role="button" data-mini="true" data-inline="true" data-corners="false" data-ng-click="validateNewRinglet(formNewRinglet.$invalid)">Save</a>
+    </div>
+    <div data-role="content">
+        <form name="formNewRinglet">
+            <div data-ng-show="showErrors" class="center red">
+                <p data-ng-show="formNewRinglet.name.$error.required">"Name required"</p>
+                <p data-ng-show="showFunctionError">"The name is already used"</p>
+                <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
+            </div>
+            <ul>
+                <li><input data-role="none" name="name" type="text" placeholder="Name" data-ng-model="newRinglet.name" data-ng-change="showFunctionError=false; showServerError=false" required></li>
+            </ul>
+        </form>
     </div>
 </div>
 <!------------------------Ringlet View---------------------------------------------------->
@@ -481,7 +502,8 @@
                 <li><input data-role="none" name="name" type="text" placeholder="Name" data-ng-model="currentRinglet.name" data-ng-change="showFunctionError=false; showServerError=false" required></li>
             </ul>
         </form>
-        <br/><br/>
+        <a data-role="button" data-corners="false" data-ng-click="deleteRinglet(currentRinglet.id)">Delete</a>
+        <br/>
         <div>
             <ul id="friendRem-images" data-role="listview">
                 <li data-ng-repeat="ringster in ringsters">
@@ -549,8 +571,9 @@
             <label>Subscription Package</label>
             <p><br/></p>
             <div id="pro-divPackages" style="display: block">
-                <ul data-role="listview"   id="pro-ulPackages">
-                </ul><br/>
+                <ul data-role="listview" id="pro-ulPackages">
+                </ul>
+                <br/>
             </div><br/>
             <div id="pro-divTerms" class="center">
                 <a href="#privacy">Privacy</a> and  <a href="#terms">Terms</a>
@@ -560,14 +583,13 @@
 </div>
 <!---------------------------------Privacy View---------------------------------------------------->
 <div data-role="page" id="privacy" data-theme="a">
-    <div data-role="header" id="privacy-header" >
+    <div data-role="header" id="privacy-header">
         <a href="#pro" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
 
         </a>
         <h4>Privacy Policy</h4>
     </div>
     <div data-role="content" id="privacy-content">
-        <br/>
         <br/>
         <p style="font-size: 11px; text-align: justify; margin: 0 5px 10px 5px">This Privacy Policy explains Ringlet’s practices regarding the collection, use, disclosure, and protection of information that is collected through the Ringlet (“Ringlet”, “We” or “Our”) mobile app and website (collectively, our “Service”), as well as your choices regarding the collection and use of information.</p>
         <p style="font-size: 13px; margin: 0 5px 5px 5px">1. How Ringlet Collects and Uses Information:</p>
@@ -644,13 +666,12 @@
 </div>
 <!---------------------------------Terms View---------------------------------------------------->
 <div data-role="page" id="terms" data-theme="a">
-    <div data-role="header" id="terms-header" >
+    <div data-role="header" id="terms-header">
         <a href="#pro" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
         </a>
         <h4>Terms and Conditions</h4>
     </div>
     <div data-role="content" id="terms-content">
-        <br/>
         <br/>
         <p style="font-size: 11px; text-align: justify; margin: 0 5px 10px 5px">This page explains the terms by which you may use our online and/or mobile services, web site, and software provided on or in connection with the service provided by Ringlet (collectively the “Service”). By accessing or using the Service, you signify that you have read, understood, and agree to be bound by this Terms and Conditions Agreement (“Agreement”) and to the collection and use of your information as set forth in the Ringlet Privacy Policy whether or not you are a registered user of our Service. This Agreement applies to all visitors, users, and others who access the Service (“Users”).</p>
         <p style="font-size: 11px; text-align: justify; margin: 0 5px 10px 5px">PLEASE READ THIS AGREEMENT CAREFULLY TO ENSURE THAT YOU UNDERSTAND EACH PROVISION. THIS AGREEMENT CONTAINS A MANDATORY ARBITRATION OF DISPUTES PROVISION THAT REQUIRES THE USE OF ARBITRATION ON AN INDIVIDUAL BASIS TO RESOLVE DISPUTES, RATHER THAN JURY TRIALS OR CLASS ACTIONS.</p>
@@ -770,22 +791,22 @@
             <a href="#" data-ng-click="deleteChat()" data-rel="back" data-role="button" data-corners="false">Yes</a>
         </div>
     </div>
-    <div  data-id="footer" id="chat-footer" data-role="footer" class="ui-bar">
-        <p>
-            <textarea id="text-Chat" data-ng-model="chat.message" data-ng-focus="scrollDiv()" data-ng-blur="scrollDiv()" data-ng-change="showFunctionError=false; showServerError=false"></textarea>
+    <div  data-id="footer" id="chat-footer" data-role="footer" class="ui-bar" data-ng-click="focusChat()">
+        <p data-ng-click="focusChat()">
+            <textarea id="text-Chat" data-ng-model="chat.message" data-ng-click="focusChat()" data-ng-blur="scrollDiv()" data-ng-change="showFunctionError=false; showServerError=false"></textarea>
             <a data-role="button" id="button-Chat" href="#popup-Item-Announcement"  data-ng-click="sendMessage()" data-rel="popup"  data-mini="true" data-inline="true" data-corners="false" >Send</a>
         </p>
     </div>
 </div>
-<!--Panel-->
+<!---------------------------------Panel--------------------------------->
 <div data-role="panel" id="panel-menu" data-theme="a" data-position="left">
     </br>
     <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
         <li data-role="list-divider" class="center">Menu</li>
-        <li><a data-ng-click="getNearByRingsters()">Home</a></li>
+        <li><a data-ng-click="getNearByRingsters(); homeHeader='Home'">Home</a></li>
         <li><a data-ng-click="currentUser()">My Profile</a></li>
         <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
-        <li><a data-ng-click="getFriends()">Friends</a></li>
+        <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()">Friends</a></li>
         <li><a data-ng-click="getRinglets()">Ringlets</a></li>
         <li><a href="#chat-list" data-ng-show="chats[0].id!=undefined" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
         <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
