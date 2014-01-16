@@ -43,6 +43,8 @@
     <string></string>
     <key>NSMainNibFile~ipad</key>
     <string></string>
+    <key>UIStatusBarHidden</key>
+    <true/>
     <key>UIStatusBarStyle</key>
     <string>UIStatusBarStyleBlackTranslucent</string>
     <key>UISupportedInterfaceOrientations</key>

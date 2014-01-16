@@ -75,6 +75,11 @@ $(document).on("pageshow","#ringlet-list",function(){
     $("#ringlet-list-view" ).listview( "refresh" );
 });
 
+$(document).on("pagebeforeshow","#pro",function(){
+    $("#pro-ulPackages" ).listview( "refresh" );
+});
+
+
 $(document).on("pageshow","#chat",function(){
     var footer = document.getElementById("chat-footer").offsetHeight;
     $('#chat-content').css({'max-height': (screen.height-(100+footer)) + 'px'});
