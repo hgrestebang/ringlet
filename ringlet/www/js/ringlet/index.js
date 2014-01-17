@@ -18,8 +18,6 @@ var app = {
         $( document ).on( "click", ".icon-arrow-left", function() {
             $.mobile.loading('hide');
         });
-
-        Keyboard.hideFormAccessoryBar(true);
     }
 };
 

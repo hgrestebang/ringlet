@@ -45,9 +45,6 @@
     <feature name="PushNotification">
         <param name="ios-package" value="PushNotification" />
     </feature>
-    <feature name="Keyboard">
-        <param name="ios-package" onload="true" value="CDVKeyboard" />
-    </feature>
     <preference name="fullscreen" value="true" />
     <preference name="webviewbounce" value="true" />
     <content src="index.html" />

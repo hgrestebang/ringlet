@@ -44,7 +44,6 @@
 		7E7966E51810823500FA85AD /* icon-76@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E7966DB1810823500FA85AD /* icon-76@2x.png */; };
 		7E7966E61810823500FA85AD /* icon-small.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E7966DC1810823500FA85AD /* icon-small.png */; };
 		7E7966E71810823500FA85AD /* icon-small@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 7E7966DD1810823500FA85AD /* icon-small@2x.png */; };
-		8485C0BF1889DA070062E107 /* CDVKeyboard.m in Sources */ = {isa = PBXBuildFile; fileRef = 8485C0BE1889DA070062E107 /* CDVKeyboard.m */; };
 		848BB2D1187DEA1500B13F6C /* InAppPurchase.m in Sources */ = {isa = PBXBuildFile; fileRef = 848BB2CE187DEA1500B13F6C /* InAppPurchase.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		848BB2D2187DEA1500B13F6C /* SKProduct+LocalizedPrice.m in Sources */ = {isa = PBXBuildFile; fileRef = 848BB2D0187DEA1500B13F6C /* SKProduct+LocalizedPrice.m */; };
 		848BB2D5187DEA3600B13F6C /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 848BB2D4187DEA3600B13F6C /* StoreKit.framework */; };
@@ -125,8 +124,6 @@
 		7E7966DB1810823500FA85AD /* icon-76@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-76@2x.png"; sourceTree = "<group>"; };
 		7E7966DC1810823500FA85AD /* icon-small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-small.png"; sourceTree = "<group>"; };
 		7E7966DD1810823500FA85AD /* icon-small@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon-small@2x.png"; sourceTree = "<group>"; };
-		8485C0BD1889DA070062E107 /* CDVKeyboard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDVKeyboard.h; sourceTree = "<group>"; };
-		8485C0BE1889DA070062E107 /* CDVKeyboard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDVKeyboard.m; sourceTree = "<group>"; };
 		848BB2CD187DEA1500B13F6C /* InAppPurchase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InAppPurchase.h; sourceTree = "<group>"; };
 		848BB2CE187DEA1500B13F6C /* InAppPurchase.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InAppPurchase.m; sourceTree = "<group>"; };
 		848BB2CF187DEA1500B13F6C /* SKProduct+LocalizedPrice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SKProduct+LocalizedPrice.h"; sourceTree = "<group>"; };
@@ -276,8 +273,6 @@
 		307C750510C5A3420062BCA9 /* Plugins */ = {
 			isa = PBXGroup;
 			children = (
-				8485C0BD1889DA070062E107 /* CDVKeyboard.h */,
-				8485C0BE1889DA070062E107 /* CDVKeyboard.m */,
 				84CE22AC1886DC8200CC2984 /* PushNotification.h */,
 				84CE22AD1886DC8200CC2984 /* PushNotification.m */,
 				84CE22A61886DBDA00CC2984 /* AppDelegate+notification.h */,
@@ -502,7 +497,6 @@
 				1D3623260D0F684500981E51 /* AppDelegate.m in Sources */,
 				302D95F114D2391D003F00A1 /* MainViewController.m in Sources */,
 				89E148445ACE45E3897BE875 /* CDVCamera.m in Sources */,
-				8485C0BF1889DA070062E107 /* CDVKeyboard.m in Sources */,
 				AD3B32A159074B898F94DF34 /* CDVJpegHeaderWriter.m in Sources */,
 				42B3F56A187B262A00A5065E /* FacebookConnectPlugin.m in Sources */,
 				848BB2D1187DEA1500B13F6C /* InAppPurchase.m in Sources */,
