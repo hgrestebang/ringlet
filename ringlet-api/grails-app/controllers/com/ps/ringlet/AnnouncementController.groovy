@@ -33,7 +33,7 @@ class AnnouncementController {
     }
 
     def create() {
-        def message = [response:""]
+        def message = [response:"", totalSend:""]
         def totalSend=0
         User user = User.findByToken(UserToken.findByToken(params.token as String))
         String code = RandomStringUtils.random(12, true, true)

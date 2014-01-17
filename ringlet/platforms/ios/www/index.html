@@ -42,31 +42,18 @@
 <body data-ng-controller="UserCtrl">
 <!------------------------Necessary to initialize FB plugin------------------------------>
 <div id="fb-root"></div>
-<!------------------------Landing Screen View-------------------------------------------->
-<div data-role="page" id="landing" data-theme="a">
-    <div data-role="content">
-        <form class="center">
-            <img id="landing-icon" src="img/logo01.png" onload="resizeLogo()"/>
-            <a href="#login" data-role="button" data-transition="slide" data-corners="false" data-ng-click="errorValidation(); getLocation()">Login</a>
-            <a href="#signup" data-role="button" data-transition="slide" data-corners="false" data-ng-click="errorValidation(); getLocation()">Signup</a>
-        </form>
-    </div>
-</div>
 <!------------------------Log In View---------------------------------------------------->
 <div data-role="page" id="login" data-theme="a">
-    <div data-role="header" id="login-header"   >
-        <a href="#landing" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">Landing</a>
-        <h3>Log In</h3>
-    </div>
-    <div data-role="content">
-        <a data-role="button" data-corners="false" data-ng-click="facebookLogin()">Facebook</a>
+    <div data-role="content"  class="center">
+        <img id="landing-icon" src="img/logo01.png" onload="resizeLogo()"/>
+        <a data-role="button" data-corners="false" data-ng-click="facebookLogin(); getLocation()">Login with Facebook</a>
         <form name="formLogin" class="center">
             <p><label>OR</label></p>
             <ul>
                 <li><input data-role="none" name="email" type="email" placeholder="Email Address" data-ng-model="user.email" data-ng-change="showFunctionError=false; showServerError=false" required></li>
                 <li><input data-role="none" name="password" type="password" placeholder="Password" data-ng-model="user.password" data-ng-change="showFunctionError=false; showServerError=false" data-ng-minlength=5 required></li>
             </ul>
-            <div data-ng-show="showErrors" class="red">
+            <div data-ng-show="showErrors" style="display: none;" id="loginErrors" class="red">
                 <p data-ng-show="formLogin.email.$error.required">"Email required"</p>
                 <p data-ng-show="formLogin.email.$invalid && formLogin.email.$error.email">"Wrong email format"</p>
                 <p data-ng-show="formLogin.password.$error.required">"Password required"</p>
@@ -74,8 +61,10 @@
                 <p data-ng-show="showFunctionError">"The email or password is incorrect"</p>
                 <p data-ng-show="showServerError">"Can not connect to the server, try later"</p>
             </div>
-            <a data-role="button" data-corners="false" data-ng-click="validateLogin(formLogin.$invalid)">Log in</a>
-            <p class="blue" onclick="window.location.href='#forgot'" data-ng-click="errorValidation()">Forgot my password</p>
+            <a data-role="button" data-corners="false" data-ng-click="validateLogin(formLogin.$invalid); getLocation()">Log in</a>
+            <br/>
+            <a href="#signup" data-role="button" data-transition="slide" data-corners="false" data-ng-click="errorValidation(); getLocation()">Create an account now!</a>
+            <p class="blue" onclick="window.location.href='#forgot'" data-ng-click="errorValidation()">I Forgot my password</p>
         </form>
     </div>
 </div>
@@ -87,10 +76,9 @@
     </div>
     <div data-role="content">
         <form name="formForgot">
-            <div>
-                <label for="emailForgot">Username/Email:</label>
-                <input name="emailForgot" id="emailForgot" type="email" placeholder="Email Address" data-ng-model="emailForgot" data-ng-change="showFunctionError=false; showServerError=false; showPasswordError=false; showMessage=false" required>
-            </div>
+            <ul>
+                <li> <input name="emailForgot" data-role="none" id="emailForgot" type="email" placeholder="Email Address" data-ng-model="emailForgot" data-ng-change="showFunctionError=false; showServerError=false; showPasswordError=false; showMessage=false" required></li>
+            </ul>
             <div data-ng-show="showErrors" class="center red">
                 <p data-ng-show="formForgot.emailForgot.$error.required">"Email required"</p>
                 <p data-ng-show="formForgot.emailForgot.$invalid && formForgot.emailForgot.$error.email">"Wrong email format"</p>
@@ -106,7 +94,7 @@
 <!------------------------SignUp View---------------------------------------------------->
 <div data-role="page" id="signup" data-theme="a">
     <div data-role="header" id="signup-header">
-        <a data-ng-hide="user.id" href="#landing" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-ng-click="errorValidation()">Landing</a>
+        <a data-ng-hide="user.id" href="#login" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-ng-click="errorValidation()">Landing</a>
         <h3>Sign Up</h3>
         <a data-role="button" data-mini="true" data-inline="true" data-corners="false" data-ng-click="validateSignup(formSignup.$invalid)">Save</a>
     </div>
@@ -755,7 +743,7 @@
 <!---------------------------------Map View---------------------------------------------------->
 <div data-role="page" id="map" data-theme="a">
     <div data-role="header" id="map-header"  >
-        <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
+        <a href="#home" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
         </a>
         <h4>Map</h4>
     </div>
@@ -799,16 +787,16 @@
     </div>
 </div>
 <!---------------------------------Panel--------------------------------->
-<div data-role="panel" id="panel-menu" data-theme="a" data-position="left">
+<div data-role="panel" id="panel-menu" data-display="push" data-position="right">
     </br>
-    <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
+    <ul data-role="listview" data-mini="true" data-divider-theme="menu" data-icon="">
         <li data-role="list-divider" class="center">Menu</li>
         <li><a data-ng-click="getNearByRingsters(); homeHeader='Home'">Home</a></li>
         <li><a data-ng-click="currentUser()">My Profile</a></li>
         <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
         <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()">Friends</a></li>
         <li><a data-ng-click="getRinglets()">Ringlets</a></li>
-        <li><a href="#chat-list" data-ng-show="chats[0].id!=undefined" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
+        <li><a href="#chat-list" data-ng-show="chats[0].length>0" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
         <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
         <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>
         <li><a data-ng-click="logout()">Log Out</a></li>
