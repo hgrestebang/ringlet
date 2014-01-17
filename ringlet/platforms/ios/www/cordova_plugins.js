@@ -62,6 +62,13 @@ module.exports = [
         "clobbers": [
             "navigator.geolocation"
         ]
+    },
+    {
+        "file": "plugins/org.apache.cordova.keyboard/www/keyboard.js",
+        "id": "org.apache.cordova.keyboard.keyboard",
+        "clobbers": [
+            "window.Keyboard"
+        ]
     }
 ]
 });

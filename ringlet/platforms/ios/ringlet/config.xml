@@ -47,7 +47,5 @@
     </feature>
     <preference name="fullscreen" value="true" />
     <preference name="webviewbounce" value="true" />
-    <preference name="HideKeyboardFormAccessoryBar" value="true" />
-    <preference name="KeyboardShrinksView" value="true" />
     <content src="index.html" />
 </widget>

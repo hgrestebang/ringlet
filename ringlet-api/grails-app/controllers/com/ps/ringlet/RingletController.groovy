@@ -80,7 +80,7 @@ class RingletController {
         User owner = User.findByToken(UserToken.findByToken(params.token as String))
         Ringlet ringlet = Ringlet.findByOwnerAndId(owner, params.id as Long)
         if(ringlet){
-            owner.ringlets.remove(ringlet.id)
+            owner.ringlets?.remove(ringlet.id)
             owner.save(flush: true)
             ringlet.delete(flush: true)
             message.response = "ringlet_deleted"
