@@ -115,6 +115,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
 
     $scope.login = function(){
         $.mobile.loading( 'show', {textVisible: false});
+        $scope.getLocation();
         DAO.save({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'auth', action:'login', username:$scope.user.email, passwordHash:$scope.user.password, facebookId:$scope.user.id},
             function(result){
                 if(result.response == "bad_login"){
@@ -155,7 +156,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
             function(result){
                 initializeVariables();
                 $.mobile.loading( 'hide', {textVisible: false});
-                window.location.href="#landing";
+                window.location.href="#login";
             },
             function(error){
                 $.mobile.loading( 'hide', {textVisible: false});
@@ -795,12 +796,12 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     });
 
     $(document).on("pagebeforeshow","#announcement-List",function(){
-        $scope.stopInvitationFunction();
+        $scope.stopAnnouncementFunction();
         $("#listing-Announcement" ).listview( "refresh" );
     });
 
     $(document).on("pagehide","#announcement-List",function(){
-        $scope.startInvitationFunction();
+        $scope.startAnnouncementFunction();
     });
 
     $(document).on("pagebeforeshow","#chat-list",function(){
@@ -850,17 +851,16 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         $scope.invitation.recipientId = $scope.ringster.id;
         DAO.save({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'invitation', action:'create', invitation:$scope.invitation},
             function(result){
-                if(result.response == "invitation_created"){
-                    $.mobile.loading( 'hide', {textVisible: false});
-                    $scope.showMessage=true;
-                    $timeout(removeMessage, 15000);
-                    window.location.href="#listing-item";
-                }
-                else if(result.response == "invitation_not_created"){
+                console.log(result)
+                if(result.response == "invitation_not_created"){
                     $scope.showErrors = true;
                     $scope.showFunctionError = true;
                     $.mobile.loading( 'hide', {textVisible: false});
                 }
+                    $.mobile.loading( 'hide', {textVisible: false});
+                    $scope.showMessage=true;
+                    $timeout(removeMessage, 15000);
+                    window.location.href="#listing-item";
             },
             function(error){
                 $scope.showErrors = true;
@@ -1019,6 +1019,10 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     }
 
 //---------------------------- Location Functions ------------------------------------------------
+    $(document).on("pageshow","#login",function(){
+        $scope.getLocation();
+    });
+
     $scope.getLocation = function(){
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -1145,6 +1149,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
             $.mobile.loading( 'show', {textVisible: false});
             DAO.save({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'announcement', action:'create',token:appConfig.token, announcement: $scope.announcement},
                 function(result){
+                    console.log(result)
                     if(result.response == "announcement_created"){
                         $scope.announcement.total=result.totalSend
                         $scope.announcement.body=""
@@ -1153,7 +1158,11 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                         $("#popup-Announcement").popup( "open", "option", "positionTo", "window" );
                     }
                     else{
-
+                        $scope.announcement.total=result.totalSend
+                        $scope.announcement.body=""
+                        $scope.announcement.radius = $scope.searchRadius[0];
+                        var positionTo = $( ".selector" ).popup( "option", "positionTo" );
+                        $("#popup-Announcement").popup( "open", "option", "positionTo", "window" );
                     }
                     $.mobile.loading( 'hide', {textVisible: false});
                 },

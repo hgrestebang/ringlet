@@ -80,6 +80,9 @@ $(document).on("pagebeforeshow","#ringlet-list",function(){
 $(document).on("pagebeforeshow","#pro",function(){
     $("#pro-ulPackages" ).listview( "refresh" );
 });
+$(document).on("pageshow","#login",function(){
+document.getElementById("loginErrors").style.display="";
+});
 
 $(document).on("pagebeforeshow","#chat",function(){
     var footer = document.getElementById("chat-footer").offsetHeight;
