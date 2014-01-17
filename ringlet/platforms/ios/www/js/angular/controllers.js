@@ -50,7 +50,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     var mapAnnouncemnt = L.map('map-Announcement',{
         dragging: false,
         touchZoom: false,
-        zoomControl: true,
+        zoomControl: false,
         scrollWheelZoom: false,
         doubleClickZoom: false,
         boxZoom: true,
@@ -60,7 +60,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     var mapItemAnnouncement = L.map('map-Item-Announcement',{
         dragging: false,
         touchZoom: false,
-        zoomControl: true,
+        zoomControl: false,
         scrollWheelZoom: false,
         doubleClickZoom: false,
         boxZoom: true,
@@ -851,16 +851,16 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         $scope.invitation.recipientId = $scope.ringster.id;
         DAO.save({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'invitation', action:'create', invitation:$scope.invitation},
             function(result){
-                console.log(result)
                 if(result.response == "invitation_not_created"){
                     $scope.showErrors = true;
                     $scope.showFunctionError = true;
                     $.mobile.loading( 'hide', {textVisible: false});
-                }
+                }else{
                     $.mobile.loading( 'hide', {textVisible: false});
                     $scope.showMessage=true;
                     $timeout(removeMessage, 15000);
                     window.location.href="#listing-item";
+                }
             },
             function(error){
                 $scope.showErrors = true;
@@ -1149,7 +1149,6 @@ function UserCtrl($scope, $compile, DAO, $timeout){
             $.mobile.loading( 'show', {textVisible: false});
             DAO.save({serverHost:appConfig.serverHost, appName:appConfig.appName, controller:'announcement', action:'create',token:appConfig.token, announcement: $scope.announcement},
                 function(result){
-                    console.log(result)
                     if(result.response == "announcement_created"){
                         $scope.announcement.total=result.totalSend
                         $scope.announcement.body=""

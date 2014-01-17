@@ -110,6 +110,40 @@
 }
 */
 
+- (void) removeBar {
+    // Locate non-UIWindow.
+    UIWindow *keyboardWindow = nil;
+    for (UIWindow *testWindow in [[UIApplication sharedApplication] windows]) {
+        if (![[testWindow class] isEqual:[UIWindow class]]) {
+            keyboardWindow = testWindow;
+            break;
+        }
+    }
+    
+    // Locate UIWebFormView.
+    for (UIView *possibleFormView in [keyboardWindow subviews]) {
+        // iOS 5 sticks the UIWebFormView inside a UIPeripheralHostView.
+        if ([[possibleFormView description] rangeOfString:@"UIPeripheralHostView"].location != NSNotFound) {
+            for (UIView *subviewWhichIsPossibleFormView in [possibleFormView subviews]) {
+                if ([[subviewWhichIsPossibleFormView description] rangeOfString:@"UIWebFormAccessory"].location != NSNotFound) {
+                    [subviewWhichIsPossibleFormView removeFromSuperview];
+                }
+            }
+        }
+    }
+}
+
+
+NSString *hideForClass = @"hideKeyboardNavBar";
+
+- (void)keyboardWillShow:(NSNotification*) notification {
+    NSString *formClassName = [self.webView stringByEvaluatingJavaScriptFromString:@"document.body.className"];
+    
+    if ([formClassName isEqualToString:hideForClass]) {
+        // remove the bar in the next runloop (not actually created at this point)
+        [self performSelector:@selector(removeBar) withObject:nil afterDelay:0];
+    }
+}
 #pragma mark UIWebDelegate implementation
 
 - (void)webViewDidFinishLoad:(UIWebView*)theWebView
