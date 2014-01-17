@@ -353,8 +353,7 @@
 <!---------------------------------------Ringster Info View---------------------------------------------------->
 <div data-role="page" id="listing-item" data-theme="a">
     <div data-role="header" id="listing-item-header"  >
-        <a href="#home" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
-        </a>
+        <a data-role="button" data-icon="arrow-l" data-iconpos="notext" data-ng-click="getHomeUsers()"></a>
         <h2 data-ng-bind="ringster.name"></h2>
     </div>
     <div data-role="content" id="listing-item-content">
@@ -376,6 +375,7 @@
             </div>
             <a href="#chat" data-role="button" data-corners="false" data-ng-show="isFriend()" data-ng-click="errorValidation()">Let's chat</a>
             <a href="#invitation" data-role="button" data-corners="false" data-ng-hide="isFriend()" data-ng-click="errorValidation()">Send Friend Request</a>
+            <a data-role="button" data-corners="false" data-ng-show="isFriend()" data-ng-click="removeFriend(ringster.id)">Remove From Friends</a>
         </form>
     </div>
     <div data-role="popup" data-overlay-theme="b" class="ui-content" id="imagePopUpDiv">

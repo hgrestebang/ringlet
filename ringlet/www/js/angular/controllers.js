@@ -37,7 +37,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         {miles:'50', radius:'50 miles'}];
     $scope.announcement.radius = $scope.searchRadius[0];
 
-    var appConfig = {serverHost:'50.56.244.180', appName:'ringlet', token:''};
+    var appConfig = {serverHost:'192.168.1.5', appName:'ringlet', token:''};
     var owl = $("#listing-item-gallery");
     var carousel = $("#signup-carousel");
     var profileCarousel = $("#profile-carousel");
@@ -85,7 +85,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         $scope.chatUsers = [];
         $scope.chatsIndex = [];
         carouselLength = 0;
-        appConfig = {serverHost:'50.56.244.180', appName:'ringlet', token:''};
+        appConfig = {serverHost:'192.168.1.5', appName:'ringlet', token:''};
     }
 
     $scope.errorValidation = function(){
@@ -225,6 +225,28 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         $('#showOnMap').slider("refresh");
     });
 
+    $scope.getHomeUsers = function(){
+        if($scope.homeHeader == "Friends"){
+            $scope.getFriends();
+        }
+        else window.location.href="#home";
+    }
+
+    $scope.removeFriend = function(id){
+        $.mobile.loading( 'show', {textVisible: false});
+        DAO.update({serverHost:appConfig.serverHost, appName:appConfig.appName, token:appConfig.token, controller:'user', action:'removeFriend', friendId:id},
+            function(result){
+                if(result.response == "friend_removed"){
+                    $scope.user.friends.splice($scope.user.friends.indexOf(id),1);
+                }
+                $.mobile.loading( 'hide', {textVisible: false});
+            },
+            function(error){
+                console.log(error);
+                $.mobile.loading( 'hide', {textVisible: false});
+            });
+    };
+
     $scope.getRinglet = function(ringlet){
         $.mobile.loading( 'show', {textVisible: false});
         $scope.currentRinglet = ringlet;
@@ -239,7 +261,6 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                 console.log(error);
                 $.mobile.loading( 'hide', {textVisible: false});
             });
-
     };
 
     $scope.addToRinglet = function(ringster){

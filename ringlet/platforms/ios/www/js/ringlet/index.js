@@ -68,6 +68,10 @@ $(document).on("pagebeforeshow","#home",function(){
     $('#listing-content').css({'max-height': (screen.height-(100+footer)) + 'px'});
 });
 
+$(document).on("pageshow","#home",function(){
+    $("#listing-lImages" ).listview( "refresh" );
+});
+
 $(document).on("pagebeforeshow","#ringlet",function(){
     $("#friendRem-images" ).listview( "refresh" );
     $("#friendAd-images" ).listview( "refresh" );
