@@ -316,7 +316,7 @@
         <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
             <li data-role="list-divider" class="center">Menu</li>
             <li><a data-ng-click="getNearByRingsters(); homeHeader='Home'">Home</a></li>
-            <li><a data-ng-click="currentUser()">My Profile</a></li>
+            <li><a data-ng-click="currentUser()" data-rel="close">My Profile</a></li>
             <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
             <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()">Friends</a></li>
             <li><a data-ng-click="getRinglets()">Ringlets</a></li>
@@ -381,7 +381,7 @@
             <li data-role="list-divider" class="center">Menu</li>
             <li><a data-ng-click="getNearByRingsters(); homeHeader='Home'">Home</a></li>
             <li><a data-ng-click="currentUser()">My Profile</a></li>
-            <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
+            <li><a data-transition="slide" data-ng-click="errorValidation()" data-rel="close">Search</a></li>
             <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()">Friends</a></li>
             <li><a data-ng-click="getRinglets()">Ringlets</a></li>
             <li><a href="#chat-list" data-ng-show="chatUsers.length>0" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
@@ -471,7 +471,7 @@
             <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()">Friends</a></li>
             <li><a data-ng-click="getRinglets()">Ringlets</a></li>
             <li><a href="#chat-list" data-ng-show="chatUsers.length>0" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
-            <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
+            <li><a data-ng-show="announcements[0].id!=undefined" data-rel="close">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
             <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>
             <li><a data-ng-click="logout()">Log Out</a></li>
         </ul>
@@ -610,7 +610,7 @@
             <li><a data-ng-click="getRinglets()">Ringlets</a></li>
             <li><a href="#chat-list" data-ng-show="chatUsers.length>0" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
             <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
-            <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>
+            <li><a data-ng-show="invitations[0].id!=undefined" data-rel="close">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>
             <li><a data-ng-click="logout()">Log Out</a></li>
         </ul>
     </div>
@@ -644,7 +644,7 @@
             <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
             <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()">Friends</a></li>
             <li><a data-ng-click="getRinglets()">Ringlets</a></li>
-            <li><a href="#chat-list" data-ng-show="chatUsers.length>0" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
+            <li><a data-ng-show="chatUsers.length>0" data-rel="close">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
             <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
             <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>
             <li><a data-ng-click="logout()">Log Out</a></li>
@@ -681,7 +681,7 @@
             <li><a data-ng-click="currentUser()">My Profile</a></li>
             <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
             <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()">Friends</a></li>
-            <li><a data-ng-click="getRinglets()">Ringlets</a></li>
+            <li><a data-rel="close">Ringlets</a></li>
             <li><a href="#chat-list" data-ng-show="chatUsers.length>0" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
             <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
             <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>
