@@ -68,8 +68,28 @@ $(document).on("pagebeforeshow","#home",function(){
     $('#listing-content').css({'max-height': (screen.height-(100+footer)) + 'px'});
 });
 
+$(document).on("pageshow","#friends",function(){
+    $("#friends-lImages" ).listview( "refresh" );
+});
+
+$(document).on("pagebeforeshow","#friends",function(){
+    $("#friends-lImages" ).listview( "refresh" );
+    var footer = document.getElementById("friends-footer").offsetHeight;
+    $('#friends-content').css({'max-height': (screen.height-(100+footer)) + 'px'});
+});
+
 $(document).on("pageshow","#home",function(){
     $("#listing-lImages" ).listview( "refresh" );
+});
+
+$(document).on("pagebeforeshow","#result",function(){
+    $("#result-lImages" ).listview( "refresh" );
+    var footer = document.getElementById("result-footer").offsetHeight;
+    $('#listing-content').css({'max-height': (screen.height-(100+footer)) + 'px'});
+});
+
+$(document).on("pageshow","#result",function(){
+    $("#result-lImages" ).listview( "refresh" );
 });
 
 $(document).on("pagebeforeshow","#ringlet",function(){

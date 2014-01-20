@@ -4,7 +4,6 @@ var ringlet = angular.module('ringlet',['services']);
 function UserCtrl($scope, $compile, DAO, $timeout){
 
 //---------------------------- Variables Initialization ------------------------------------------
-    $scope.homeHeader = "Home";
     $scope.newRinglet = {name:''};
     $scope.user = {email:'', password:'', gender:'MALE'};
     $scope.userSearch = {name:'', username:'', phone:''};
@@ -37,7 +36,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         {miles:'50', radius:'50 miles'}];
     $scope.announcement.radius = $scope.searchRadius[0];
 
-    var appConfig = {serverHost:'192.168.1.5', appName:'ringlet', token:''};
+    var appConfig = {serverHost:'50.56.244.180', appName:'ringlet', token:''};
     var owl = $("#listing-item-gallery");
     var carousel = $("#signup-carousel");
     var profileCarousel = $("#profile-carousel");
@@ -69,6 +68,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     });
 
     function initializeVariables(){
+        $scope.newRinglet = {name:''};
         $scope.user = {email:'', password:'', gender:'MALE'};
         $scope.userSearch = {name:'', username:'', phone:''};
         $scope.invitation = {message:'I want to add you to my friends', recipientId:''};
@@ -80,12 +80,19 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         $scope.showMessage = false;
         $scope.passwordConfirm = '';
         $scope.emailForgot = '';
+        $scope.ringster=[];
+        $scope.ringsters=[];
+        $scope.announcements=[];
+        $scope.announcementItem=[];
         $scope.images = [];
         $scope.deleteImages = [];
+        $scope.announcement = {location:[]};
+        $scope.chat=[];
+        $scope.itemDelete="";
         $scope.chatUsers = [];
         $scope.chatsIndex = [];
         carouselLength = 0;
-        appConfig = {serverHost:'192.168.1.5', appName:'ringlet', token:''};
+        appConfig = {serverHost:'50.56.244.180', appName:'ringlet', token:''};
     }
 
     $scope.errorValidation = function(){
@@ -172,6 +179,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                 else{
                     $scope.ringsters=result;
                     $.mobile.loading( 'hide', {textVisible: false});
+                    $scope.homeHeader = "Home";
                     window.location.href="#home";
                 }
             }
@@ -227,11 +235,10 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     });
 
     $scope.getHomeUsers = function(){
-        if($scope.homeHeader == "Friends"){
-            $scope.getFriends();
-        }
-        else window.location.href="#home";
-    }
+        if($scope.homeHeader == "Friends") $scope.getFriends();
+        else if($scope.homeHeader == "Home") window.location.href="#home";
+        else if($scope.homeHeader == "Result") window.location.href="#result";
+    };
 
     $scope.removeFriend = function(id){
         $.mobile.loading( 'show', {textVisible: false});
@@ -328,7 +335,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                 $scope.ringsters = result;
                 $.mobile.loading( 'hide', {textVisible: false});
                 $scope.homeHeader = "Friends";
-                window.location.href="#home";
+                window.location.href="#friends";
             },
             function(error){
                 console.log(error);
@@ -378,7 +385,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                     $scope.ringsters = result;
                     $.mobile.loading( 'hide', {textVisible: false});
                     $scope.homeHeader = "Result";
-                    $.mobile.changePage("#home");
+                    $.mobile.changePage("#result");
                 }
             },
             function(error){
