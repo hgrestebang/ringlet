@@ -385,7 +385,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                     $scope.ringsters = result;
                     $.mobile.loading( 'hide', {textVisible: false});
                     $scope.homeHeader = "Result";
-                    $.mobile.changePage("#home");
+                    $.mobile.changePage("#result");
                 }
             },
             function(error){
