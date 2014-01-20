@@ -159,11 +159,27 @@
             <a href="#pro" data-ng-show="!user.isPro" class="centerFloat" data-role="button" data-transition="slide" data-direction="reverse" data-icon="location" data-iconpos="notext"></a>
             <a href="#pro" data-ng-show="!user.isPro" class="right"  data-role="button" data-transition="slide" data-direction="reverse" data-icon="tag" data-iconpos="notext"></a>
     </div>
+    <!---------------------------------Panel--------------------------------->
+    <div data-role="panel" id="panel-menu" data-position="left" data-display="push" data-dismissible="true" data-theme="a">
+        </br>
+        <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
+            <li data-role="list-divider" class="center">Menu</li>
+            <li><a data-ng-click="getNearByRingsters(); homeHeader='Home'">Home</a></li>
+            <li><a data-ng-click="currentUser()">My Profile</a></li>
+            <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
+            <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()">Friends</a></li>
+            <li><a data-ng-click="getRinglets()">Ringlets</a></li>
+            <li><a href="#chat-list" data-ng-show="chatUsers.length>0" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
+            <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
+            <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>
+            <li><a data-ng-click="logout()">Log Out</a></li>
+        </ul>
+    </div>
 </div>
 <!----------------------------------Profile View---------------------------------------------------->
 <div data-role="page" id="profile" data-theme="a">
     <div data-role="header">
-        <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-ng-click="errorValidation()">Menu</a>
+        <a href="#panel-profile" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-ng-click="errorValidation()">Menu</a>
         <h3>My Profile</h3>
         <a data-role="button" data-mini="true" data-inline="true" data-corners="false" data-ng-click="validateProfile(formProfile.$invalid)">Save</a>
     </div>
@@ -172,7 +188,7 @@
             <a href="#profile-camera" data-rel="popup" data-position-to="window">
                 <div id="profile-carousel" ><div class='item'><img id="profile-image" class="user-image" src='img/edit-image.png' onload="changeSize(this)"></div></div>
             </a>
-            <div data-role="popup" data-overlay-theme="a" id="profile-camera">
+            <div data-role="popup" data-push-theme="a" id="profile-camera">
                 <a data-corners="false" data-role="button" data-ng-hide="images.length>7" data-ng-click="capturePhotoProfile()">Take a Picture</a>
                 <a data-corners="false" data-role="button" data-ng-hide="images.length>7" data-ng-click="getPhotoProfile()">Phone Library</a>
                 <a data-corners="false" data-role="button" data-ng-hide="images.length<1" data-ng-click="deletePhotoProfile('false')">Delete Last Photo</a>
@@ -199,6 +215,22 @@
             </ul>
             <a href="#change-password" data-role="button" data-corners="false" data-ng-click="errorValidation()">Change Password</a>
         </form>
+    </div>
+    <!---------------------------------Panel--------------------------------->
+    <div data-role="panel" id="panel-profile" data-position="left" data-display="push" data-dismissible="true" data-theme="a">
+        </br>
+        <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
+            <li data-role="list-divider" class="center">Menu</li>
+            <li><a data-ng-click="getNearByRingsters(); homeHeader='Home'">Home</a></li>
+            <li><a data-ng-click="currentUser()">My Profile</a></li>
+            <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
+            <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()">Friends</a></li>
+            <li><a data-ng-click="getRinglets()">Ringlets</a></li>
+            <li><a href="#chat-list" data-ng-show="chatUsers.length>0" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
+            <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
+            <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>
+            <li><a data-ng-click="logout()">Log Out</a></li>
+        </ul>
     </div>
 </div>
 <!----------------------------------Change password View--------------------------------------------------->
@@ -230,7 +262,7 @@
 <!---------------------------------Search View----------------------------------------------------------------->
 <div data-role="page" id="search" data-theme="a">
     <div data-role="header">
-        <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-ng-click="errorValidation()">Menu</a>
+        <a href="#panel-search" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext" data-ng-click="errorValidation()">Menu</a>
         <h3>Search</h3>
     </div>
     <div data-role="content">
@@ -248,11 +280,27 @@
             <a data-role="button" data-corners="false" data-ng-click="validateSearch()">Search</a>
         </form>
     </div>
+    <!---------------------------------Panel--------------------------------->
+    <div data-role="panel" id="panel-search" data-position="left" data-display="push" data-dismissible="true" data-theme="a">
+        </br>
+        <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
+            <li data-role="list-divider" class="center">Menu</li>
+            <li><a data-ng-click="getNearByRingsters(); homeHeader='Home'">Home</a></li>
+            <li><a data-ng-click="currentUser()">My Profile</a></li>
+            <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
+            <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()">Friends</a></li>
+            <li><a data-ng-click="getRinglets()">Ringlets</a></li>
+            <li><a href="#chat-list" data-ng-show="chatUsers.length>0" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
+            <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
+            <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>
+            <li><a data-ng-click="logout()">Log Out</a></li>
+        </ul>
+    </div>
 </div>
 <!----------------------------------Announcement Create View----------------------------------------------->
 <div data-role="page" id="announcement" data-theme="a">
     <div data-role="header" id="announcement-header"  >
-        <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
+        <a href="#panel-announcement" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
         </a>
         <h3>Announcement</h3>
         <a data-role="button" data-mini="true" data-inline="true" data-corners="false" data-ng-click="saveAnnouncement()">Save</a>
@@ -282,11 +330,27 @@
             <a href="#home" data-rel="back" data-role="button" data-corners="false">OK</a>
         </div>
     </div>
+    <!---------------------------------Panel--------------------------------->
+    <div data-role="panel" id="panel-announcement" data-position="left" data-display="push" data-dismissible="true" data-theme="a">
+        </br>
+        <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
+            <li data-role="list-divider" class="center">Menu</li>
+            <li><a data-ng-click="getNearByRingsters(); homeHeader='Home'">Home</a></li>
+            <li><a data-ng-click="currentUser()">My Profile</a></li>
+            <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
+            <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()">Friends</a></li>
+            <li><a data-ng-click="getRinglets()">Ringlets</a></li>
+            <li><a href="#chat-list" data-ng-show="chatUsers.length>0" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
+            <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
+            <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>
+            <li><a data-ng-click="logout()">Log Out</a></li>
+        </ul>
+    </div>
 </div>
 <!----------------------------------Announcement List View--------------------------------------------------->
 <div data-role="page" id="announcement-List" data-theme="a">
     <div data-role="header" id="announcement-List-header"  >
-        <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
+        <a href="#panel-AnnounList" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
         </a>
         <h3>Announcements</h3>
     </div>
@@ -302,11 +366,27 @@
             </ul>
         </div>
     </div>
+    <!---------------------------------Panel--------------------------------->
+    <div data-role="panel" id="panel-AnnounList" data-position="left" data-display="push" data-dismissible="true" data-theme="a">
+        </br>
+        <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
+            <li data-role="list-divider" class="center">Menu</li>
+            <li><a data-ng-click="getNearByRingsters(); homeHeader='Home'">Home</a></li>
+            <li><a data-ng-click="currentUser()">My Profile</a></li>
+            <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
+            <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()">Friends</a></li>
+            <li><a data-ng-click="getRinglets()">Ringlets</a></li>
+            <li><a href="#chat-list" data-ng-show="chatUsers.length>0" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
+            <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
+            <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>
+            <li><a data-ng-click="logout()">Log Out</a></li>
+        </ul>
+    </div>
 </div>
 <!----------------------------------Announcement Item View--------------------------------------------------->
 <div data-role="page" id="announcement-item" data-theme="a">
     <div data-role="header" id="announcement-Item-header"  >
-        <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
+        <a href="#panel-AnnounItem" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
         </a>
         <h3>Announcement</h3>
         <a data-role="button" href="#popup-Item-Announcement" data-rel="popup"  data-mini="true" data-inline="true" data-corners="false" >Delete</a>
@@ -336,6 +416,22 @@
             <a href="#" data-rel="back" data-role="button" data-corners="false">No</a>
             <a href="#" data-ng-click="deleteAnnouncement()" data-rel="back" data-role="button" data-corners="false">Yes</a>
         </div>
+    </div>
+    <!---------------------------------Panel--------------------------------->
+    <div data-role="panel" id="panel-AnnounItem" data-position="left" data-display="push" data-dismissible="true" data-theme="a">
+        </br>
+        <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
+            <li data-role="list-divider" class="center">Menu</li>
+            <li><a data-ng-click="getNearByRingsters(); homeHeader='Home'">Home</a></li>
+            <li><a data-ng-click="currentUser()">My Profile</a></li>
+            <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
+            <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()">Friends</a></li>
+            <li><a data-ng-click="getRinglets()">Ringlets</a></li>
+            <li><a href="#chat-list" data-ng-show="chatUsers.length>0" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
+            <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
+            <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>
+            <li><a data-ng-click="logout()">Log Out</a></li>
+        </ul>
     </div>
 </div>
 <!---------------------------------------Ringster Info View---------------------------------------------------->
@@ -393,7 +489,7 @@
 <!------------------------Invitation List View---------------------------------------------------->
 <div data-role="page" id="invitation-list" data-theme="a">
     <div data-role="header">
-        <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext"></a>
+        <a href="#panel-Invitation" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext"></a>
         <h4>Invitations</h4>
     </div>
     <div data-role="content">
@@ -408,11 +504,27 @@
             </ul>
         </div>
     </div>
+    <!---------------------------------Panel--------------------------------->
+    <div data-role="panel" id="panel-Invitation" data-position="left" data-display="push" data-dismissible="true" data-theme="a">
+        </br>
+        <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
+            <li data-role="list-divider" class="center">Menu</li>
+            <li><a data-ng-click="getNearByRingsters(); homeHeader='Home'">Home</a></li>
+            <li><a data-ng-click="currentUser()">My Profile</a></li>
+            <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
+            <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()">Friends</a></li>
+            <li><a data-ng-click="getRinglets()">Ringlets</a></li>
+            <li><a href="#chat-list" data-ng-show="chatUsers.length>0" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
+            <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
+            <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>
+            <li><a data-ng-click="logout()">Log Out</a></li>
+        </ul>
+    </div>
 </div>
 <!------------------------Chat List View---------------------------------------------------->
 <div data-role="page" id="chat-list" data-theme="a">
     <div data-role="header">
-        <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
+        <a href="#panel-Chat" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
         </a>
         <h4>Chats</h4>
     </div>
@@ -428,11 +540,27 @@
             </ul>
         </div>
     </div>
+    <!---------------------------------Panel--------------------------------->
+    <div data-role="panel" id="panel-Chat" data-position="left" data-display="push" data-dismissible="true" data-theme="a">
+        </br>
+        <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
+            <li data-role="list-divider" class="center">Menu</li>
+            <li><a data-ng-click="getNearByRingsters(); homeHeader='Home'">Home</a></li>
+            <li><a data-ng-click="currentUser()">My Profile</a></li>
+            <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
+            <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()">Friends</a></li>
+            <li><a data-ng-click="getRinglets()">Ringlets</a></li>
+            <li><a href="#chat-list" data-ng-show="chatUsers.length>0" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
+            <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
+            <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>
+            <li><a data-ng-click="logout()">Log Out</a></li>
+        </ul>
+    </div>
 </div>
 <!------------------------Ringlet List View---------------------------------------------------->
 <div data-role="page" id="ringlet-list" data-theme="a">
     <div data-role="header">
-        <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
+        <a href="#panel-Ringlet" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
         </a>
         <h4>Ringlets</h4>
         <a href="#new-ringlet" data-role="button" data-transition="slide" data-mini="true" data-inline="true" data-corners="false" data-ng-click="newRinglet.name=''">New</a>
@@ -449,6 +577,22 @@
                 </li>
             </ul>
         </div>
+    </div>
+    <!---------------------------------Panel--------------------------------->
+    <div data-role="panel" id="panel-Ringlet" data-position="left" data-display="push" data-dismissible="true" data-theme="a">
+        </br>
+        <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
+            <li data-role="list-divider" class="center">Menu</li>
+            <li><a data-ng-click="getNearByRingsters(); homeHeader='Home'">Home</a></li>
+            <li><a data-ng-click="currentUser()">My Profile</a></li>
+            <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
+            <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()">Friends</a></li>
+            <li><a data-ng-click="getRinglets()">Ringlets</a></li>
+            <li><a href="#chat-list" data-ng-show="chatUsers.length>0" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
+            <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
+            <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>
+            <li><a data-ng-click="logout()">Log Out</a></li>
+        </ul>
     </div>
 </div>
 <!------------------------New Ringlet View---------------------------------------------------->
@@ -542,7 +686,7 @@
 <!---------------------------------Pro View---------------------------------------------------->
 <div data-role="page" id="pro" data-theme="a">
     <div data-role="header" id="pro-header"  >
-        <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
+        <a href="#panel-Pro" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
 
         </a>
         <h3>Become a Pro User</h3>
@@ -567,6 +711,22 @@
                 <a href="#privacy">Privacy</a> and  <a href="#terms">Terms</a>
             </div>
         </form>
+    </div>
+    <!---------------------------------Panel--------------------------------->
+    <div data-role="panel" id="panel-Pro" data-position="left" data-display="push" data-dismissible="true" data-theme="a">
+        </br>
+        <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
+            <li data-role="list-divider" class="center">Menu</li>
+            <li><a data-ng-click="getNearByRingsters(); homeHeader='Home'">Home</a></li>
+            <li><a data-ng-click="currentUser()">My Profile</a></li>
+            <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
+            <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()">Friends</a></li>
+            <li><a data-ng-click="getRinglets()">Ringlets</a></li>
+            <li><a href="#chat-list" data-ng-show="chatUsers.length>0" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
+            <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
+            <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>
+            <li><a data-ng-click="logout()">Log Out</a></li>
+        </ul>
     </div>
 </div>
 <!---------------------------------Privacy View---------------------------------------------------->
@@ -754,7 +914,7 @@
 <!---------------------------------Chat View---------------------------------------------------->
 <div data-role="page" id="chat" data-theme="a">
     <div data-role="header" id="chat-header"  >
-        <a href="#panel-menu" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
+        <a href="#panel-ChatView" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
         </a>
         <h4>{{ringster.name}}</h4>
     </div>
@@ -785,22 +945,22 @@
             <a data-role="button" id="button-Chat" href="#popup-Item-Announcement"  data-ng-click="sendMessage()" data-rel="popup"  data-mini="true" data-inline="true" data-corners="false" >Send</a>
         </p>
     </div>
-</div>
-<!---------------------------------Panel--------------------------------->
-<div data-role="panel" id="panel-menu" data-display="push" data-position="right">
-    </br>
-    <ul data-role="listview" data-mini="true" data-divider-theme="menu" data-icon="">
-        <li data-role="list-divider" class="center">Menu</li>
-        <li><a data-ng-click="getNearByRingsters(); homeHeader='Home'">Home</a></li>
-        <li><a data-ng-click="currentUser()">My Profile</a></li>
-        <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
-        <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()">Friends</a></li>
-        <li><a data-ng-click="getRinglets()">Ringlets</a></li>
-        <li><a href="#chat-list" data-ng-show="chats[0].length>0" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
-        <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
-        <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>
-        <li><a data-ng-click="logout()">Log Out</a></li>
-    </ul>
+    <!---------------------------------Panel--------------------------------->
+    <div data-role="panel" id="panel-ChatView" data-position="left" data-display="push" data-dismissible="true" data-theme="a">
+        </br>
+        <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
+            <li data-role="list-divider" class="center">Menu</li>
+            <li><a data-ng-click="getNearByRingsters(); homeHeader='Home'">Home</a></li>
+            <li><a data-ng-click="currentUser()">My Profile</a></li>
+            <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
+            <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()">Friends</a></li>
+            <li><a data-ng-click="getRinglets()">Ringlets</a></li>
+            <li><a href="#chat-list" data-ng-show="chatUsers.length>0" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
+            <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
+            <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>
+            <li><a data-ng-click="logout()">Log Out</a></li>
+        </ul>
+    </div>
 </div>
 <!-- END OF THE PAGES--->
 </body>

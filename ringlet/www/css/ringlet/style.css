@@ -106,7 +106,18 @@ form ul li .ui-slider-switch{
     display: inline;
 }
 
-#panel-menu ul li a{
+#panel-menu ul li a,
+#panel-profile ul li a,
+#panel-search  ul li a,
+#panel-announcement ul li a,
+#panel-AnnounList  ul li a,
+#panel-AnnounItem  ul li a,
+#panel-Invitation  ul li a,
+#panel-Chat ul li a,
+#panel-Ringlet ul li a,
+#panel-Pro ul li a,
+#panel-ChatView ul li a
+{
     padding-top: 20px !important;
     padding-bottom: 20px !important;
 }
