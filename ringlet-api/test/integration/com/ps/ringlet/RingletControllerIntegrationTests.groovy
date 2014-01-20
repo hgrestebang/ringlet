@@ -5,37 +5,52 @@ import org.junit.*
 
 class RingletControllerIntegrationTests {
     def contRinglet,idCreaRinglet
-    def token = '3d231daf-1d95-4991-a2df-b390e1deb75e'
+    def token
 
     @Before
     void setUp() {
         // Setup logic here
         contRinglet = new RingletController()
+        token = User.findByUsername('admin@ringlet.me').token?.token
+
+        if(!Ringlet.findAll()){
+            new Ringlet(
+                    name: 'Ringlet Test',
+                    owner: User.findByUsername('admin@ringlet.me'),
+                    users: [1,2]
+
+            ).save()
+
+            User owner = User.findByUsername('admin@ringlet.me')
+            owner.addToRinglets(1L)
+            owner.save(flush: true)
+        }
     }
 
     @After
     void tearDown() {
         // Tear down logic here
+        Ringlet ringletR = Ringlet.findById(1L)
+        ringletR?.setName('Ringlet Test')
+        ringletR?.save(flush: true)
     }
 
     @Test
     void testCreate(){
         contRinglet.params.token = token
-        contRinglet.params.name = 'Ringlet Test 3'
+        contRinglet.params.name = 'Ringlet Create Test'
         contRinglet.create()
         assert contRinglet.response.text == '{"response":"ringlet_created"}'
         assertEquals(Ringlet.findByOwnerAndName(User.findById(1), contRinglet.params.name).name,contRinglet.params.name)
         idCreaRinglet = Ringlet.findByOwnerAndName(User.findById(1), contRinglet.params.name).id
-
     }
 
     @Test
     void testGetByUser(){
         contRinglet.params.token = token
         contRinglet.getByUser()
+        assert contRinglet.response.json.id.size() > 0
         assert contRinglet.response.json.id.contains(1)
-        assertEquals(contRinglet.response.json.name[0],'Ringlet Test')
-        assert contRinglet.response.json.users.size() > 0
     }
 
     @Test
@@ -50,11 +65,11 @@ class RingletControllerIntegrationTests {
     void testUpdate(){
         contRinglet.params.ringlet = [
                 name: 'Ringlet Test Update',
-                id:2]
+                id:1]
         contRinglet.params.token = token
         contRinglet.update()
         assert contRinglet.response.text == '{"response":"ringlet_updated"}'
-        assertEquals(Ringlet.findById(2).name, contRinglet.params.ringlet.name)
+        assertEquals(Ringlet.findById(1).name, contRinglet.params.ringlet.name)
     }
 
     @Test
@@ -75,7 +90,7 @@ class RingletControllerIntegrationTests {
         contRinglet.params.userId = 3
         contRinglet.addUser()
         assert contRinglet.response.text == '{"response":"user_added"}'
-        assert Ringlet.findById(1).users?.contains(contRinglet.params.userId as Long)
+        assert Ringlet.findById(1).users?.contains(contRinglet.params.userId as long)
     }
 
     @Test
@@ -84,17 +99,17 @@ class RingletControllerIntegrationTests {
         contRinglet.params.userId = 3
         contRinglet.params.token = token
         contRinglet.removeUser()
-        assert Ringlet.findById(1).users?.contains(contRinglet.params.userId as Long) == false
+        assert Ringlet.findById(1).users?.contains(contRinglet.params.userId as long) == false
         assert contRinglet.response.text == '{"response":"user_removed"}'
     }
 
     @Test
     void testDelete(){
         contRinglet.params.token =  token
-        contRinglet.params.id = 7 //idCreaRinglet
+        contRinglet.params.id = Ringlet.findByOwnerAndName(User.findById(1L),'Ringlet Create Test').id
         contRinglet.delete()
         assert contRinglet.response.text == '{"response":"ringlet_deleted"}'
-        assertNull(Ringlet.findById(idCreaRinglet as long))
+        assertNull(Ringlet.findById(contRinglet.params.id as long))
     }
 
 }

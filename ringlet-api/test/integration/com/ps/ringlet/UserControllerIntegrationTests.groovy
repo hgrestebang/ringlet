@@ -6,18 +6,22 @@ import static org.junit.Assert.*
 import org.junit.*
 
 class UserControllerIntegrationTests {
-    def contUser, token
+    def contUser,token
 
     @Before
     void setUp() {
         //Setup logic here
         contUser = new UserController()
-        token = '3d231daf-1d95-4991-a2df-b390e1deb75e'
+        token = User.findByUsername('admin@ringlet.me').token?.token
     }
 
     @After
     void tearDown() {
         // Tear down logic here
+        User admin = User.findByUsername('admin123@ringlet.me')
+        admin?.setUsername('admin@ringlet.me')
+        admin?.setPasswordHash(new Sha256Hash('admin').toHex())
+        admin?.save(flush: true)
     }
 
     @Test
@@ -27,8 +31,8 @@ class UserControllerIntegrationTests {
 //        contUser.params.name = 'Administrator'
         contUser.search()
         assert contUser.response.text != '[{"response":"not_found"}]'
-        assert contUser.response.json.id.size() > 0
-        assert contUser.response.getJson().size() > 0
+        assert contUser.response.json.id?.size() > 0
+        assert contUser.response.json.id?.contains(1)
         //assert contUser.response.json.response == 'not_found'
     }
 
@@ -38,7 +42,7 @@ class UserControllerIntegrationTests {
         //contUser.params.name = 'Administrator'
         contUser.params.username = 'ringlett'
         //assert contUser.response.getJson().size() > 0
-        assert contUser.response.json.response == 'not_found'
+        assert contUser.response.text != '[{"response":"not_found"}]'
     }
 
     @Test
@@ -71,7 +75,7 @@ class UserControllerIntegrationTests {
 
     @Test
     void testGetFriendsFail(){
-        contUser.params.token = token
+        contUser.params.token = User.findByUsername('user5@ringlet.me')
         contUser.getFriends()
         assert contUser.response.json.id.size() == 0
     }
@@ -115,7 +119,7 @@ class UserControllerIntegrationTests {
 
     @Test
     void testCreateFail(){
-        def userT = [email: "admin@ringlet.me", password:'admin']
+        def userT = [email: "test@ringlet.me", password:'admin']
         contUser.params.user = userT
         contUser.create()
         assert contUser.response.text == '{"response":"email_used"}'
@@ -123,7 +127,7 @@ class UserControllerIntegrationTests {
 
     @Test
     void testUpdateFail(){
-        contUser.params.token = '49258e40-9ecb-4443-b87e-8621c805aacf'//user1
+        contUser.params.token = User.findByUsername('user4@ringlet.me').token?.token
         def userT = [username: "admin@ringlet.me"]
         contUser.params.user = userT
         contUser.update()
@@ -192,9 +196,14 @@ class UserControllerIntegrationTests {
 
     @Test
     void testDeleteAccount(){
-        contUser.params.token = '9cde5677-6f91-400f-ac9d-19817c4e62ec'// Token of new user
+        contUser.params.token = User.findByUsername('test@ringlet.me') // Token of new user
         contUser.deleteAccount()
         assert contUser.response.text == '{"response":"user_deleted"}'
+        assert User.findByUsername('test@ringlet.me').status == UserStatus.REMOVED
+
+        User createU = User.findByUsername('test@ringlet.me')
+        createU?.delete()
+        createU?.save(flush: true)
     }
 
 

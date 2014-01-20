@@ -16,24 +16,20 @@ class AnnouncementControllerTests {
         user = new User(
                 username: 'test@ringlet.me',
                 passwordHash: '5bbf1a9e0de062225a1b',
-                facebookId: '12345',
                 name: 'User Test',
-                phone: '123456789',
                 token: new UserToken(
-                        token: 'token123',
+                        token: 'token',
                         valid: true
                 ).save(),
                 location: [37.33233141d, -122.031286d]
         ).save()
 
         user2 = new User(
-                username: 'test@ringlet.me',
+                username: 'test1@ringlet.me',
                 passwordHash: '5bbf1a9e0de062225a1b',
-                facebookId: '1234',
-                name: 'User Test',
-                phone: '123456789',
+                name: 'User Test 2',
                 token: new UserToken(
-                        token: 'token1234',
+                        token: 'token1',
                         valid: true
                 ).save(),
                 location: [37.33233141d, -122.031286d]
@@ -53,23 +49,24 @@ class AnnouncementControllerTests {
     }
 
     void testGetByUser(){
-        params.token = 'token123'
+        params.token = 'token'
         controller.getByUser()
-        assert response.getJson().size() > 0
+        assert response.getJson().size() >= 0
+        assert response.json[0]?.message ==  'Announcement Test'
     }
 
     void testGetByUserNoAnnouncement(){
         params.token = 'token123'
         controller.getByUser()
-        assert response.getJson().size() == 0
+        assert response.text == '[{"response":"not_found"}]'
     }
 
     void testCreate(){
-        /*params.token = 'token1234'
-        def announcementT = [message: "Test Invitation 2",recipientId: 1]
-        params.announcement = announcementT
+        /*params.announcement = [body:"Create Test Announcement 000", radius: [miles: '10']]
+        params.token = 'token1'
         controller.create()
-        assert response.text == '{"response":"announcement_created"}'*/
+        assert response.text == '{"response":"announcement_created"}'
+        assert Announcement.findByMessage('Create Test Announcement 000') */
     }
 
     void testCreateFail(){
@@ -79,9 +76,10 @@ class AnnouncementControllerTests {
     }
 
     void testDelete(){
-        params.token = 'token123'
+        params.token = 'token'
         params.id = 1
         controller.delete()
         assert response.text == '{"response":"announcement_deleted"}'
+        assert announcement.ownerStatus ==  MessageStatus.DELETED
     }
 }

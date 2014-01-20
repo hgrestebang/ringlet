@@ -4,13 +4,12 @@ import static org.junit.Assert.*
 import org.junit.*
 
 class AuthControllerTests {
-    def contAuth,token
+    def contAuth
 
     @Before
     void setUp() {
         // Setup logic here
         contAuth = new AuthController()
-        token = '3d231daf-1d95-4991-a2df-b390e1deb75e'
     }
 
     /*@After
@@ -29,10 +28,10 @@ class AuthControllerTests {
 
     @Test
     void testLogout(){
-        contAuth.params.token = '7526bf2d-5b70-4f73-92dd-33748f32bf77'
+        contAuth.params.token = User.findByUsername('user8@ringlet.me').token?.token
         contAuth.logout()
         assert contAuth.response.json.response == 'logout_successfully'
-        assert User.findByToken(UserToken.findByToken('7526bf2d-5b70-4f73-92dd-33748f32bf77')).token.valid == false
+        assert User.findByToken(UserToken.findByToken(User.findByUsername('user8@ringlet.me').token?.token)).token.valid == false
     }
 
     @Test
