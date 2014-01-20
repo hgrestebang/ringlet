@@ -72,10 +72,14 @@ $(document).on("pageshow","#home",function(){
     $("#listing-lImages" ).listview( "refresh" );
 });
 
-$(document).on("panelbeforeclose","#panel-menu",function(){
-    console.log($("#listing-lImages" ))
-    $("#listing-lImages" ).listview( "refresh" );
-    console.log("zzzz")
+$(document).on("pagebeforeshow","#result",function(){
+    $("#result-lImages" ).listview( "refresh" );
+    var footer = document.getElementById("result-footer").offsetHeight;
+    $('#listing-content').css({'max-height': (screen.height-(100+footer)) + 'px'});
+});
+
+$(document).on("pageshow","#result",function(){
+    $("#result-lImages" ).listview( "refresh" );
 });
 
 $(document).on("pagebeforeshow","#ringlet",function(){

@@ -171,16 +171,11 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                 }
                 else{
                     $scope.ringsters=result;
-                    console.log(result)
                     $.mobile.loading( 'hide', {textVisible: false});
                     window.location.href="#home";
-
-                    $("#panel-menu").panel("close");
                 }
             }
         );
-        $("#listing-lImages" ).listview( "refresh" );
-
     }
 
     $scope.getRingsters = function(ringster){
@@ -383,7 +378,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                     $scope.ringsters = result;
                     $.mobile.loading( 'hide', {textVisible: false});
                     $scope.homeHeader = "Result";
-                    $.mobile.changePage("#home");
+                    $.mobile.changePage("#result");
                 }
             },
             function(error){
