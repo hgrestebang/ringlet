@@ -69,6 +69,8 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     });
 
     function initializeVariables(){
+        $scope.homeHeader = "Home";
+        $scope.newRinglet = {name:''};
         $scope.user = {email:'', password:'', gender:'MALE'};
         $scope.userSearch = {name:'', username:'', phone:''};
         $scope.invitation = {message:'I want to add you to my friends', recipientId:''};
@@ -80,11 +82,17 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         $scope.showMessage = false;
         $scope.passwordConfirm = '';
         $scope.emailForgot = '';
+        $scope.ringster=[];
+        $scope.ringsters=[];
+        $scope.announcements=[];
+        $scope.announcementItem=[];
         $scope.images = [];
         $scope.deleteImages = [];
+        $scope.announcement = {location:[]};
+        $scope.chat=[];
+        $scope.itemDelete="";
         $scope.chatUsers = [];
         $scope.chatsIndex = [];
-        carouselLength = 0;
         appConfig = {serverHost:'192.168.1.5', appName:'ringlet', token:''};
     }
 
