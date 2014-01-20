@@ -34,7 +34,7 @@ h1, h2, h3, h4, h5, h6{
     margin-top: 15px;
 }
 
-#listing-footer{
+#listing-footer,#result-footer{
     position: absolute;
     bottom: 0;
     left:0;
@@ -107,6 +107,7 @@ form ul li .ui-slider-switch{
 }
 
 #panel-menu ul li a,
+#panel-result ul li a,
 #panel-profile ul li a,
 #panel-search  ul li a,
 #panel-announcement ul li a,
