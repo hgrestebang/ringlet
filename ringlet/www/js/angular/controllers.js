@@ -182,6 +182,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                     $scope.ringsters=result;
                     $.mobile.loading( 'hide', {textVisible: false});
                     window.location.href="#home";
+                    $("#listing-lImages" ).listview( "refresh" );
                 }
             }
         );
@@ -338,6 +339,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                 $.mobile.loading( 'hide', {textVisible: false});
                 $scope.homeHeader = "Friends";
                 window.location.href="#home";
+                $("#listing-lImages" ).listview( "refresh" );
             },
             function(error){
                 console.log(error);

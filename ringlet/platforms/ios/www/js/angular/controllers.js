@@ -69,6 +69,8 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     });
 
     function initializeVariables(){
+        $scope.homeHeader = "Home";
+        $scope.newRinglet = {name:''};
         $scope.user = {email:'', password:'', gender:'MALE'};
         $scope.userSearch = {name:'', username:'', phone:''};
         $scope.invitation = {message:'I want to add you to my friends', recipientId:''};
@@ -80,8 +82,15 @@ function UserCtrl($scope, $compile, DAO, $timeout){
         $scope.showMessage = false;
         $scope.passwordConfirm = '';
         $scope.emailForgot = '';
+        $scope.ringster=[];
+        $scope.ringsters=[];
+        $scope.announcements=[];
+        $scope.announcementItem=[];
         $scope.images = [];
         $scope.deleteImages = [];
+        $scope.announcement = {location:[]};
+        $scope.chat=[];
+        $scope.itemDelete="";
         $scope.chatUsers = [];
         $scope.chatsIndex = [];
         carouselLength = 0;
@@ -173,11 +182,8 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                     $scope.ringsters=result;
                     $.mobile.loading( 'hide', {textVisible: false});
                     window.location.href="#home";
-//                    $.mobile.activePage[0].id
-
                     $("#listing-lImages" ).listview( "refresh" );
                 }
-
             }
         );
     }
@@ -333,6 +339,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                 $.mobile.loading( 'hide', {textVisible: false});
                 $scope.homeHeader = "Friends";
                 window.location.href="#home";
+                $("#listing-lImages" ).listview( "refresh" );
             },
             function(error){
                 console.log(error);
