@@ -24,8 +24,6 @@ class AnnouncementControllerIntegrationTests {
         contAnnouncement.params.token = token
         contAnnouncement.create()
         assert contAnnouncement.response.json.response == 'announcement_created'
-        //assert Announcement.findLastIndexOf()
-        //assertEquals(Announcement.findById(1L).id,1)
     }
 
     @Test
@@ -43,5 +41,6 @@ class AnnouncementControllerIntegrationTests {
         contAnnouncement.params.token = token
         contAnnouncement.getByUser()
         assert contAnnouncement.response.getJson().size() > 0
+        assert Announcement.findByOwner(User.findByToken(UserToken.findByToken(contAnnouncement.params.token))).message == 'Create Test Announcement'
     }
 }
