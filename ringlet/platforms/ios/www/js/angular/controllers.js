@@ -171,15 +171,16 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                 }
                 else{
                     $scope.ringsters=result;
+                    console.log(result)
                     $.mobile.loading( 'hide', {textVisible: false});
                     window.location.href="#home";
-//                    $.mobile.activePage[0].id
 
-                    $("#listing-lImages" ).listview( "refresh" );
+                    $("#panel-menu").panel("close");
                 }
-
             }
         );
+        $("#listing-lImages" ).listview( "refresh" );
+
     }
 
     $scope.getRingsters = function(ringster){

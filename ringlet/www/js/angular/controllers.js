@@ -171,8 +171,11 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                 }
                 else{
                     $scope.ringsters=result;
+                    console.log(result)
                     $.mobile.loading( 'hide', {textVisible: false});
                     window.location.href="#home";
+
+                    $("#panel-menu").panel("close");
                 }
             }
         );

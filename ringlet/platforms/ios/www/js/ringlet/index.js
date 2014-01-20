@@ -72,6 +72,12 @@ $(document).on("pageshow","#home",function(){
     $("#listing-lImages" ).listview( "refresh" );
 });
 
+$(document).on("panelbeforeclose","#panel-menu",function(){
+    console.log($("#listing-lImages" ))
+    $("#listing-lImages" ).listview( "refresh" );
+    console.log("zzzz")
+});
+
 $(document).on("pagebeforeshow","#ringlet",function(){
     $("#friendRem-images" ).listview( "refresh" );
     $("#friendAd-images" ).listview( "refresh" );
