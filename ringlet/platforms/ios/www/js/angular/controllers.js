@@ -4,7 +4,6 @@ var ringlet = angular.module('ringlet',['services']);
 function UserCtrl($scope, $compile, DAO, $timeout){
 
 //---------------------------- Variables Initialization ------------------------------------------
-    $scope.homeHeader = "Home";
     $scope.newRinglet = {name:''};
     $scope.user = {email:'', password:'', gender:'MALE'};
     $scope.userSearch = {name:'', username:'', phone:''};
@@ -69,7 +68,6 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     });
 
     function initializeVariables(){
-        $scope.homeHeader = "Home";
         $scope.newRinglet = {name:''};
         $scope.user = {email:'', password:'', gender:'MALE'};
         $scope.userSearch = {name:'', username:'', phone:''};
@@ -181,8 +179,8 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                 else{
                     $scope.ringsters=result;
                     $.mobile.loading( 'hide', {textVisible: false});
+                    $scope.homeHeader = "Home";
                     window.location.href="#home";
-                    $("#listing-lImages" ).listview( "refresh" );
                 }
             }
         );
@@ -237,11 +235,10 @@ function UserCtrl($scope, $compile, DAO, $timeout){
     });
 
     $scope.getHomeUsers = function(){
-        if($scope.homeHeader == "Friends"){
-            $scope.getFriends();
-        }
-        else window.location.href="#home";
-    }
+        if($scope.homeHeader == "Friends") $scope.getFriends();
+        else if($scope.homeHeader == "Home") window.location.href="#home";
+        else if($scope.homeHeader == "Result") window.location.href="#result";
+    };
 
     $scope.removeFriend = function(id){
         $.mobile.loading( 'show', {textVisible: false});
@@ -338,8 +335,7 @@ function UserCtrl($scope, $compile, DAO, $timeout){
                 $scope.ringsters = result;
                 $.mobile.loading( 'hide', {textVisible: false});
                 $scope.homeHeader = "Friends";
-                window.location.href="#home";
-                $("#listing-lImages" ).listview( "refresh" );
+                window.location.href="#friends";
             },
             function(error){
                 console.log(error);

@@ -164,10 +164,104 @@
         </br>
         <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
             <li data-role="list-divider" class="center">Menu</li>
-            <li><a data-ng-click="getNearByRingsters(); homeHeader='Home'" data-rel="close">Home</a></li>
+            <li><a data-rel="close">Home</a></li>
             <li><a data-ng-click="currentUser()">My Profile</a></li>
             <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
-            <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()" data-rel="close">Friends</a></li>
+            <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()">Friends</a></li>
+            <li><a data-ng-click="getRinglets()">Ringlets</a></li>
+            <li><a href="#chat-list" data-ng-show="chatUsers.length>0" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
+            <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
+            <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>
+            <li><a data-ng-click="logout()">Log Out</a></li>
+        </ul>
+    </div>
+</div>
+<!------------------------Friends View---------------------------------------------------->
+<div data-role="page" id="friends" data-theme="a">
+    <div data-role="header" id="friends-header"  >
+        <a href="#panel-friends" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
+        </a>
+        <h4>Friends</h4>
+    </div>
+    <div data-role="content" id="friends-content">
+        <div id="friends-information">
+            <ul id="friends-lImages" data-role="listview">
+                <li data-ng-repeat="ringster in ringsters">
+                    <a href="#listing-item" data-ng-click="getRingsters(ringster)">
+                        <img id="imgfriends-{{ringster.id}}" data-ng-show="ringster.photos.length > 0" data-ng-src="{{ringster.photos[0].path}}" onload="changeSizeImgList(this)" onerror="imgError(this)" />
+                        <img id="noImgfriends-{{ringster.id}}" class="list-image" data-ng-hide="ringster.photos.length > 0" src="img/house.png" onload="changeSizeImgList(this)"/>
+                        <h2 data-ng-bind="ringster.name"></h2>
+                        <span class="textFont8" data-ng-bind="ringster.distanceFromPoint+' miles away'"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div  data-id="footer" id="friends-footer" data-role="footer" class="ui-bar">
+        <a href="#search"  data-role="button" data-transition="slide" data-direction="reverse" data-icon="search" data-iconpos="notext"></a>
+        <a href="#map" data-ng-show="user.isPro" data-ng-click="initMap()" class="centerFloat" data-role="button" data-transition="slide" data-direction="reverse" data-icon="location" data-iconpos="notext"></a>
+        <a href="#announcement" data-ng-show="user.isPro" data-ng-click="announcementForm()" class="right" data-role="button" data-transition="slide" data-direction="reverse" data-icon="tag" data-iconpos="notext"></a>
+
+        <!--no Pro-->
+        <a href="#pro" data-ng-show="!user.isPro" class="centerFloat" data-role="button" data-transition="slide" data-direction="reverse" data-icon="location" data-iconpos="notext"></a>
+        <a href="#pro" data-ng-show="!user.isPro" class="right"  data-role="button" data-transition="slide" data-direction="reverse" data-icon="tag" data-iconpos="notext"></a>
+    </div>
+    <!---------------------------------Panel--------------------------------->
+    <div data-role="panel" id="panel-friends" data-position="left" data-display="push" data-dismissible="true" data-theme="a">
+        </br>
+        <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
+            <li data-role="list-divider" class="center">Menu</li>
+            <li><a data-ng-click="getNearByRingsters()">Home</a></li>
+            <li><a data-ng-click="currentUser()">My Profile</a></li>
+            <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
+            <li><a data-ng-show="user.friends.length>0"  data-rel="close">Friends</a></li>
+            <li><a data-ng-click="getRinglets()">Ringlets</a></li>
+            <li><a href="#chat-list" data-ng-show="chatUsers.length>0" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
+            <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
+            <li><a data-ng-click="getInvitations()" data-ng-show="invitations[0].id!=undefined" data-transition="slide">Invitations <span class="numberInformation">{{invitations.length}}</span></a></li>
+            <li><a data-ng-click="logout()">Log Out</a></li>
+        </ul>
+    </div>
+</div>
+<!------------------------Result View---------------------------------------------------->
+<div data-role="page" id="result" data-theme="a">
+    <div data-role="header" id="result-header"  >
+        <a href="#panel-result" data-role="button" data-transition="slide" data-direction="reverse" data-icon="arrow-l" data-iconpos="notext">
+        </a>
+        <h4 data-ng-bind="homeHeader"></h4>
+    </div>
+    <div data-role="content" id="result-content">
+        <div id="result-information">
+            <ul id="result-lImages" data-role="listview">
+                <li data-ng-repeat="ringster in ringsters">
+                    <a href="#listing-item" data-ng-click="getRingsters(ringster)">
+                        <img id="imgresult-{{ringster.id}}" data-ng-show="ringster.photos.length > 0" data-ng-src="{{ringster.photos[0].path}}" onload="changeSizeImgList(this)" onerror="imgError(this)" />
+                        <img id="noImgresult-{{ringster.id}}" class="list-image" data-ng-hide="ringster.photos.length > 0" src="img/house.png" onload="changeSizeImgList(this)"/>
+                        <h2 data-ng-bind="ringster.name"></h2>
+                        <span class="textFont8" data-ng-bind="ringster.distanceFromPoint+' miles away'"></span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div  data-id="footer" id="result-footer" data-role="footer" class="ui-bar">
+        <a href="#search"  data-role="button" data-transition="slide" data-direction="reverse" data-icon="search" data-iconpos="notext"></a>
+        <a href="#map" data-ng-show="user.isPro" data-ng-click="initMap()" class="centerFloat" data-role="button" data-transition="slide" data-direction="reverse" data-icon="location" data-iconpos="notext"></a>
+        <a href="#announcement" data-ng-show="user.isPro" data-ng-click="announcementForm()" class="right" data-role="button" data-transition="slide" data-direction="reverse" data-icon="tag" data-iconpos="notext"></a>
+
+        <!--no Pro-->
+        <a href="#pro" data-ng-show="!user.isPro" class="centerFloat" data-role="button" data-transition="slide" data-direction="reverse" data-icon="location" data-iconpos="notext"></a>
+        <a href="#pro" data-ng-show="!user.isPro" class="right"  data-role="button" data-transition="slide" data-direction="reverse" data-icon="tag" data-iconpos="notext"></a>
+    </div>
+    <!---------------------------------Panel--------------------------------->
+    <div data-role="panel" id="panel-result" data-position="left" data-display="push" data-dismissible="true" data-theme="a">
+        </br>
+        <ul data-role="listview"   data-mini="true" data-divider-theme="menu" data-icon="">
+            <li data-role="list-divider" class="center">Menu</li>
+            <li><a data-ng-click="getNearByRingsters(); homeHeader='Home'">Home</a></li>
+            <li><a data-ng-click="currentUser()">My Profile</a></li>
+            <li><a href="#search" data-transition="slide" data-ng-click="errorValidation()">Search</a></li>
+            <li><a data-ng-show="user.friends.length>0" data-ng-click="getFriends()">Friends</a></li>
             <li><a data-ng-click="getRinglets()">Ringlets</a></li>
             <li><a href="#chat-list" data-ng-show="chatUsers.length>0" data-transition="slide">Chats <span class="numberInformation">{{chatUsers.length}}</span></a></li>
             <li><a href="#announcement-List" data-ng-show="announcements[0].id!=undefined" data-transition="slide">Announcements <span class="numberInformation">{{announcements.length}}</span></a></li>
